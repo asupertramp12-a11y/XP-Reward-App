@@ -4,81 +4,410 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Douglas Battle Pass Premium</title>
+
 <style>
-body{margin:0;font-family:Segoe UI,Arial;background:linear-gradient(135deg,#101b3a,#5b21b6,#0ea5e9);color:white}
-.container{max-width:1400px;margin:auto;padding:20px}
-.card{background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border-radius:18px;padding:18px;margin:12px 0}
-h1,h2{margin:0 0 10px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px}
-.day label{display:block;padding:6px}
-.progress{height:28px;background:#222;border-radius:14px;overflow:hidden}
-.bar{height:100%;width:0;background:linear-gradient(90deg,gold,#f59e0b)}
-.badge{display:inline-block;padding:8px 12px;border-radius:20px;background:#f59e0b;color:#111;font-weight:bold;margin:4px}
-.btn{background:#22c55e;border:none;padding:10px 14px;border-radius:10px;font-weight:bold;cursor:pointer}
-.stat{font-size:1.2em;margin:6px 0}
+body{
+    margin:0;
+    font-family:Segoe UI,Arial,sans-serif;
+    background:linear-gradient(135deg,#101b3a,#5b21b6,#0ea5e9);
+    color:white;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+    padding:20px;
+}
+
+h1,h2,h3{
+    margin-top:0;
+}
+
+.card{
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(8px);
+    border-radius:18px;
+    padding:18px;
+    margin:12px 0;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:15px;
+}
+
+.day label{
+    display:block;
+    padding:6px;
+}
+
+.progress{
+    height:28px;
+    background:#222;
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.bar{
+    height:100%;
+    width:0;
+    background:linear-gradient(90deg,gold,#f59e0b);
+    transition:.3s;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 12px;
+    border-radius:20px;
+    background:#f59e0b;
+    color:#111;
+    font-weight:bold;
+    margin:4px;
+}
+
+.btn{
+    background:#22c55e;
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:4px;
+}
+
+.btn:hover{
+    opacity:.9;
+}
+
+.stat{
+    font-size:1.2em;
+    margin:6px 0;
+}
+
+.nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.tab{
+    display:none;
+}
+
+.tab.active{
+    display:block;
+}
+
+.rank{
+    font-size:1.4em;
+    font-weight:bold;
+    color:gold;
+}
+
+.reward{
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,.15);
+}
 </style>
 </head>
+
 <body>
+
 <div class="container">
+
 <h1>🎮 Douglas's Battle Pass Premium</h1>
-<div class="card">
-<div class="stat" id="level">Level 1 Recruit</div>
-<div class="stat" id="stars"></div>
-<div class="stat" id="tokens"></div>
-<div class="stat" id="money"></div>
-<div class="progress"><div class="bar" id="bar"></div></div>
+
+<div class="card nav">
+    <button class="btn" onclick="showTab('dashboard')">🏠 Dashboard</button>
+    <button class="btn" onclick="showTab('guide')">📖 Guide</button>
+    <button class="btn" onclick="showTab('shop')">🛒 Shop</button>
 </div>
-<div class="card">
-<h2>🏆 Achievement Badges</h2>
-<div id="badges"></div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="tab active">
+
+    <div class="card">
+        <div class="rank" id="rank">Recruit</div>
+        <div class="stat" id="level">Level 1</div>
+        <div class="stat" id="stars"></div>
+        <div class="stat" id="tokens"></div>
+        <div class="stat" id="money"></div>
+
+        <div class="progress">
+            <div class="bar" id="bar"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🏆 Achievement Badges</h2>
+        <div id="badges"></div>
+    </div>
+
+    <div class="grid" id="days"></div>
+
 </div>
-<div class="grid" id="days"></div>
-<div class="card">
-<h2>🛒 Reward Shop</h2>
-<p>30 Tokens = 30 mins Fortnite</p>
-<p>40 Tokens = Movie Night</p>
-<p>60 Tokens = Dad & Douglas VR Session</p>
-<p>80 Tokens = Ice Cream Adventure</p>
-<button class="btn" onclick="resetWeek()">Reset Week</button>
+
+<!-- GUIDE -->
+
+<div id="guide" class="tab">
+
+    <div class="card">
+        <h2>📖 Douglas Battle Pass Guide</h2>
+
+        <h3>🎯 Mission Objective</h3>
+        <p>
+            Complete daily missions throughout the week to earn
+            Battle Stars, Screen Tokens and level up your Battle Pass.
+        </p>
+
+        <h3>⭐ Battle Stars</h3>
+        <p>
+            Every completed activity earns a Battle Star.
+            There are 42 available each week.
+        </p>
+
+        <h3>🎟 Screen Tokens</h3>
+        <p>
+            Learning and challenge-based activities award Screen Tokens.
+            Spend them in the Reward Shop.
+        </p>
+
+        <h3>🏆 Rank Progression</h3>
+        <ul>
+            <li>Level 1+ Recruit</li>
+            <li>Level 3+ Explorer</li>
+            <li>Level 5+ Champion</li>
+            <li>Level 7+ Hero</li>
+            <li>Level 9+ Legend</li>
+        </ul>
+
+        <h3>💷 Pocket Money</h3>
+        <ul>
+            <li>20 Stars = £3</li>
+            <li>25 Stars = £4</li>
+            <li>30+ Stars = £5</li>
+        </ul>
+
+        <h3>🔥 Weekly Goal</h3>
+        <p>
+            Try to unlock all badges and hit 30+ Battle Stars to
+            become a Battle Pass Legend.
+        </p>
+    </div>
+
 </div>
+
+<!-- SHOP -->
+
+<div id="shop" class="tab">
+
+    <div class="card">
+        <h2>🛒 Reward Shop</h2>
+
+        <div class="reward">🎮 30 Tokens = 30 Minutes Fortnite</div>
+        <div class="reward">🍿 40 Tokens = Movie Night</div>
+        <div class="reward">🥽 60 Tokens = Dad & Douglas VR Session</div>
+        <div class="reward">🍦 80 Tokens = Ice Cream Adventure</div>
+
+        <br>
+
+        <button class="btn" onclick="resetWeek()">
+            🔄 Reset Week
+        </button>
+    </div>
+
 </div>
+
+</div>
+
 <script>
-const missions=[['Shield Recharge AM',0],['Learning Quest',20],['Explorer Quest',15],['Level Up Challenge',15],['Team Quest',10],['Shield Recharge PM',0]];
-const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const data=JSON.parse(localStorage.getItem('douglasPremium')||'{}');
-const daysDiv=document.getElementById('days');
+
+const missions = [
+    ['Shield Recharge AM',0],
+    ['Learning Quest',20],
+    ['Explorer Quest',15],
+    ['Level Up Challenge',15],
+    ['Team Quest',10],
+    ['Shield Recharge PM',0]
+];
+
+const days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+];
+
+const data = JSON.parse(
+    localStorage.getItem('douglasPremium') || '{}'
+);
+
+const daysDiv = document.getElementById('days');
+
 days.forEach(day=>{
- let c=document.createElement('div');
- c.className='card day';
- c.innerHTML='<h2>'+day+'</h2>';
- missions.forEach(m=>{
-   const id=day+'-'+m[0];
-   const checked=data[id]?'checked':'';
-   c.innerHTML += `<label><input type="checkbox" ${checked} onchange="toggle('${id}',this.checked)"> ${m[0]}</label>`;
- });
- daysDiv.appendChild(c);
+
+    const card = document.createElement('div');
+
+    card.className = 'card day';
+
+    let html = `<h2>${day}</h2>`;
+
+    missions.forEach(mission=>{
+
+        const id = day + '-' + mission[0];
+
+        const checked =
+            data[id] ? 'checked' : '';
+
+        html += `
+            <label>
+                <input
+                    type="checkbox"
+                    ${checked}
+                    onchange="toggle('${id}',this.checked)">
+                ${mission[0]}
+            </label>
+        `;
+    });
+
+    card.innerHTML = html;
+
+    daysDiv.appendChild(card);
+
 });
-function toggle(id,val){data[id]=val;save();}
-function save(){localStorage.setItem('douglasPremium',JSON.stringify(data));update();}
-function update(){
- let stars=Object.values(data).filter(v=>v).length;
- let tokens=0;
- Object.keys(data).forEach(k=>{if(data[k]){missions.forEach(m=>{if(k.includes(m[0])) tokens+=m[1];});}});
- let level=Math.max(1,Math.floor(stars/5)+1);
- let money=stars>=30?5:stars>=25?4:stars>=20?3:0;
- document.getElementById('stars').innerHTML='⭐ Battle Stars: '+stars+'/42';
- document.getElementById('tokens').innerHTML='🎟 Screen Tokens: '+tokens+' mins';
- document.getElementById('money').innerHTML='💷 Pocket Money Forecast: £'+money;
- document.getElementById('level').innerHTML='🎯 Level '+level;
- document.getElementById('bar').style.width=Math.min((stars/30)*100,100)+'%';
- let badges='';
- if(stars>=10) badges+='<span class="badge">Explorer</span>';
- if(stars>=20) badges+='<span class="badge">Brain Buff</span>';
- if(stars>=30) badges+='<span class="badge">Victory Royale</span>';
- if(stars>=35) badges+='<span class="badge">Legend</span>';
- document.getElementById('badges').innerHTML=badges||'No badges unlocked yet';
+
+function showTab(tabId){
+
+    document
+        .querySelectorAll('.tab')
+        .forEach(tab=>{
+            tab.classList.remove('active');
+        });
+
+    document
+        .getElementById(tabId)
+        .classList.add('active');
 }
-function resetWeek(){if(confirm('Reset all progress?')){localStorage.removeItem('douglasPremium');location.reload();}}
+
+function toggle(id,value){
+
+    data[id] = value;
+
+    save();
+}
+
+function save(){
+
+    localStorage.setItem(
+        'douglasPremium',
+        JSON.stringify(data)
+    );
+
+    update();
+}
+
+function getRank(level){
+
+    if(level >= 9) return '🏆 Legend';
+    if(level >= 7) return '🦸 Hero';
+    if(level >= 5) return '⚔️ Champion';
+    if(level >= 3) return '🧭 Explorer';
+
+    return '🪖 Recruit';
+}
+
+function update(){
+
+    let stars =
+        Object.values(data)
+        .filter(v=>v)
+        .length;
+
+    let tokens = 0;
+
+    Object.keys(data).forEach(key=>{
+
+        if(data[key]){
+
+            missions.forEach(m=>{
+
+                if(key.includes(m[0])){
+
+                    tokens += m[1];
+                }
+            });
+        }
+    });
+
+    const level =
+        Math.max(1,Math.floor(stars/5)+1);
+
+    const money =
+        stars >= 30 ? 5 :
+        stars >= 25 ? 4 :
+        stars >= 20 ? 3 : 0;
+
+    document.getElementById('stars').innerHTML =
+        '⭐ Battle Stars: ' + stars + '/42';
+
+    document.getElementById('tokens').innerHTML =
+        '🎟 Screen Tokens: ' + tokens;
+
+    document.getElementById('money').innerHTML =
+        '💷 Pocket Money Forecast: £' + money;
+
+    document.getElementById('level').innerHTML =
+        '🎯 Level ' + level;
+
+    document.getElementById('rank').innerHTML =
+        getRank(level);
+
+    document.getElementById('bar').style.width =
+        Math.min((stars/42)*100,100) + '%';
+
+    let badges = '';
+
+    if(stars >= 10)
+        badges += '<span class="badge">Explorer</span>';
+
+    if(stars >= 20)
+        badges += '<span class="badge">Brain Buff</span>';
+
+    if(stars >= 30)
+        badges += '<span class="badge">Victory Royale</span>';
+
+    if(stars >= 35)
+        badges += '<span class="badge">Legend</span>';
+
+    document.getElementById('badges').innerHTML =
+        badges || 'No badges unlocked yet';
+}
+
+function resetWeek(){
+
+    if(
+        confirm(
+            'Reset all Battle Pass progress?'
+        )
+    ){
+
+        localStorage.removeItem(
+            'douglasPremium'
+        );
+
+        location.reload();
+    }
+}
+
 update();
+
 </script>
-</body></html>
+
+</body>
+</html>
