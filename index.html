@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f2c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Douglas Battle Pass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a0f2c;
+  --purple:#8b5cf6; --purple2:#a78bfa;
+  --sky:#38bdf8; --gold:#fbbf24; --gold2:#f59e0b;
+  --white:#ffffff; --muted:rgba(255,255,255,.68); --faint:rgba(255,255,255,.45);
+  --glass:rgba(255,255,255,.075); --glass2:rgba(255,255,255,.13);
+  --green:#34d399;
+  --r:26px;
+  --shadow:0 12px 34px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{font-family:Nunito,system-ui,-apple-system,sans-serif;color:var(--white);background:var(--navy);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.bg{position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,#0a0f2c,#0e1340 55%,#0a0f2c)}
+.orb{position:fixed;border-radius:50%;filter:blur(60px);z-index:-1;opacity:.55;animation:float 18s ease-in-out infinite}
+.orb.a{width:340px;height:340px;background:#7c3aed;top:-80px;left:-90px}
+.orb.b{width:300px;height:300px;background:#0ea5e9;top:30%;right:-120px;animation-delay:-6s;opacity:.4}
+.orb.c{width:280px;height:280px;background:#f59e0b;bottom:-120px;left:20%;animation-delay:-12s;opacity:.22}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,40px)}}
+
+.glass{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:var(--r);box-shadow:var(--shadow)}
+.wrap{max-width:560px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 16px calc(120px + env(safe-area-inset-bottom))}
+
+/* Top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
