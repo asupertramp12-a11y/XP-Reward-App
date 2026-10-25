@@ -37,3 +37,546 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 
 /* Top bar */
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.brand{font-family:"Lilita One",sans-serif;font-size:22px;letter-spacing:.5px;line-height:1}
+.brand small{display:block;font-family:Nunito;font-weight:800;font-size:11px;letter-spacing:2px;color:var(--sky);text-transform:uppercase;margin-bottom:4px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;font-weight:900;font-size:15px}
+.pill.tok{background:linear-gradient(135deg,rgba(251,191,36,.25),rgba(245,158,11,.12));box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+
+h2.sec{font-family:"Lilita One",sans-serif;font-size:22px;font-weight:400;margin:26px 4px 12px;letter-spacing:.3px}
+h2.sec:first-child{margin-top:4px}
+.view{display:none;animation:in .35s ease}
+.view.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Hero */
+.hero{padding:24px 22px;position:relative;overflow:hidden;background:linear-gradient(140deg,rgba(139,92,246,.42),rgba(56,189,248,.18) 70%,rgba(255,255,255,.05))}
+.hero::after{content:"";position:absolute;right:-50px;top:-50px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.35),transparent 70%)}
+.hero .day{font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.hero h1{font-family:"Lilita One",sans-serif;font-weight:400;font-size:34px;line-height:1.05;margin:6px 0 4px}
+.hero .sub{font-weight:800;color:var(--muted);font-size:16px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.tag{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.12);font-weight:800;font-size:13px}
+.hero .note{font-weight:800;font-size:15px;display:flex;gap:8px;align-items:center}
+.hero .status{margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.btn{padding:12px 18px;border-radius:16px;font-weight:900;font-size:15px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#2a1a00;box-shadow:0 8px 20px rgba(245,158,11,.35);transition:transform .15s}
+.btn:active{transform:scale(.96)}
+.btn.ghost{background:rgba(255,255,255,.12);color:var(--white);box-shadow:none}
+.btn.danger{background:rgba(244,63,94,.18);color:#fecdd3;box-shadow:none}
+.btn:disabled{opacity:.4;box-shadow:none}
+
+/* Rank */
+.rank{margin-top:14px;padding:18px 20px;display:flex;gap:16px;align-items:center}
+.rank .icon{width:68px;height:68px;flex:none;border-radius:22px;display:grid;place-items:center;font-size:36px;background:linear-gradient(135deg,var(--purple),var(--sky));box-shadow:0 8px 24px rgba(139,92,246,.45)}
+.rank .lbl{font-size:12px;font-weight:900;letter-spacing:2px;color:var(--sky);text-transform:uppercase}
+.rank .name{font-family:"Lilita One",sans-serif;font-size:28px;line-height:1.1}
+.rank .info{flex:1;min-width:0}
+.xp{height:10px;border-radius:99px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden}
+.xp i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--purple2),var(--sky));transition:width .6s}
+.xp-t{font-size:12px;font-weight:800;color:var(--muted);margin-top:6px}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.stat{padding:16px}
+.stat .e{font-size:24px}
+.stat .k{font-size:12px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+.stat .v{font-family:"Lilita One",sans-serif;font-size:30px;line-height:1.1;margin-top:2px}
+.stat .v small{font-size:16px;color:var(--faint)}
+.stat .h{font-size:12px;font-weight:700;color:var(--muted);margin-top:4px}
+.stat.goldy .v{color:var(--gold)}
+
+/* Weekly progress */
+.week{padding:18px 18px 16px;margin-top:14px}
+.week .row{display:flex;justify-content:space-between;align-items:baseline}
+.week .row b{font-family:"Lilita One",sans-serif;font-weight:400;font-size:18px}
+.week .row span{font-weight:900;color:var(--gold)}
+.bar{position:relative;height:16px;border-radius:99px;background:rgba(255,255,255,.1);margin:14px 0 26px}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold2),var(--gold));box-shadow:0 0 16px rgba(251,191,36,.55);transition:width .6s}
+.mk{position:absolute;top:-4px;width:2px;height:24px;background:rgba(255,255,255,.35);border-radius:2px}
+.mk em{position:absolute;top:26px;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;font-weight:900;color:var(--muted);white-space:nowrap}
+.mk.hit{background:var(--gold)} .mk.hit em{color:var(--gold)}
+.dots{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dot{text-align:center;padding:8px 0;border-radius:14px;background:rgba(255,255,255,.06);font-size:11px;font-weight:900;color:var(--muted)}
+.dot b{display:block;font-size:15px;color:var(--white)}
+.dot.full{background:linear-gradient(135deg,rgba(251,191,36,.35),rgba(245,158,11,.15));color:var(--gold)}
+.dot.today{box-shadow:inset 0 0 0 2px var(--sky)}
+
+/* Badges */
+.badges{display:flex;flex-wrap:wrap;gap:10px}
+.badge{display:flex;align-items:center;gap:10px;padding:10px 14px 10px 10px;border-radius:18px}
+.badge .bi{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:linear-gradient(135deg,var(--gold),var(--purple))}
+.badge b{display:block;font-size:14px;font-weight:900}
+.badge small{display:block;font-size:11px;font-weight:700;color:var(--muted)}
+.badge.locked{opacity:.42}
+.badge.locked .bi{background:rgba(255,255,255,.12);filter:grayscale(1)}
+
+/* Storyboard */
+.daycard{padding:18px;margin-bottom:16px;transition:box-shadow .3s}
+.daycard.today{box-shadow:var(--shadow),0 0 0 2px rgba(56,189,248,.65),0 0 30px rgba(56,189,248,.25)}
+.dh{display:flex;align-items:center;gap:14px}
+.de{width:56px;height:56px;flex:none;border-radius:18px;display:grid;place-items:center;font-size:28px}
+.dn{font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center}
+.dn .now{background:var(--sky);color:#04263a;padding:2px 8px;border-radius:99px;letter-spacing:1px}
+.dt{font-family:"Lilita One",sans-serif;font-size:23px;line-height:1.1}
+.ds{font-size:13px;font-weight:800;color:var(--muted);margin-top:2px}
+.ring{margin-left:auto;width:52px;height:52px;flex:none;border-radius:50%;display:grid;place-items:center}
+.ring span{width:40px;height:40px;border-radius:50%;background:#141a47;display:grid;place-items:center;font-weight:900;font-size:14px}
+.missions{display:grid;gap:8px;margin:16px 0 14px}
+.m{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 12px 12px 10px;border-radius:18px;background:rgba(255,255,255,.06);transition:background .2s,transform .12s}
+.m:active{transform:scale(.98)}
+.m .mi{width:38px;height:38px;flex:none;border-radius:12px;display:grid;place-items:center;font-size:19px;background:rgba(255,255,255,.08)}
+.m .mt{flex:1;font-weight:800;font-size:16px}
+.m .ck{width:30px;height:30px;flex:none;border-radius:50%;box-shadow:inset 0 0 0 2.5px rgba(255,255,255,.3);display:grid;place-items:center;font-size:16px;font-weight:900;color:transparent;transition:all .2s}
+.m.done{background:linear-gradient(110deg,rgba(139,92,246,.35),rgba(56,189,248,.18))}
+.m.done .ck{background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 0 14px rgba(251,191,36,.6);color:#2a1a00}
+.m.done .mt{color:var(--white)}
+.game{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;border-radius:18px;font-weight:900}
+.game.lock{background:rgba(255,255,255,.06);color:var(--muted)}
+.game.open{background:linear-gradient(135deg,rgba(251,191,36,.3),rgba(245,158,11,.14));color:var(--gold)}
+.game small{font-weight:800;font-size:12px;opacity:.85}
+
+/* Rewards */
+.bank{padding:22px;text-align:center;background:linear-gradient(140deg,rgba(251,191,36,.25),rgba(139,92,246,.2))}
+.bank .k{font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.bank .v{font-family:"Lilita One",sans-serif;font-size:52px;line-height:1.1}
+.bank .h{font-size:13px;font-weight:800;color:var(--muted)}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.reward{padding:18px 16px;display:flex;flex-direction:column;gap:10px}
+.reward .re{font-size:40px;line-height:1}
+.reward .rn{font-weight:900;font-size:16px;line-height:1.2;flex:1}
+.reward .rc{display:inline-flex;align-self:flex-start;padding:5px 11px;border-radius:99px;background:rgba(251,191,36,.18);color:var(--gold);font-weight:900;font-size:14px}
+.reward .xp{margin-top:0}
+.reward .btn{padding:10px;font-size:14px}
+.reward.ready{box-shadow:var(--shadow),0 0 0 2px rgba(251,191,36,.6)}
+.hist{padding:6px 16px}
+.hrow{display:flex;align-items:center;gap:12px;padding:12px 0}
+.hrow+.hrow{border-top:1px solid rgba(255,255,255,.07)}
+.hrow .he{font-size:22px}
+.hrow .hn{flex:1;font-weight:800;font-size:14px}
+.hrow .hn small{display:block;color:var(--muted);font-weight:700;font-size:12px}
+.hrow button{font-size:12px;font-weight:800;color:var(--muted);padding:6px 10px;border-radius:10px;background:rgba(255,255,255,.07)}
+.empty{color:var(--muted);font-weight:700;font-size:14px;padding:14px 0;text-align:center}
+
+/* Guide */
+.gcard{padding:20px;margin-bottom:12px}
+.gcard h3{font-family:"Lilita One",sans-serif;font-weight:400;font-size:21px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.gcard h3 .gi{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:rgba(255,255,255,.1)}
+.gcard p{font-weight:700;color:var(--muted);line-height:1.5;font-size:15px}
+.gcard p+p{margin-top:8px}
+.rules{list-style:none;display:grid;gap:8px}
+.rules li{display:flex;gap:10px;font-weight:800;font-size:15px;line-height:1.4;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05)}
+.rules li::before{content:"✦";color:var(--gold)}
+.rules li.no::before{content:"✋";}
+.tbl{display:grid;gap:8px}
+.tr{display:flex;justify-content:space-between;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);font-weight:800;font-size:15px}
+.tr span:last-child{color:var(--gold)}
+.parent{display:grid;gap:10px;margin-top:6px}
+
+/* Nav */
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:calc(100% - 24px);max-width:536px;display:grid;grid-template-columns:repeat(4,1fr);padding:8px;border-radius:26px;z-index:20;background:rgba(18,24,66,.6)}
+nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0;border-radius:18px;font-weight:900;font-size:12px;color:var(--muted);transition:all .2s}
+nav button .ni{font-size:22px;transition:transform .2s}
+nav button.on{background:linear-gradient(135deg,rgba(139,92,246,.6),rgba(56,189,248,.35));color:var(--white)}
+nav button.on .ni{transform:translateY(-2px) scale(1.08)}
+
+/* Toast + confetti */
+.toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translate(-50%,-140%);z-index:50;padding:14px 20px;border-radius:20px;font-weight:900;font-size:16px;text-align:center;background:linear-gradient(135deg,rgba(139,92,246,.92),rgba(56,189,248,.85));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 14px 40px rgba(0,0,0,.45);transition:transform .45s cubic-bezier(.2,1.4,.4,1);max-width:90vw}
+.toast.show{transform:translate(-50%,0)}
+.cf{position:fixed;top:-12px;width:9px;height:14px;border-radius:3px;z-index:40;pointer-events:none;animation:fall var(--d) linear forwards}
+@keyframes fall{to{transform:translate(var(--x),110vh) rotate(var(--r));opacity:.9}}
+
+@media (min-width:480px){.hero h1{font-size:38px}}
+@media (prefers-reduced-motion:reduce){.orb,.view{animation:none}.cf{display:none}}
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><small id="weekLbl">Week 1</small>Douglas Battle Pass</div>
+    <div class="pill tok glass" id="topTok">🎟 0</div>
+  </header>
+
+  <section class="view on" id="v-dash"></section>
+  <section class="view" id="v-story"></section>
+  <section class="view" id="v-rewards"></section>
+  <section class="view" id="v-guide"></section>
+</div>
+
+<nav class="glass" id="nav">
+  <button data-tab="dash" class="on"><span class="ni">🏠</span>Dashboard</button>
+  <button data-tab="story"><span class="ni">⭐</span>Storyboard</button>
+  <button data-tab="rewards"><span class="ni">🎁</span>Rewards</button>
+  <button data-tab="guide"><span class="ni">📖</span>Guide</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- Data ---------- */
+const DAYS = [
+  {name:'Monday',   emoji:'🏡', title:'Monday - OWS',       sub:'Our Wilde Space Day', tags:['Explore','Learn','Create'],        col:'#8b5cf6'},
+  {name:'Tuesday',  emoji:'🧭', title:'Explorer Day',       sub:'Head out and discover', tags:['Adventure','Discovery','Outdoors'], col:'#38bdf8'},
+  {name:'Wednesday',emoji:'📚', title:'Skill Up Day',       sub:'Grow your powers',    tags:['Learning','Reading','Fitness'],     col:'#34d399'},
+  {name:'Thursday', emoji:'🛠', title:'Builder Day',        sub:'Make something epic', tags:['VR','Creativity','Projects'],       col:'#fb923c'},
+  {name:'Friday',   emoji:'🏆', title:'Victory Royale Day', sub:'Look how far you came', tags:['Review','Rewards','Celebrate'],   col:'#fbbf24'},
+  {name:'Saturday', emoji:'🌲', title:'Adventure Day',      sub:'Team time',           tags:['Family','Outdoors','Fun'],          col:'#4ade80'},
+  {name:'Sunday',   emoji:'🔄', title:'Reset Day',          sub:'Get ready for next week', tags:['Prepare','Organise','Recharge'], col:'#f472b6'}
+];
+const MISSIONS = [
+  {name:'Shield Recharge AM', icon:'🛡️'},
+  {name:'Learning Quest',     icon:'📘'},
+  {name:'Explorer Quest',     icon:'🧭'},
+  {name:'Level Up Challenge', icon:'⚡'},
+  {name:'Team Quest',         icon:'🤝'},
+  {name:'Shield Recharge PM', icon:'🌙'}
+];
+const RANKS = [
+  {lvl:1, name:'Recruit',  icon:'🪖'},
+  {lvl:3, name:'Explorer', icon:'🧭'},
+  {lvl:5, name:'Champion', icon:'🥇'},
+  {lvl:7, name:'Hero',     icon:'🦸'},
+  {lvl:9, name:'Legend',   icon:'👑'}
+];
+const REWARDS = [
+  {id:'fortnite', emoji:'🎮', name:'Fortnite Session',        cost:30},
+  {id:'movie',    emoji:'🍿', name:'Movie Night',             cost:40},
+  {id:'vr',       emoji:'🥽', name:'Dad & Douglas VR Session', cost:60},
+  {id:'icecream', emoji:'🍦', name:'Ice Cream Adventure',     cost:80}
+];
+const MAX_STARS = 42, TOKENS_PER_STAR = 2, FULL_DAY_BONUS = 3, STARS_PER_LEVEL = 5;
+
+/* ---------- State ---------- */
+const KEY = 'douglasBattlePassV2';
+const blankWeek = () => DAYS.map(() => MISSIONS.map(() => false));
+const fresh = () => ({v:2, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[]});
+let state = load();
+
+function load(){
+  try{
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (s && Array.isArray(s.week) && s.week.length === 7) return Object.assign(fresh(), s);
+  }catch(e){}
+  return fresh();
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+/* ---------- Logic ---------- */
+const dayCount = i => state.week[i].filter(Boolean).length;
+const stars    = () => state.week.flat().filter(Boolean).length;
+const fullDays = () => DAYS.filter((_, i) => dayCount(i) === 6).length;
+const earned   = () => stars() * TOKENS_PER_STAR + fullDays() * FULL_DAY_BONUS;
+const tokens   = () => Math.max(0, state.banked + earned() - state.spent);
+const level    = s => Math.min(9, 1 + Math.floor(s / STARS_PER_LEVEL));
+const rankFor  = l => RANKS.filter(r => r.lvl <= l).pop();
+const nextRank = l => RANKS.find(r => r.lvl > l);
+const money    = s => s >= 30 ? 5 : s >= 25 ? 4 : s >= 20 ? 3 : 0;
+const gaming   = c => c >= 6 ? 90 : c === 5 ? 75 : c === 4 ? 60 : 0;
+const todayIdx = () => (new Date().getDay() + 6) % 7;
+const missionDays = m => state.week.filter(d => d[m]).length;
+
+function nextMoney(s){
+  if (s < 20) return {need:20 - s, amt:3};
+  if (s < 25) return {need:25 - s, amt:4};
+  if (s < 30) return {need:30 - s, amt:5};
+  return null;
+}
+
+const BADGES = [
+  {id:'first',    icon:'🚀', name:'First Mission', hint:'Complete any mission',          test:() => stars() >= 1},
+  {id:'explorer', icon:'🧭', name:'Explorer',      hint:'Reach Level 3',                 test:() => level(stars()) >= 3},
+  {id:'brain',    icon:'🧠', name:'Brain Buff',    hint:'Learning Quest on 5 days',      test:() => missionDays(1) >= 5},
+  {id:'team',     icon:'🤝', name:'Team Player',   hint:'Team Quest on 5 days',          test:() => missionDays(4) >= 5},
+  {id:'shield',   icon:'🛡️', name:'Shield Master', hint:'Both shields on 5 days',        test:() => state.week.filter(d => d[0] && d[5]).length >= 5},
+  {id:'perfect',  icon:'💎', name:'Perfect Day',   hint:'All 6 missions in one day',     test:() => fullDays() >= 1},
+  {id:'victory',  icon:'🏆', name:'Victory Royale',hint:'Perfect Friday',                test:() => dayCount(4) === 6},
+  {id:'legend',   icon:'👑', name:'Legend',        hint:'Reach Level 9',                 test:() => level(stars()) >= 9}
+];
+
+function checkBadges(){
+  const fresh = [];
+  BADGES.forEach(b => {
+    if (!state.badges.includes(b.id) && b.test()){ state.badges.push(b.id); fresh.push(b); }
+  });
+  return fresh;
+}
+
+/* ---------- Render ---------- */
+const $ = id => document.getElementById(id);
+const ringStyle = (c, col) => `background:conic-gradient(${col} ${c/6*360}deg, rgba(255,255,255,.1) 0)`;
+
+function gamingHTML(c){
+  const g = gaming(c);
+  if (g) return `<div class="game open"><span>🎮 ${g} Minutes Unlocked</span><small>after 4pm</small></div>`;
+  const need = 4 - c;
+  return `<div class="game lock"><span>🔒 Gaming Locked</span><small>${need} more mission${need>1?'s':''} to unlock</small></div>`;
+}
+
+function renderDash(){
+  const t = todayIdx(), d = DAYS[t], c = dayCount(t), s = stars(), L = level(s);
+  const r = rankFor(L), nr = nextRank(L);
+  const intoLvl = s - (L - 1) * STARS_PER_LEVEL;
+  const xpPct = L >= 9 ? 100 : intoLvl / STARS_PER_LEVEL * 100;
+  const nm = nextMoney(s), g = gaming(c);
+  const isMon = t === 0;
+
+  const heroStatus = g
+    ? `🎮 ${g} minutes unlocked today`
+    : `${c}/6 missions · ${4 - c} more to unlock gaming`;
+
+  $('v-dash').innerHTML = `
+    <div class="hero glass">
+      <div class="day">Today · ${d.name}</div>
+      <h1>${d.emoji} ${d.title}</h1>
+      <div class="sub">${isMon ? 'Our Wilde Space' : d.sub}</div>
+      <div class="tags">${d.tags.map(x => `<span class="tag">${x}</span>`).join('')}</div>
+      <div class="note">🎮 Complete missions to unlock gaming after 4pm</div>
+      <div class="status">
+        <span style="font-weight:900;color:var(--gold)">${heroStatus}</span>
+        <button class="btn" data-go="story">Play missions ▸</button>
+      </div>
+    </div>
+
+    <div class="rank glass">
+      <div class="icon">${r.icon}</div>
+      <div class="info">
+        <div class="lbl">Level ${L} · Current Rank</div>
+        <div class="name">${r.name}</div>
+        <div class="xp"><i style="width:${xpPct}%"></i></div>
+        <div class="xp-t">${L >= 9 ? 'Max level reached — you are a Legend!' :
+          `${STARS_PER_LEVEL - intoLvl} ⭐ to Level ${L + 1}${nr ? ` · ${nr.name} at Level ${nr.lvl}` : ''}`}</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat glass"><div class="e">⭐</div><div class="k">Battle Stars</div><div class="v">${s} <small>/ ${MAX_STARS}</small></div></div>
+      <div class="stat glass"><div class="e">🎟</div><div class="k">Screen Tokens</div><div class="v">${tokens()}</div><div class="h">+${earned()} this week</div></div>
+      <div class="stat glass goldy"><div class="e">💷</div><div class="k">Pocket Money</div><div class="v">£${money(s)}</div><div class="h">${nm ? `${nm.need} ⭐ more for £${nm.amt}` : 'Top reward reached!'}</div></div>
+      <div class="stat glass"><div class="e">🎯</div><div class="k">Level</div><div class="v">${L} <small>/ 9</small></div></div>
+    </div>
+
+    <div class="week glass">
+      <div class="row"><b>Weekly Progress</b><span>${Math.round(s / MAX_STARS * 100)}%</span></div>
+      <div class="bar"><i style="width:${s / MAX_STARS * 100}%"></i>
+        ${[20,25,30].map(m => `<div class="mk ${s >= m ? 'hit' : ''}" style="left:${m / MAX_STARS * 100}%"><em>£${money(m)}</em></div>`).join('')}
+      </div>
+      <div class="dots">${DAYS.map((x, i) => {
+        const n = dayCount(i);
+        return `<div class="dot ${n === 6 ? 'full' : ''} ${i === t ? 'today' : ''}"><b>${n}</b>${x.name.slice(0,3)}</div>`;
+      }).join('')}</div>
+    </div>
+
+    <h2 class="sec">Achievement Badges</h2>
+    <div class="badges">${BADGES.map(b => {
+      const got = state.badges.includes(b.id);
+      return `<div class="badge glass ${got ? '' : 'locked'}"><div class="bi">${b.icon}</div><div><b>${b.name}</b><small>${got ? 'Unlocked' : b.hint}</small></div></div>`;
+    }).join('')}</div>
+  `;
+}
+
+function renderStory(){
+  const t = todayIdx();
+  $('v-story').innerHTML = `<h2 class="sec">This Week's Missions</h2>` + DAYS.map((d, i) => {
+    const c = dayCount(i);
+    return `
+    <div class="daycard glass ${i === t ? 'today' : ''}" id="day-${i}">
+      <div class="dh">
+        <div class="de" style="background:${d.col}33">${d.emoji}</div>
+        <div>
+          <div class="dn">${d.name}${i === t ? '<span class="now">TODAY</span>' : ''}</div>
+          <div class="dt">${d.title}</div>
+          <div class="ds">${d.tags.join(' · ')}</div>
+        </div>
+        <div class="ring" style="${ringStyle(c, d.col)}"><span>${c}/6</span></div>
+      </div>
+      <div class="missions">${MISSIONS.map((m, j) => {
+        const on = state.week[i][j];
+        return `<button class="m ${on ? 'done' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on}">
+          <span class="mi">${m.icon}</span><span class="mt">${m.name}</span><span class="ck">✓</span></button>`;
+      }).join('')}</div>
+      ${gamingHTML(c)}
+    </div>`;
+  }).join('');
+}
+
+function renderRewards(){
+  const tk = tokens();
+  const hist = state.redeemed.slice().reverse();
+  $('v-rewards').innerHTML = `
+    <div class="bank glass">
+      <div class="k">Your Screen Tokens</div>
+      <div class="v">🎟 ${tk}</div>
+      <div class="h">Earn 2 tokens per mission · +3 bonus for a perfect day</div>
+    </div>
+    <h2 class="sec">Reward Shop</h2>
+    <div class="rgrid">${REWARDS.map(r => {
+      const ok = tk >= r.cost, pct = Math.min(100, tk / r.cost * 100);
+      return `<div class="reward glass ${ok ? 'ready' : ''}">
+        <div class="re">${r.emoji}</div>
+        <div class="rn">${r.name}</div>
+        <span class="rc">🎟 ${r.cost}</span>
+        <div class="xp"><i style="width:${pct}%"></i></div>
+        <button class="btn ${ok ? '' : 'ghost'}" data-redeem="${r.id}" ${ok ? '' : 'disabled'}>${ok ? 'Unlock!' : `${r.cost - tk} more`}</button>
+      </div>`;
+    }).join('')}</div>
+    <h2 class="sec">Unlocked Rewards</h2>
+    <div class="hist glass">${hist.length ? hist.map((h, k) => {
+      const idx = state.redeemed.length - 1 - k;
+      return `<div class="hrow"><span class="he">${h.emoji}</span>
+        <span class="hn">${h.name}<small>${h.date} · 🎟 ${h.cost}</small></span>
+        <button data-undo="${idx}">Undo</button></div>`;
+    }).join('') : `<div class="empty">No rewards unlocked yet — keep levelling up!</div>`}</div>
+  `;
+}
+
+function renderGuide(){
+  const card = (icon, title, body) => `<div class="gcard glass"><h3><span class="gi">${icon}</span>${title}</h3>${body}</div>`;
+  const list = (items, noIdx = []) => `<ul class="rules">${items.map((x, i) => `<li class="${noIdx.includes(i) ? 'no' : ''}">${x}</li>`).join('')}</ul>`;
+  $('v-guide').innerHTML = `
+    <h2 class="sec">How We Play</h2>
+    ${card('🏡', 'Monday - OWS', `<p>OWS is <b style="color:#fff">Our Wilde Space</b>.</p><p>Monday is a dedicated day with Mum for learning, creativity, exploration, outdoor activities and fun.</p>`)}
+    ${card('🎮', 'Gaming Rules', list([
+      'No gaming in the morning.', 'Gaming is normally after 4pm.', 'Complete missions first.',
+      'Gaming is earned.', 'Gaming should stop when Mum or Dad ask.', 'Real life comes before screen time.'
+    ]) + `<div class="tbl" style="margin-top:12px">
+      <div class="tr"><span>0–3 missions</span><span>🔒 Locked</span></div>
+      <div class="tr"><span>4 missions</span><span>60 Minutes</span></div>
+      <div class="tr"><span>5 missions</span><span>75 Minutes</span></div>
+      <div class="tr"><span>6 missions</span><span>90 Minutes</span></div></div>`)}
+    ${card('🤝', 'Team Rules', list([
+      'Be kind to Mum, Dad and Dorothea.', 'Treat family members like teammates.', 'Use calm words.',
+      'Help others.', 'Everyone makes mistakes. Heroes reset and try again.'
+    ]))}
+    ${card('💜', 'Dorothea Rules', list([
+      "Dorothea is on Douglas's team.", 'Use gentle hands.', 'Use gentle words.',
+      'Protect younger teammates.', 'Being patient is a hero skill.'
+    ]))}
+    ${card('🌈', 'Managing Big Feelings', list([
+      'Feeling angry is OK.', 'Feeling frustrated is OK.', 'Feeling sad is OK.', 'Feeling tired is OK.',
+      'Hurting people is not OK.', 'Take a break.', 'Ask for help.', 'Reset and try again.'
+    ], [4]))}
+    ${card('🦸', 'Hero Habits', list([
+      'Try your best.', 'Complete missions.', 'Keep learning.', 'Spend time outdoors.',
+      'Help your family.', 'Look after your body.', 'Look after your mind.'
+    ]))}
+    ${card('⭐', 'How Rewards Work', `<div class="tbl">
+      <div class="tr"><span>Each mission</span><span>1 ⭐ + 2 🎟</span></div>
+      <div class="tr"><span>Perfect day bonus</span><span>+3 🎟</span></div>
+      <div class="tr"><span>Every 5 stars</span><span>Level up</span></div>
+      <div class="tr"><span>20 Stars</span><span>£3</span></div>
+      <div class="tr"><span>25 Stars</span><span>£4</span></div>
+      <div class="tr"><span>30+ Stars</span><span>£5</span></div></div>
+      <p style="margin-top:12px">Tokens carry over to next week. Stars and missions start fresh each week.</p>`)}
+    ${card('🔐', 'Parent Zone', `<p>Use on Sunday evening to start a new week. Unspent tokens are saved.</p>
+      <div class="parent">
+        <button class="btn" data-act="newweek">🔄 Start New Week</button>
+        <button class="btn danger" data-act="wipe">Reset everything</button>
+      </div>`)}
+  `;
+}
+
+function renderTop(){
+  $('topTok').textContent = `🎟 ${tokens()}`;
+  $('weekLbl').textContent = `Week ${state.weekNo} · Level ${level(stars())}`;
+}
+
+function renderAll(){ renderTop(); renderDash(); renderStory(); renderRewards(); renderGuide(); }
+
+/* ---------- FX ---------- */
+let toastTimer;
+function toast(msg){
+  const el = $('toast'); el.innerHTML = msg; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+function confetti(n = 60){
+  const cols = ['#fbbf24','#8b5cf6','#38bdf8','#34d399','#f472b6','#ffffff'];
+  for (let i = 0; i < n; i++){
+    const c = document.createElement('i'); c.className = 'cf';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = cols[i % cols.length];
+    c.style.setProperty('--x', (Math.random() * 160 - 80) + 'px');
+    c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg');
+    c.style.setProperty('--d', (1.6 + Math.random() * 1.6) + 's');
+    c.style.animationDelay = Math.random() * .3 + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3800);
+  }
+}
+const buzz = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
+
+/* ---------- Actions ---------- */
+function toggle(d, m){
+  const beforeL = level(stars()), beforeG = gaming(dayCount(d)), beforeM = money(stars());
+  state.week[d][m] = !state.week[d][m];
+  const on = state.week[d][m];
+  const afterL = level(stars()), afterG = gaming(dayCount(d)), afterM = money(stars());
+  const newBadges = checkBadges();
+  save(); renderAll();
+  if (!on) return;
+  buzz(15);
+  const msgs = [];
+  if (afterL > beforeL){ const r = rankFor(afterL); msgs.push(`⬆️ LEVEL ${afterL}! ${r.lvl === afterL ? `${r.icon} New rank: ${r.name}` : ''}`); }
+  if (afterG > beforeG) msgs.push(`🎮 ${afterG} minutes unlocked!`);
+  if (afterM > beforeM) msgs.push(`💷 Pocket money now £${afterM}!`);
+  newBadges.forEach(b => msgs.push(`${b.icon} Badge unlocked: ${b.name}`));
+  if (dayCount(d) === 6) msgs.unshift(`💎 PERFECT DAY! +${FULL_DAY_BONUS} bonus tokens`);
+  if (msgs.length){ toast(msgs.join('<br>')); confetti(dayCount(d) === 6 || afterL > beforeL ? 90 : 40); buzz([20,40,20]); }
+}
+
+function redeem(id){
+  const r = REWARDS.find(x => x.id === id);
+  if (!r || tokens() < r.cost) return;
+  if (!confirm(`Unlock ${r.name} for ${r.cost} tokens?\n\nCheck with Mum or Dad first!`)) return;
+  state.spent += r.cost;
+  state.redeemed.push({id:r.id, emoji:r.emoji, name:r.name, cost:r.cost,
+    date:new Date().toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'})});
+  save(); renderAll(); toast(`${r.emoji} ${r.name} unlocked!`); confetti(80); buzz([20,40,20]);
+}
+
+function undo(idx){
+  const h = state.redeemed[idx]; if (!h) return;
+  if (!confirm(`Undo ${h.name} and give back ${h.cost} tokens?`)) return;
+  state.spent = Math.max(0, state.spent - h.cost);
+  state.redeemed.splice(idx, 1);
+  save(); renderAll();
+}
+
+function newWeek(){
+  const e = earned();
+  if (!confirm(`Start Week ${state.weekNo + 1}?\n\n${stars()} stars this week → £${money(stars())} pocket money.\n${e} tokens will be saved. Missions will reset.`)) return;
+  state.banked += e;
+  state.week = blankWeek();
+  state.weekNo += 1;
+  save(); renderAll(); go('dash');
+  toast(`🔄 Week ${state.weekNo} begins! Let's go!`); confetti(70);
+}
+
+function wipe(){
+  if (!confirm('Reset EVERYTHING? Tokens, badges, rewards and missions will all be cleared.')) return;
+  if (!confirm('Are you sure? This cannot be undone.')) return;
+  state = fresh(); save(); renderAll(); go('dash');
+}
+
+function go(tab){
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'v-' + tab));
+  document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  if (tab === 'story'){
+    const el = $('day-' + todayIdx());
+    setTimeout(() => el && el.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+  } else window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.tab) return go(t.dataset.tab);
+  if (t.dataset.go) return go(t.dataset.go);
+  if (t.dataset.d !== undefined) return toggle(+t.dataset.d, +t.dataset.m);
+  if (t.dataset.redeem) return redeem(t.dataset.redeem);
+  if (t.dataset.undo !== undefined) return undo(+t.dataset.undo);
+  if (t.dataset.act === 'newweek') return newWeek();
+  if (t.dataset.act === 'wipe') return wipe();
+});
+
+checkBadges(); save(); renderAll();
+</script>
+</body>
+</html>
