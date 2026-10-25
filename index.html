@@ -6,17 +6,58 @@
 <title>Douglas Battle Pass Premium</title>
 
 <style>
+
+:root{
+    --bg-dark:#09111f;
+    --card-bg:rgba(255,255,255,.08);
+    --card-border:rgba(255,255,255,.15);
+    --gold:#fbbf24;
+    --purple:#7c3aed;
+    --blue:#38bdf8;
+    --success:#22c55e;
+    --text:#ffffff;
+}
+
 body{
     margin:0;
-    font-family:Segoe UI,Arial,sans-serif;
-    background:linear-gradient(135deg,#101b3a,#5b21b6,#0ea5e9);
-    color:white;
+    font-family:'Segoe UI',Arial,sans-serif;
+
+    background:
+        radial-gradient(circle at top right,
+        rgba(56,189,248,.35),
+        transparent 30%),
+
+        radial-gradient(circle at bottom left,
+        rgba(124,58,237,.35),
+        transparent 35%),
+
+        var(--bg-dark);
+
+    color:var(--text);
+
+    min-height:100vh;
 }
 
 .container{
     max-width:1400px;
     margin:auto;
-    padding:20px;
+    padding:24px;
+}
+
+.hero{
+    margin-bottom:24px;
+}
+
+.hero-title{
+    font-size:2.8rem;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.hero-subtitle{
+    color:#dbeafe;
+    opacity:.85;
+    font-size:1rem;
 }
 
 h1,h2,h3{
@@ -24,72 +65,139 @@ h1,h2,h3{
 }
 
 .card{
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(8px);
-    border-radius:18px;
-    padding:18px;
-    margin:12px 0;
+    background:var(--card-bg);
+
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+
+    border:1px solid var(--card-border);
+
+    border-radius:28px;
+
+    padding:24px;
+
+    margin:14px 0;
+
+    box-shadow:
+        0 16px 40px rgba(0,0,0,.35);
+}
+
+.today-card{
+    text-align:center;
+}
+
+.today-day{
+    font-size:1.8rem;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.today-subtitle{
+    color:#cbd5e1;
+}
+
+.today-reward{
+    margin-top:14px;
+    color:var(--gold);
+    font-weight:700;
 }
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:15px;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:18px;
+}
+
+.day{
+    transition:.2s;
+}
+
+.day:hover{
+    transform:translateY(-2px);
+}
+
+.day h2{
+    font-size:1.2rem;
 }
 
 .day label{
     display:block;
-    padding:6px;
+    padding:8px 0;
 }
 
 .progress{
-    height:28px;
-    background:#222;
-    border-radius:14px;
+    height:30px;
+    background:#1e293b;
+    border-radius:30px;
     overflow:hidden;
-    margin-top:10px;
+    margin-top:14px;
 }
 
 .bar{
     height:100%;
     width:0;
-    background:linear-gradient(90deg,gold,#f59e0b);
-    transition:.3s;
+
+    background:linear-gradient(
+        90deg,
+        #fbbf24,
+        #f59e0b
+    );
+
+    transition:.35s;
 }
 
 .badge{
     display:inline-block;
-    padding:8px 12px;
-    border-radius:20px;
-    background:#f59e0b;
+
+    padding:10px 16px;
+
+    border-radius:24px;
+
+    background:linear-gradient(
+        135deg,
+        #fbbf24,
+        #f59e0b
+    );
+
     color:#111;
-    font-weight:bold;
+
+    font-weight:700;
+
     margin:4px;
 }
 
 .btn{
-    background:#22c55e;
-    border:none;
-    padding:10px 14px;
-    border-radius:10px;
-    font-weight:bold;
+    background:rgba(255,255,255,.10);
+
+    border:1px solid rgba(255,255,255,.18);
+
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:18px;
+
+    font-weight:600;
+
     cursor:pointer;
-    margin:4px;
+
+    transition:.2s;
 }
 
 .btn:hover{
-    opacity:.9;
+    background:rgba(255,255,255,.18);
 }
 
 .stat{
-    font-size:1.2em;
-    margin:6px 0;
+    font-size:1.15rem;
+    margin:10px 0;
 }
 
 .nav{
     display:flex;
     flex-wrap:wrap;
     gap:10px;
+    margin-bottom:24px;
 }
 
 .tab{
@@ -101,15 +209,43 @@ h1,h2,h3{
 }
 
 .rank{
-    font-size:1.4em;
+    font-size:1.6rem;
     font-weight:bold;
-    color:gold;
+    color:var(--gold);
 }
 
 .reward{
-    padding:10px;
-    border-bottom:1px solid rgba(255,255,255,.15);
+    padding:14px 0;
+    border-bottom:1px solid rgba(255,255,255,.12);
 }
+
+.shop-card{
+    background:rgba(255,255,255,.06);
+    border-radius:20px;
+    padding:18px;
+    margin-bottom:12px;
+}
+
+.shop-card h3{
+    margin-bottom:6px;
+}
+
+@media(max-width:768px){
+
+    .hero-title{
+        font-size:2rem;
+    }
+
+    .container{
+        padding:16px;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:22px;
+    }
+}
+
 </style>
 </head>
 
@@ -117,15 +253,40 @@ h1,h2,h3{
 
 <div class="container">
 
-<h1>🎮 Douglas's Battle Pass Premium</h1>
-<p>🏡 OWS • 📚 Learning • 🌲 Adventure • 💜 Kindness • 🤝 Teamwork</p>
+<div class="hero">
 
+    <div class="hero-title">
+        🎮 Douglas Battle Pass
+    </div>
+
+    <div class="hero-subtitle">
+        🏡 OWS • 📚 Learning • 🌲 Adventure • 💜 Kindness • 🤝 Teamwork
+    </div>
+
+</div>
+
+<div class="card today-card">
+
+    <div class="today-day">
+        🏡 Monday - OWS
+    </div>
+
+    <div class="today-subtitle">
+        Explore • Learn • Create
+    </div>
+
+    <div class="today-reward">
+        Complete missions to unlock gaming after 4pm
+    </div>
+
+</div>
 
 <div class="card nav">
     <button class="btn" onclick="showTab('dashboard')">🏠 Dashboard</button>
     <button class="btn" onclick="showTab('guide')">📖 Guide</button>
     <button class="btn" onclick="showTab('shop')">🛒 Shop</button>
 </div>
+
 
 <!-- DASHBOARD -->
 
