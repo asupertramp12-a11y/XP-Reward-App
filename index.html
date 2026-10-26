@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#03040a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Saira:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Saira:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* Layout: one command column over a cinematic 3D scene. Obsidian glass panels with hairline edges, HUD corner brackets on the briefing card, a floating command bar. */
 :root{
@@ -102,6 +102,90 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .bar{height:6px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
 .bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(70,224,255,.5),var(--cyan));box-shadow:0 0 12px var(--cyan);transition:width .8s cubic-bezier(.2,.9,.2,1)}
 .bar.gold i{background:linear-gradient(90deg,rgba(245,196,81,.5),var(--gold));box-shadow:0 0 12px var(--gold)}
+
+/* MoodLoop: a calm, bright, neutral space (Deep Ocean, Seafoam, Coral, Sky Mist, Sandstone) */
+#scene,.vignette,.fallback{transition:opacity .6s}
+body.calm{background:linear-gradient(180deg,#d4e9f4 0%,#e6f2f2 40%,#f5eddf 100%) fixed}
+body.calm #scene,body.calm .vignette,body.calm .fallback{opacity:0;pointer-events:none}
+body.calm header.top{display:none}
+body.calm .toast{background:rgba(255,255,255,.95);color:#1d3f63;box-shadow:0 14px 34px rgba(29,63,99,.18),inset 0 0 0 1px rgba(95,191,152,.6)}
+body.calm .toast div{font-family:"Nunito",var(--f-body);text-transform:none;letter-spacing:0;font-weight:800}
+body.calm .toast svg{color:#4fb48a}
+body.calm nav{background:rgba(255,255,255,.8);box-shadow:0 10px 30px rgba(29,63,99,.15),inset 0 0 0 1px rgba(29,63,99,.08)}
+body.calm nav button{color:#6f8ba3}
+body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shadow:inset 0 0 0 1px rgba(95,191,152,.7)}
+#v-mood{--ink:#1d3f63;--ink2:#4b6a85;--ink3:#86a0b5;--line:rgba(29,63,99,.10);color:var(--ink);font-family:"Nunito",var(--f-body);font-variant-numeric:normal}
+#v-mood .card{background:rgba(255,255,255,.72);border-radius:24px;box-shadow:0 12px 32px rgba(29,63,99,.10),inset 0 0 0 1px rgba(255,255,255,.8);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+#v-mood .sec{font-family:"Nunito",var(--f-body);font-weight:800;font-size:15px;letter-spacing:.06em;color:var(--ink2);margin:26px 4px 10px}
+#v-mood .sec::after{background:linear-gradient(90deg,rgba(29,63,99,.16),transparent)}
+#v-mood .empty{color:var(--ink2);font-weight:600}
+.ml-head{display:flex;align-items:center;gap:12px;margin:2px 4px 14px}
+.ml-head svg{width:48px;height:48px;flex:none}
+.ml-word{font-weight:800;font-size:30px;line-height:1;letter-spacing:-.01em}
+.ml-word span{color:#4fb48a}
+.ml-tag{font-size:13px;font-weight:700;font-style:italic;color:var(--ink2);margin-top:4px}
+.ml-stage{padding:18px 8px 16px;text-align:center}
+.ml-q{font-weight:800;font-size:21px;line-height:1.25;margin:0 12px 6px;text-wrap:balance}
+.ml-band{display:block;width:100%;max-width:400px;height:auto;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;filter:drop-shadow(0 16px 18px rgba(29,63,99,.20))}
+.ml-band:active{cursor:grabbing}
+.ml-band .seg{transition:stroke-width .2s}
+.ml-band .seg.sel{stroke:#fff;stroke-width:3.5}
+.ml-pick{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:4px}
+.ml-pick button{width:48px;height:48px;flex:none;border-radius:50%;background:#fff;color:var(--ink);font-size:26px;font-weight:800;line-height:1;box-shadow:0 4px 14px rgba(29,63,99,.14)}
+.ml-name{min-width:150px;font-weight:800;font-size:26px;line-height:1.1}
+.ml-hint{font-size:13px;font-weight:700;color:var(--ink3);margin-top:3px}
+.ml-sw{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:16px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.ml-sw button{width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.85),0 2px 8px rgba(29,63,99,.22)}
+.ml-sw button.on{outline:3px solid var(--ink);outline-offset:2px}
+.ml-draft{padding:18px 16px;margin-top:12px}
+.ml-draft .lbl{font-size:14px;font-weight:700;color:var(--ink2);margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.chipb{padding:8px 13px;border-radius:999px;background:#fff;color:var(--ink2);font-weight:700;font-size:14px;box-shadow:inset 0 0 0 1px var(--line)}
+.chipb.on{background:#d6f3e6;color:var(--ink);box-shadow:inset 0 0 0 1.5px #4fb48a}
+.ml-note{width:100%;min-height:88px;resize:vertical;padding:12px 14px;border-radius:16px;border:0;background:#fff;color:var(--ink);font:600 16px/1.45 "Nunito",var(--f-body);box-shadow:inset 0 0 0 1px var(--line)}
+.ml-note::placeholder{color:var(--ink3)}
+.ml-note:focus{outline:2px solid #4fb48a;outline-offset:1px}
+.ml-row{display:flex;gap:10px;margin-top:14px}
+.ml-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:16px;font:800 16px "Nunito",var(--f-body)}
+.ml-btn.go{background:var(--ink);color:#fff;box-shadow:0 8px 20px rgba(29,63,99,.25)}
+.ml-btn.no{background:#fff;color:var(--ink2);box-shadow:inset 0 0 0 1px var(--line)}
+.ml-tip{display:flex;gap:12px;align-items:center;margin-top:12px;padding:14px 16px;border-radius:20px;background:color-mix(in srgb,var(--mc) 30%,#fff);font-weight:700;font-size:16px;line-height:1.45}
+.ml-tip svg{width:34px;height:34px;flex:none}
+.ml-day{padding:6px 16px}
+.ml-entry{display:flex;gap:12px;align-items:flex-start;padding:12px 0}
+.ml-entry+.ml-entry{border-top:1px solid var(--line)}
+.ml-entry svg.fc{width:36px;height:36px;flex:none}
+.ml-entry .tx{flex:1;min-width:0}
+.ml-entry .tx b{font-size:16px;font-weight:800}
+.ml-entry .tx small{color:var(--ink3);font-weight:700;font-size:12px;margin-left:6px}
+.ml-entry .tx p{margin-top:4px;color:var(--ink2);font-weight:600;font-size:15px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.ml-entry .tg{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.ml-entry .tg span{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(29,63,99,.06);color:var(--ink2)}
+.ml-entry button{font-size:12px;font-weight:700;color:var(--ink3);padding:6px 8px;border-radius:8px}
+.cal{padding:16px}
+.cal-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.cal-h b{font-weight:800;font-size:20px}
+.cal-h button{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#fff;font-size:22px;font-weight:800;color:var(--ink);box-shadow:0 3px 10px rgba(29,63,99,.12)}
+.cal-h button:disabled{opacity:.35}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-g .wd{text-align:center;font-size:11px;font-weight:800;color:var(--ink3);padding-bottom:4px}
+.cd{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;position:relative;font:700 14px "Nunito",var(--f-body);color:var(--ink2);background:rgba(29,63,99,.05)}
+.cd.has{background:var(--mc);color:var(--ink)}
+.cd.today{box-shadow:inset 0 0 0 2px var(--ink)}
+.cd.sel{outline:3px solid #f37f6a;outline-offset:1px}
+.cd.fut{opacity:.35}
+.cd.blank{background:none}
+.cd i{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);font-style:normal;font-size:9px;line-height:1;color:var(--ink)}
+.ml-key{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:14px;font-size:13px;font-weight:700;color:var(--ink2)}
+.ml-key span{display:inline-flex;align-items:center;gap:6px}
+.ml-key span::before{content:"";width:12px;height:12px;border-radius:4px;background:var(--mc)}
+.ml-sum{padding:16px;display:grid;gap:10px}
+.ml-sum .meta{color:var(--ink2);font-weight:700;font-size:14px}
+.ml-bar{display:grid;grid-template-columns:96px 1fr 26px;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.ml-bar .bar{height:12px;background:rgba(29,63,99,.07)}
+.ml-bar .bar i{background:var(--mc);box-shadow:none}
+.ml-bar em{font-style:normal;text-align:right;color:var(--ink2)}
+@media (prefers-reduced-motion:reduce){#mlDial{transition:none!important}}
 
 /* Game timer */
 .timer{margin-top:12px;padding:18px;background:linear-gradient(165deg,rgba(245,196,81,.11),rgba(12,16,30,.6) 55%)}
@@ -230,8 +314,8 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .parent{display:grid;gap:10px;margin-top:14px}
 
 /* Command bar */
-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));max-width:556px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;border-radius:20px;z-index:20;background:rgba(8,11,22,.72)}
-nav button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;border-radius:14px;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);transition:color .2s,background .2s}
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));max-width:556px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:6px;border-radius:20px;z-index:20;background:rgba(8,11,22,.72)}
+nav button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;border-radius:14px;font-size:9.5px;font-weight:600;letter-spacing:.05em;min-width:0;overflow:hidden;text-transform:uppercase;color:var(--ink-3);transition:color .2s,background .2s}
 nav button svg{font-size:21px}
 nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 0 1px rgba(70,224,255,.35)}
 
@@ -269,6 +353,7 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
   <section class="view on" id="v-dash"></section>
   <section class="view" id="v-story"></section>
   <section class="view" id="v-rewards"></section>
+  <section class="view" id="v-mood"></section>
   <section class="view" id="v-guide"></section>
 </div>
 
@@ -564,6 +649,269 @@ function toggleTimer(){
 }
 setInterval(() => { if (ensurePlay()){ persist(); renderAll(); } else tickTimer(); }, 1000);
 
+/* ================= MoodLoop =================
+   A calm, bright space styled after the MoodLoop wristband prototype.
+   Entries live in one Firebase doc per month: families/<code>M<YYYYMM>
+   shape: {days:{d26:{e<id>:{t, mood, tags:[], note}}}} */
+const ML_INK = '#1d3f63';
+const MOODS = [
+  {id:'happy',      name:'Happy',      col:'#ffd166', tip:'Brilliant! What made it a good one?',
+   face:'<path d="M8 14.2c1 1.5 2.4 2.3 4 2.3s3-.8 4-2.3"/>'},
+  {id:'calm',       name:'Calm',       col:'#86d9b4', tip:'Nice and steady. Calm is a superpower.',
+   face:'<path d="M8.5 15.2h7"/>'},
+  {id:'sad',        name:'Sad',        col:'#9cc9ec', tip:'Feeling sad is OK. A hug or a chat with Mum or Dad can help.',
+   face:'<path d="M8 16.6c1-1.3 2.4-2 4-2s3 .7 4 2"/>'},
+  {id:'worried',    name:'Worried',    col:'#bcaef0', tip:'Feeling worried is OK. Try 5 slow breaths, then tell someone what is on your mind.',
+   face:'<path d="M7.6 8.3l2.2-1.1M16.4 8.3l-2.2-1.1"/><path d="M8.3 16c.9-.9 1.8-.9 2.6 0s1.8.9 2.6 0 1.6-.8 2.2 0"/>'},
+  {id:'frustrated', name:'Frustrated', col:'#ffb07f', tip:'Feeling frustrated is OK. Take a break, then reset and try again.',
+   face:'<path d="M7.5 7.8l2.6 1M16.5 7.8l-2.6 1"/><path d="M8.5 16h7"/>'},
+  {id:'angry',      name:'Angry',      col:'#f3836f', tip:'Feeling angry is OK. Hurting people is not. Take a break, breathe, and ask for help.',
+   face:'<path d="M7 7.3l3.2 1.6M17 7.3l-3.2 1.6"/><path d="M8 16.8c1-1.1 2.4-1.7 4-1.7s3 .6 4 1.7"/>'}
+];
+const ML_TAGS = ['School', 'Home', 'Friends', 'Family', 'Gaming', 'Tired', 'Too noisy', 'Body'];
+const moodBy = id => MOODS.find(m => m.id === id) || MOODS[1];
+const faceBits = m => `<path d="M9 11h.01M15 11h.01" stroke-width="2.6"/>${m.face}`;
+const faceSVG = (m, cls = '') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="${ML_INK}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10.2" fill="${m.col}"/>${faceBits(m)}</svg>`;
+const monthKey = ds => ds.slice(0, 7);
+const ML_KEY = 'douglasMoodV1';
+let moodData = (() => { try{ return JSON.parse(localStorage.getItem(ML_KEY)) || {}; }catch(e){ return {}; } })();
+const moodSaveLocal = () => { try{ localStorage.setItem(ML_KEY, JSON.stringify(moodData)); }catch(e){} };
+const moodSubs = {};
+let moodView = {month:monthKey(dateStr()), sel:dateStr(), draft:null, tip:null, angle:0, live:null, dragging:false};
+
+function moodRef(mk){
+  if (!fbReady() || !window.firebase || !firebase.apps.length) return null;
+  const c = familyCode(); if (!c) return null;
+  return firebase.firestore().collection('families').doc(c + 'M' + mk.replace('-', ''));
+}
+function moodWatch(mk){
+  if (moodSubs[mk]) return; const r = moodRef(mk); if (!r) return;
+  moodSubs[mk] = true;
+  r.onSnapshot(snap => {
+    if (snap.metadata.fromCache && !snap.exists) return;
+    moodData[mk] = snap.exists ? (snap.data() || {days:{}}) : (moodData[mk] || {days:{}});
+    moodSaveLocal(); if (tab === 'mood') renderMood();
+  }, () => { delete moodSubs[mk]; });
+}
+function entriesFor(ds){
+  const d = ((moodData[monthKey(ds)] || {}).days || {})['d' + ds.slice(8)] || {};
+  return Object.entries(d).map(([id, e]) => Object.assign({id}, e)).filter(e => e && e.mood).sort((a, b) => a.t - b.t);
+}
+async function moodAdd(ds, entry){
+  const mk = monthKey(ds), dk = 'd' + ds.slice(8), id = 'e' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  moodData[mk] = moodData[mk] || {days:{}}; moodData[mk].days = moodData[mk].days || {};
+  (moodData[mk].days[dk] = moodData[mk].days[dk] || {})[id] = entry;
+  moodSaveLocal();
+  const r = moodRef(mk);
+  if (r){ try{ await r.set({days:{[dk]:{[id]:entry}}}, {merge:true}); }catch(e){ lastErr = e && (e.code || e.message); toast([['pulse', 'Saved here, will sync later']]); } }
+}
+async function moodDel(ds, id){
+  const mk = monthKey(ds), dk = 'd' + ds.slice(8);
+  try{ delete moodData[mk].days[dk][id]; }catch(e){}
+  moodSaveLocal(); renderMood();
+  const r = moodRef(mk);
+  if (r){ try{ await r.update({[`days.${dk}.${id}`]: firebase.firestore.FieldValue.delete()}); }catch(e){ lastErr = e && (e.code || e.message); } }
+}
+const niceDate = ds => { const [y, m, d] = ds.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}); };
+const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
+
+
+/* ---- The wristband ---- */
+const BANDS = {seafoam:['#cdf2e1','#8fdcbc','#56b88f'], coral:['#fdd6cb','#f59a86','#d26d58'], sky:['#dceef9','#a9d2ee','#6fa6d0']};
+let bandName = (() => { try{ const b = localStorage.getItem('douglasBand'); return BANDS[b] ? b : 'seafoam'; }catch(e){ return 'seafoam'; } })();
+const CX = 180, CY = 134;
+const pol = (r, deg) => [CX + r * Math.sin(deg * Math.PI / 180), CY - r * Math.cos(deg * Math.PI / 180)];
+function sector(r1, r2, a1, a2){
+  const f = n => n.toFixed(2), [x1, y1] = pol(r2, a1), [x2, y2] = pol(r2, a2), [x3, y3] = pol(r1, a2), [x4, y4] = pol(r1, a1);
+  return `M${f(x1)} ${f(y1)}A${r2} ${r2} 0 0 1 ${f(x2)} ${f(y2)}L${f(x3)} ${f(y3)}A${r1} ${r1} 0 0 0 ${f(x4)} ${f(y4)}Z`;
+}
+function bandSVG(b){
+  const [lt, base, dk] = BANDS[b] || BANDS.seafoam;
+  const segs = MOODS.map((m, i) => { const a = i * 60;
+    return `<path class="seg" data-seg="${i}" d="${sector(50, 98, a - 28, a + 28)}" fill="${m.col}"/>
+      <g transform="rotate(${a} ${CX} ${CY})" pointer-events="none"><g transform="translate(${CX - 15} ${CY - 74 - 15}) scale(1.25)" fill="none" stroke="${ML_INK}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.6"/>${faceBits(m)}</g></g>`; }).join('');
+  return `<svg class="ml-band" id="mlBand" viewBox="0 0 360 268" role="img" aria-label="MoodLoop wristband. Turn the dial to choose a feeling.">
+    <defs>
+      <linearGradient id="mlStrap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lt}"/><stop offset=".5" stop-color="${base}"/><stop offset="1" stop-color="${dk}"/></linearGradient>
+      <radialGradient id="mlHouse" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="${lt}"/><stop offset=".55" stop-color="${base}"/><stop offset="1" stop-color="${dk}"/></radialGradient>
+      <radialGradient id="mlFaceBg" cx=".45" cy=".35" r=".75"><stop offset="0" stop-color="#3d4d60"/><stop offset="1" stop-color="#1f2a37"/></radialGradient>
+      <radialGradient id="mlCap" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#efe5d3"/></radialGradient>
+    </defs>
+    <rect x="-40" y="94" width="440" height="80" rx="40" fill="url(#mlStrap)"/>
+    ${[288, 310, 332, 354].map(x => `<ellipse cx="${x}" cy="134" rx="4.5" ry="5.5" fill="${dk}" opacity=".8"/>`).join('')}
+    <rect x="14" y="86" width="26" height="96" rx="11" fill="${base}" stroke="${dk}" stroke-width="1.5"/>
+    <circle cx="${CX}" cy="${CY}" r="124" fill="url(#mlHouse)" stroke="${dk}" stroke-width="1.5"/>
+    <circle cx="${CX}" cy="${CY}" r="105" fill="url(#mlFaceBg)"/>
+    <g id="mlDial">${segs}</g>
+    <circle cx="${CX}" cy="${CY}" r="44" fill="url(#mlCap)" stroke="${dk}" stroke-opacity=".45"/>
+    <g id="mlCenter" pointer-events="none"></g>
+    <path d="M${CX - 10} ${CY - 121}L${CX + 10} ${CY - 121}L${CX} ${CY - 106}Z" fill="${ML_INK}" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>
+    <ellipse cx="${CX - 44}" cy="${CY - 80}" rx="48" ry="15" fill="#fff" opacity=".2" transform="rotate(-28 ${CX - 44} ${CY - 80})" pointer-events="none"/>
+  </svg>`;
+}
+const modIdx = a => ((Math.round(-a / 60) % 6) + 6) % 6;
+const draftIdx = () => moodView.draft ? MOODS.findIndex(m => m.id === moodView.draft.mood) : -1;
+function updateBand(anim = true){
+  const d = $('mlDial'); if (!d) return;
+  d.style.transformOrigin = `${CX}px ${CY}px`; d.style.transformBox = 'view-box';
+  d.style.transition = anim ? 'transform .55s cubic-bezier(.2,.9,.3,1.15)' : 'none';
+  d.style.transform = `rotate(${moodView.angle}deg)`;
+  const i = moodView.live !== null ? moodView.live : draftIdx(), m = i >= 0 ? MOODS[i] : null;
+  document.querySelectorAll('#mlDial .seg').forEach(p => p.classList.toggle('sel', +p.dataset.seg === i));
+  $('mlCenter').innerHTML = m
+    ? `<g transform="translate(${CX - 31} ${CY - 31}) scale(2.6)" fill="none" stroke="${ML_INK}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" fill="${m.col}"/>${faceBits(m)}</g>`
+    : `<text x="${CX}" y="${CY - 3}" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="16" fill="${ML_INK}">Turn</text><text x="${CX}" y="${CY + 16}" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="800" font-size="16" fill="${ML_INK}">me</text>`;
+  const nm = $('mlName'); nm.textContent = m ? m.name : 'Turn the dial';
+  $('mlHint').textContent = m ? (moodView.live !== null ? 'Let go to choose' : 'Add a note below, then Save') : 'Spin it, tap a face, or use the arrows';
+  const today = dateStr();
+  $('mlQ').textContent = moodView.sel === today ? 'How are you feeling right now?' : `How did you feel on ${niceDate(moodView.sel)}?`;
+}
+function selectIdx(i){
+  const target = -i * 60, cur = moodView.angle, d = (((target - cur) % 360) + 540) % 360 - 180;
+  moodView.angle = cur + d; moodView.live = null; moodView.tip = null;
+  moodView.draft = Object.assign(moodView.draft || {tags:[], note:''}, {mood:MOODS[i].id});
+  updateBand(true); renderMoodRest(); buzz(10);
+}
+function bindBand(svg){
+  let drag = null;
+  const at = e => { const r = svg.getBoundingClientRect(), x = (e.clientX - r.left) * 360 / r.width - CX, y = (e.clientY - r.top) * 268 / r.height - CY;
+    return {deg:Math.atan2(x, -y) * 180 / Math.PI, dist:Math.hypot(x, y)}; };
+  svg.addEventListener('pointerdown', e => {
+    const a = at(e); if (a.dist < 30 || a.dist > 126) return;
+    drag = {prev:a.deg, x:e.clientX, y:e.clientY, moved:false, seg:e.target.closest && e.target.closest('[data-seg]')};
+    try{ svg.setPointerCapture(e.pointerId); }catch(_){}
+    e.preventDefault();
+  });
+  svg.addEventListener('pointermove', e => {
+    if (!drag) return;
+    if (!drag.moved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 6){ drag.moved = true; moodView.dragging = true; }
+    if (!drag.moved) return;
+    const a = at(e), dd = (((a.deg - drag.prev) % 360) + 540) % 360 - 180; drag.prev = a.deg;
+    moodView.angle += dd;
+    const li = modIdx(moodView.angle); if (li !== moodView.live){ moodView.live = li; buzz(6); }
+    updateBand(false);
+  });
+  const end = () => {
+    if (!drag) return; const d = drag; drag = null; moodView.dragging = false;
+    if (d.moved) selectIdx(modIdx(moodView.angle));
+    else if (d.seg) selectIdx(+d.seg.dataset.seg);
+  };
+  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+}
+
+const ML_LOGO = `<svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke-linecap="round" stroke-width="6">
+  <path d="M24 6a18 18 0 0 1 17.5 13.8" stroke="#f37f6a"/><path d="M41.6 27.5A18 18 0 0 1 16 40.2" stroke="#1d3f63"/>
+  <path d="M10 35A18 18 0 0 1 17 8" stroke="#56b88f"/><circle cx="24" cy="24" r="6" fill="#9cc9ec" stroke="none"/></svg>`;
+
+let moodPending = false;
+function renderMood(){
+  const el = $('v-mood'); if (!el) return;
+  moodWatch(monthKey(dateStr())); moodWatch(moodView.month);
+  if (!$('mlBand') || el.dataset.bandc !== bandName){
+    el.dataset.bandc = bandName;
+    el.innerHTML = `
+      <div class="ml-head">${ML_LOGO}<div><div class="ml-word">Mood<span>Loop</span></div><div class="ml-tag">Be yourself. Feel safe. Thrive together.</div></div></div>
+      <div class="card ml-stage">
+        <h2 class="ml-q" id="mlQ"></h2>
+        ${bandSVG(bandName)}
+        <div class="ml-pick"><button data-act="mlprev" aria-label="Turn the dial back">‹</button>
+          <div><div class="ml-name" id="mlName"></div><div class="ml-hint" id="mlHint"></div></div>
+          <button data-act="mlnext" aria-label="Turn the dial on">›</button></div>
+        <div class="ml-sw">Band ${Object.keys(BANDS).map(b => `<button data-band="${b}" class="${b === bandName ? 'on' : ''}" style="background:${BANDS[b][1]}" aria-label="${b} band"></button>`).join('')}</div>
+      </div>
+      <div id="mlRest"></div>`;
+    bindBand($('mlBand'));
+  }
+  if (!moodView.dragging) updateBand(false);
+  renderMoodRest();
+}
+
+function renderMoodRest(){
+  const el = $('mlRest'); if (!el) return;
+  const ae = document.activeElement;
+  if (ae && ae.id === 'mlNote'){ moodPending = true; return; }   // don't redraw under his fingers
+  moodPending = false;
+  const today = dateStr(), v = moodView, isToday = v.sel === today, dr = v.draft;
+  const [Y, M] = v.month.split('-').map(Number), first = new Date(Y, M - 1, 1), days = new Date(Y, M, 0).getDate();
+  const lead = (first.getDay() + 6) % 7, cells = [];
+  for (let i = 0; i < lead; i++) cells.push('<div class="cd blank"></div>');
+  for (let d = 1; d <= days; d++){
+    const ds = `${Y}-${pad2(M)}-${pad2(d)}`, es = entriesFor(ds), last = es[es.length - 1], fut = ds > today;
+    cells.push(`<button class="cd ${last ? 'has' : ''} ${ds === today ? 'today' : ''} ${ds === v.sel ? 'sel' : ''} ${fut ? 'fut' : ''}" ${fut ? 'disabled' : `data-day="${ds}"`}
+      ${last ? `style="--mc:${moodBy(last.mood).col}"` : ''} aria-label="${niceDate(ds)}${last ? ', ' + moodBy(last.mood).name : ''}">${d}${es.length > 1 ? `<i>×${es.length}</i>` : ''}</button>`);
+  }
+  const counts = {}; let checked = 0;
+  for (let d = 1; d <= days; d++){ const es = entriesFor(`${Y}-${pad2(M)}-${pad2(d)}`); if (es.length) checked++; es.forEach(e => counts[e.mood] = (counts[e.mood] || 0) + 1); }
+  const maxC = Math.max(1, ...Object.values(counts)), ranked = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const top = ranked[0] && (!ranked[1] || ranked[0][1] > ranked[1][1]) ? ranked[0] : null;
+  const monthName = first.toLocaleDateString('en-GB', {month:'long', year:'numeric'});
+  const sel = entriesFor(v.sel), tip = v.tip ? moodBy(v.tip) : null;
+
+  el.innerHTML = `
+    ${dr ? `<div class="card ml-draft">
+      <p class="lbl">What's it about? (optional)</p>
+      <div class="chips">${ML_TAGS.map(t => `<button class="chipb ${dr.tags.includes(t) ? 'on' : ''}" data-mtag="${t}">${t}</button>`).join('')}</div>
+      <p class="lbl">Want to say more? (optional)</p>
+      <textarea class="ml-note" id="mlNote" maxlength="600" placeholder="What happened? What would help?">${esc(dr.note)}</textarea>
+      <div class="ml-row"><button class="ml-btn no" data-act="mlcancel">Cancel</button><button class="ml-btn go" data-act="mlsave">${ic('check')}Save ${moodBy(dr.mood).name}</button></div>
+    </div>` : ''}
+    ${tip ? `<div class="ml-tip" style="--mc:${tip.col}">${faceSVG(tip)}<span>${tip.tip}</span></div>` : ''}
+
+    <h2 class="sec">${isToday ? 'Today' : niceDate(v.sel)}</h2>
+    <div class="card ml-day">${sel.length ? sel.map(e => { const m = moodBy(e.mood);
+      return `<div class="ml-entry">${faceSVG(m, 'fc')}<div class="tx"><b>${m.name}</b><small>${new Date(e.t).toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})}</small>
+        ${e.tags && e.tags.length ? `<div class="tg">${e.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
+        ${e.note ? `<p>${esc(e.note)}</p>` : ''}</div>
+        <button data-mdel="${v.sel}|${e.id}" aria-label="Remove">Remove</button></div>`; }).join('')
+      : `<div class="empty">${isToday ? 'No check-ins yet today. Turn the dial above.' : 'Nothing logged on this day.'}</div>`}</div>
+
+    <h2 class="sec">Mood calendar</h2>
+    <div class="card cal">
+      <div class="cal-h"><button data-mnav="-1" aria-label="Previous month">‹</button><b>${monthName}</b><button data-mnav="1" aria-label="Next month" ${v.month >= monthKey(today) ? 'disabled' : ''}>›</button></div>
+      <div class="cal-g">${['M','T','W','T','F','S','S'].map(x => `<div class="wd">${x}</div>`).join('')}${cells.join('')}</div>
+      <div class="ml-key">${MOODS.map(m => `<span style="--mc:${m.col}">${m.name}</span>`).join('')}</div>
+    </div>
+
+    <h2 class="sec">${first.toLocaleDateString('en-GB', {month:'long'})} at a glance</h2>
+    <div class="card ml-sum">
+      ${checked ? `<div class="meta">Checked in on ${checked} day${checked > 1 ? 's' : ''}${top ? ` · Most often: <b style="color:var(--ink)">${moodBy(top[0]).name}</b>` : ''}</div>
+      ${MOODS.map(m => `<div class="ml-bar" style="--mc:${m.col}"><span>${m.name}</span><div class="bar"><i style="width:${(counts[m.id] || 0) / maxC * 100}%"></i></div><em>${counts[m.id] || 0}</em></div>`).join('')}`
+      : '<div class="empty">No check-ins this month yet.</div>'}
+    </div>`;
+  const ta = $('mlNote');
+  if (ta){ ta.oninput = () => { if (moodView.draft) moodView.draft.note = ta.value; };
+    ta.onblur = () => setTimeout(() => { if (moodPending) renderMoodRest(); }, 0); }
+}
+
+function moodClick(t){
+  const v = moodView;
+  if (t.dataset.act === 'mlprev' || t.dataset.act === 'mlnext'){
+    const cur = draftIdx() >= 0 ? draftIdx() : modIdx(v.angle);
+    selectIdx((cur + (t.dataset.act === 'mlnext' ? 1 : 5)) % 6); return true;
+  }
+  if (t.dataset.band){ bandName = t.dataset.band; try{ localStorage.setItem('douglasBand', bandName); }catch(e){} renderMood(); return true; }
+  if (t.dataset.mtag && v.draft){ const i = v.draft.tags.indexOf(t.dataset.mtag); i < 0 ? v.draft.tags.push(t.dataset.mtag) : v.draft.tags.splice(i, 1); renderMoodRest(); return true; }
+  if (t.dataset.act === 'mlcancel'){ v.draft = null; updateBand(); renderMoodRest(); return true; }
+  if (t.dataset.act === 'mlsave' && v.draft){
+    const dr = v.draft, ta = $('mlNote'); if (ta) dr.note = ta.value;
+    const now = new Date(), [y, m, d] = v.sel.split('-').map(Number);
+    const when = v.sel === dateStr() ? now : new Date(y, m - 1, d, 19, 0);
+    moodAdd(v.sel, {t:when.getTime(), mood:dr.mood, tags:dr.tags.slice(), note:(dr.note || '').trim().slice(0, 600)});
+    v.tip = dr.mood; v.draft = null; updateBand(); renderMoodRest(); buzz(12);
+    toast([['heart', 'Feeling saved']]); return true;
+  }
+  if (t.dataset.day){ v.sel = t.dataset.day; v.draft = null; v.tip = null; updateBand(); renderMoodRest(); window.scrollTo({top:0, behavior:'smooth'}); return true; }
+  if (t.dataset.mnav){
+    const [y, m] = v.month.split('-').map(Number), n = new Date(y, m - 1 + Number(t.dataset.mnav), 1), mk = `${n.getFullYear()}-${pad2(n.getMonth() + 1)}`;
+    if (mk > monthKey(dateStr())) return true; v.month = mk; renderMood(); return true;
+  }
+  if (t.dataset.mdel){
+    const [ds, id] = t.dataset.mdel.split('|');
+    ask('Remove this check-in?', 'It will be removed on every device.', 'Remove').then(ok => { if (ok) moodDel(ds, id); }); return true;
+  }
+  return false;
+}
+
 /* ================= Render ================= */
 const $ = id => document.getElementById(id);
 const ringStyle = (c, col) => `background:conic-gradient(${col} ${c / 6 * 360}deg, rgba(255,255,255,.08) 0)`;
@@ -576,7 +924,7 @@ function gamingHTML(c){
 }
 
 function renderNav(){
-  $('nav').innerHTML = [['dash','home','Dashboard'],['story','target','Storyboard'],['rewards','gift','Rewards'],['guide','book','Guide']]
+  $('nav').innerHTML = [['dash','home','Dashboard'],['story','target','Storyboard'],['rewards','gift','Rewards'],['mood','heart','MoodLoop'],['guide','book','Guide']]
     .map(([k, i, l]) => `<button data-tab="${k}" class="${k === tab ? 'on' : ''}">${ic(i)}${l}</button>`).join('');
 }
 
@@ -686,6 +1034,7 @@ function renderGuide(){
     ${card('home', 'Monday - OWS', `<p>OWS is <b style="color:var(--ink)">Our Wilde Space</b>.</p><p>Monday is a dedicated day with Mum for learning, creativity, exploration, outdoor activities and fun.</p>`)}
     ${card('target', 'What Each Mission Means', `<div class="tbl">${MISSIONS.map(m =>
       `<div class="tr"><span>${m.name}</span><span style="color:var(--ink);text-align:right">${m.what}</span></div>`).join('')}</div>`)}
+    ${card('heart', 'MoodLoop', `<p>MoodLoop is for noticing feelings. Pick the face that matches how you feel, add a few words if you want, and Mum and Dad can see it too.</p><p>All feelings are OK. There are no stars or tokens for moods, so always pick the true one.</p>`)}
     ${card('pad', 'Gaming Rules', list(['No gaming in the morning.', 'Gaming is normally after 4pm.', 'Complete missions first.',
       'Gaming is earned.', 'Gaming should stop when Mum or Dad ask.', 'Real life comes before screen time.', 'Use the Game Timer when you play.', 'Unused game time rolls over to the next day.']) +
       `<div class="tbl" style="margin-top:12px">
@@ -727,7 +1076,7 @@ function renderTop(){
   $('topTok').innerHTML = `${ic('token')}${tokens()}`;
   $('weekLbl').textContent = `Week ${state.weekNo} · Level ${level(stars())}`;
 }
-function renderAll(){ if (!state.play) ensurePlay(); renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderGuide(); }
+function renderAll(){ if (!state.play) ensurePlay(); renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderMood(); renderGuide(); }
 
 /* ================= FX ================= */
 let toastTimer;
@@ -816,8 +1165,9 @@ async function wipe(){
 
 function go(k){
   tab = k;
+  document.body.classList.toggle('calm', k === 'mood');
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'v-' + k));
-  renderAll(); space.setScene(k);
+  renderAll(); space.setScene(k === 'mood' ? 'guide' : k);
   if (k === 'story'){ const el = $('day-' + todayIdx()); setTimeout(() => el && el.scrollIntoView({behavior:'smooth', block:'start'}), 80); }
   else window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -825,6 +1175,7 @@ function go(k){
 document.addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t || t.closest('#modal')) return;
   if (t.dataset.tab) return go(t.dataset.tab);
+  if (tab === 'mood' && moodClick(t)) return;
   if (t.dataset.go) return go(t.dataset.go);
   if (t.dataset.d !== undefined) return toggle(+t.dataset.d, +t.dataset.m);
   if (t.dataset.redeem) return redeem(t.dataset.redeem);
