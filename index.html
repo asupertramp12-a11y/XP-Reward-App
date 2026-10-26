@@ -229,7 +229,7 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 .modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:20px;background:rgba(2,3,8,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .mbox{width:100%;max-width:380px;padding:22px;background:rgba(14,18,34,.92)}
 .mbox h3{font-family:var(--f-display);font-weight:800;font-size:24px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:8px}
-.mbox p{color:var(--ink-2);font-weight:500;line-height:1.55;white-space:pre-line}
+.mbox p{color:var(--ink-2);font-weight:500;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere}
 .mrow{display:flex;gap:10px;margin-top:20px}
 .mrow .btn{flex:1}
 .toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-170%);z-index:50;display:grid;gap:6px;padding:14px 18px;min-width:240px;max-width:min(92vw,420px);border-radius:14px;background:rgba(10,14,28,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(70,224,255,.45),0 0 30px rgba(70,224,255,.2);transition:transform .5s cubic-bezier(.2,1.3,.4,1)}
@@ -273,6 +273,8 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 /* ================= Icons ================= */
 const ICONS = {
@@ -361,17 +363,55 @@ function saveLocal(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }ca
 const CLIENT = Math.random().toString(36).slice(2, 10);
 let ref = null, writing = false, dirty = false, pushTimer = null, lastRev = 0, readOnly = false, seenCloud = false;
 
+/* ---- Family sync (Firebase) ----
+   Paste your Firebase web config between the braces below (see setup steps).
+   Leave it empty and the app saves on this device only. */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCdS-73Pb77tgIZGskEU3MlyPac6BIT9l0",
+  authDomain: "douglas-battle-pass.firebaseapp.com",
+  projectId: "douglas-battle-pass",
+  storageBucket: "douglas-battle-pass.firebasestorage.app",
+  messagingSenderId: "245650212548",
+  appId: "1:245650212548:web:25d20b785ce7633b5e2b91"
+};
+
+const FAM_KEY = 'douglasFamilyCode';
+const fbReady = () => !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId && window.firebase);
+const goodCode = c => typeof c === 'string' && /^[A-Za-z0-9]{20,64}$/.test(c);
+function familyCode(){
+  const m = location.hash.match(/family=([A-Za-z0-9]+)/);
+  if (m && goodCode(m[1])){ try{ localStorage.setItem(FAM_KEY, m[1]); }catch(e){} return m[1]; }
+  try{ const c = localStorage.getItem(FAM_KEY); if (goodCode(c)) return c; }catch(e){}
+  return null;
+}
+function newCode(){
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789', a = new Uint32Array(24);
+  crypto.getRandomValues(a); return Array.from(a, n => abc[n % abc.length]).join('');
+}
+const familyLink = c => location.origin + location.pathname + '#family=' + c;
+
 function setSync(s){
   const el = $('sync'); el.dataset.s = s;
-  el.querySelector('span').textContent = {local:'This device', connecting:'Linking', saving:'Saving', synced:'Synced', offline:'Offline', readonly:'View only'}[s] || s;
+  el.querySelector('span').textContent = {local:'This device', nolink:'Not linked', connecting:'Linking', saving:'Saving', synced:'Synced', offline:'Offline', readonly:'View only'}[s] || s;
 }
 async function initCloud(){
-  if (!window.claude || typeof window.claude.use !== 'function') return setSync('local');
-  setSync('connecting');
-  let db = null;
-  try{ db = await window.claude.use('db'); }catch(e){}
-  if (!db) return setSync('local');
-  try{ ref = db.doc('game/state'); }catch(e){ return setSync('local'); }
+  if (fbReady()){
+    const code = familyCode();
+    if (!code) return setSync('nolink');
+    if (!location.hash.includes(code)) history.replaceState(null, '', '#family=' + code);
+    setSync('connecting');
+    try{
+      if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+      ref = firebase.firestore().collection('families').doc(code);
+    }catch(e){ return setSync('offline'); }
+  } else {
+    if (!window.claude || typeof window.claude.use !== 'function') return setSync('local');
+    setSync('connecting');
+    let db = null;
+    try{ db = await window.claude.use('db'); }catch(e){}
+    if (!db) return setSync('local');
+    try{ ref = db.doc('game/state'); }catch(e){ return setSync('local'); }
+  }
   ref.onSnapshot(snap => {
     if (snap.metadata.hasPendingWrites) return;
     if (!snap.exists){ if (!seenCloud){ seenCloud = true; dirty = true; flush(); } return; }
@@ -396,7 +436,7 @@ async function flush(){
     await ref.set({state:JSON.parse(JSON.stringify(state)), rev:lastRev, by:CLIENT, at:new Date().toISOString()});
     setSync('synced');
   }catch(e){
-    if (e && (e.code === 'invalid_argument' || e.code === 'not_granted')){ readOnly = true; setSync('readonly'); }
+    if (e && (e.code === 'invalid_argument' || e.code === 'not_granted' || e.code === 'permission-denied')){ readOnly = true; setSync('readonly'); }
     else { dirty = true; setSync('offline'); setTimeout(flush, 4000 + Math.random() * 2000); }
   }
   writing = false;
@@ -581,6 +621,11 @@ function renderGuide(){
         <div class="tr"><span>25 stars</span><span>£4</span></div>
         <div class="tr"><span>30+ stars</span><span>£5</span></div></div>
       <p style="margin-top:12px">Tokens carry over to next week. Stars and missions start fresh each week.</p>`)}
+    ${fbReady() ? card('users', 'Family Sync', familyCode()
+      ? `<p>This device is linked. Open the family link once on each phone or iPad and they'll all stay in step.</p>
+        <div class="parent"><button class="btn" data-act="sharelink">${ic('arrow')}Share family link</button></div>`
+      : `<p>This device isn't linked yet. If you already have a family link, open it here instead. Otherwise create one on this device.</p>
+        <div class="parent"><button class="btn" data-act="makelink">${ic('key')}Create family link</button></div>`) : ''}
     ${card('key', 'Parent Zone', `<p>Use on Sunday evening to start a new week. Unspent tokens are kept.</p>
       <div class="parent">
         <button class="btn" data-act="newweek">${ic('refresh')}Start New Week</button>
@@ -695,7 +740,24 @@ document.addEventListener('click', e => {
   if (t.dataset.undo !== undefined) return undo(+t.dataset.undo);
   if (t.dataset.act === 'newweek') return newWeek();
   if (t.dataset.act === 'wipe') return wipe();
+  if (t.dataset.act === 'makelink') return makeLink();
+  if (t.dataset.act === 'sharelink') return shareLink();
 });
+
+async function makeLink(){
+  if (!await ask('Create family link?', 'This device becomes the master copy. Then share the link with the other phones and the iPad.', 'Create')) return;
+  const c = newCode();
+  try{ localStorage.setItem(FAM_KEY, c); }catch(e){}
+  history.replaceState(null, '', '#family=' + c);
+  await initCloud(); renderAll(); shareLink();
+}
+async function shareLink(){
+  const c = familyCode(); if (!c) return;
+  const url = familyLink(c);
+  try{ if (navigator.share){ await navigator.share({title:'Douglas Battle Pass', url}); return; } }catch(e){ if (e && e.name === 'AbortError') return; }
+  try{ await navigator.clipboard.writeText(url); toast([['check', 'Family link copied']]); return; }catch(e){}
+  ask('Family link', url + '\n\nKeep this private: anyone with it can tick missions.', 'Done');
+}
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('modal').hidden) $('mNo').click(); });
 
 /* ================= Cinematic 3D backdrop ================= */
