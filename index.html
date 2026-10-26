@@ -361,7 +361,7 @@ function loadLocal(){
 function saveLocal(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 
 const CLIENT = Math.random().toString(36).slice(2, 10);
-let ref = null, writing = false, dirty = false, pushTimer = null, lastRev = 0, readOnly = false, seenCloud = false;
+let lastErr = null, ref = null, writing = false, dirty = false, pushTimer = null, lastRev = 0, readOnly = false, seenCloud = false;
 
 /* ---- Family sync (Firebase) ----
    Paste your Firebase web config between the braces below (see setup steps).
@@ -413,7 +413,7 @@ async function initCloud(){
     try{ ref = db.doc('game/state'); }catch(e){ return setSync('local'); }
   }
   ref.onSnapshot(snap => {
-    if (snap.metadata.hasPendingWrites) return;
+    if (snap.metadata.hasPendingWrites || snap.metadata.fromCache) return;
     if (!snap.exists){ if (!seenCloud){ seenCloud = true; dirty = true; flush(); } return; }
     seenCloud = true;
     const d = snap.data();
@@ -421,7 +421,8 @@ async function initCloud(){
     if (dirty || writing) return;
     if (valid(d.state)){ state = Object.assign(fresh(), JSON.parse(JSON.stringify(d.state))); saveLocal(); renderAll(); }
     setSync(readOnly ? 'readonly' : 'synced');
-  }, () => setSync('offline'));
+  }, e => { lastErr = e && (e.code || e.message); setSync(e && e.code === 'permission-denied' ? 'readonly' : 'offline'); });
+  if (fbReady()) setTimeout(() => { if (!seenCloud) setSync('offline'); }, 15000);
 }
 function persist(){
   saveLocal();
@@ -623,7 +624,8 @@ function renderGuide(){
       <p style="margin-top:12px">Tokens carry over to next week. Stars and missions start fresh each week.</p>`)}
     ${fbReady() ? card('users', 'Family Sync', familyCode()
       ? `<p>This device is linked. Open the family link once on each phone or iPad and they'll all stay in step.</p>
-        <div class="parent"><button class="btn" data-act="sharelink">${ic('arrow')}Share family link</button></div>`
+        <div class="parent"><button class="btn" data-act="sharelink">${ic('arrow')}Share family link</button>
+        <button class="btn ghost" data-act="checklink">${ic('pulse')}Check connection</button></div>`
       : `<p>This device isn't linked yet. If you already have a family link, open it here instead. Otherwise create one on this device.</p>
         <div class="parent"><button class="btn" data-act="makelink">${ic('key')}Create family link</button></div>`) : ''}
     ${card('key', 'Parent Zone', `<p>Use on Sunday evening to start a new week. Unspent tokens are kept.</p>
@@ -742,6 +744,7 @@ document.addEventListener('click', e => {
   if (t.dataset.act === 'wipe') return wipe();
   if (t.dataset.act === 'makelink') return makeLink();
   if (t.dataset.act === 'sharelink') return shareLink();
+  if (t.dataset.act === 'checklink') return checkLink();
 });
 
 async function makeLink(){
@@ -750,6 +753,21 @@ async function makeLink(){
   try{ localStorage.setItem(FAM_KEY, c); }catch(e){}
   history.replaceState(null, '', '#family=' + c);
   await initCloud(); renderAll(); shareLink();
+}
+async function checkLink(){
+  const c = familyCode(); if (!c) return;
+  const k = FIREBASE_CONFIG.apiKey || '', url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/families/${c}?key=${encodeURIComponent(k)}`;
+  let msg;
+  try{
+    const r = await fetch(url), j = await r.json().catch(() => ({}));
+    const why = (j.error && j.error.message) || '';
+    if (r.ok) msg = 'Connected. Firebase has your family save.';
+    else if (r.status === 404) msg = 'Connected, but nothing saved yet. Tick a mission and check again.';
+    else if (/api key/i.test(why)) msg = 'The API key is wrong.\nCopy the apiKey line again from Firebase → Project settings → Your apps.';
+    else if (r.status === 403) msg = 'Firebase refused access.\nCheck the Rules tab matches the rules exactly and was published.\n\n' + why;
+    else msg = `Firebase replied ${r.status}.\n${why}`;
+  }catch(e){ msg = 'Could not reach Firebase from this device (no internet, or a content blocker is stopping it).'; }
+  ask('Connection check', msg + (lastErr ? `\n\nLast error: ${lastErr}` : '') + `\n\nKey ends …${k.slice(-6)} · code ${c.slice(0, 4)}…`, 'OK');
 }
 async function shareLink(){
   const c = familyCode(); if (!c) return;
