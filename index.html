@@ -103,6 +103,16 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(70,224,255,.5),var(--cyan));box-shadow:0 0 12px var(--cyan);transition:width .8s cubic-bezier(.2,.9,.2,1)}
 .bar.gold i{background:linear-gradient(90deg,rgba(245,196,81,.5),var(--gold));box-shadow:0 0 12px var(--gold)}
 
+/* Game timer */
+.timer{margin-top:12px;padding:18px;background:linear-gradient(165deg,rgba(245,196,81,.11),rgba(12,16,30,.6) 55%)}
+.timer.run{box-shadow:var(--shadow),inset 0 0 0 1px rgba(245,196,81,.55),0 0 34px rgba(245,196,81,.16)}
+.gt-big{font-family:var(--f-display);font-weight:800;font-size:60px;line-height:1;margin:14px 0 4px;color:var(--gold);text-shadow:0 0 24px rgba(245,196,81,.35)}
+.timer.off .gt-big{color:var(--ink-3);text-shadow:none}
+.gt-lbl{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px}
+.gt-row{display:flex;gap:10px;margin-top:14px}
+.gt-row .btn{flex:1}
+.gt-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+
 /* Rank */
 .rank{margin-top:12px;padding:18px;display:flex;gap:18px;align-items:center}
 .hex{width:74px;height:84px;flex:none;display:grid;place-items:center;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(160deg,var(--cyan),var(--violet) 60%,var(--red));position:relative}
@@ -350,7 +360,7 @@ const MAX_STARS = 42, TOKENS_PER_STAR = 2, FULL_DAY_BONUS = 3, STARS_PER_LEVEL =
 /* ================= State (local + cloud sync) ================= */
 const KEY = 'douglasBattlePassV2';
 const blankWeek = () => DAYS.map(() => MISSIONS.map(() => false));
-const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[]});
+const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null});
 const valid = s => s && Array.isArray(s.week) && s.week.length === 7 && s.week.every(d => Array.isArray(d) && d.length === 6);
 let state = loadLocal();
 
@@ -419,10 +429,23 @@ async function initCloud(){
     const d = snap.data();
     if (d.by === CLIENT && d.rev === lastRev){ if (!dirty && !writing) setSync('synced'); return; }
     if (dirty || writing) return;
-    if (valid(d.state)){ state = Object.assign(fresh(), JSON.parse(JSON.stringify(d.state))); saveLocal(); renderAll(); }
+    const inc = unpack(d.state);
+    if (valid(inc)){ state = Object.assign(fresh(), inc); saveLocal(); renderAll(); }
     setSync(readOnly ? 'readonly' : 'synced');
   }, e => { lastErr = e && (e.code || e.message); setSync(e && e.code === 'permission-denied' ? 'readonly' : 'offline'); });
   if (fbReady()) setTimeout(() => { if (!seenCloud) setSync('offline'); }, 15000);
+}
+/* Firebase can't store lists inside lists, so each day is saved as a string like "110000". */
+function pack(s){
+  const o = JSON.parse(JSON.stringify(s));
+  o.week = s.week.map(d => d.map(x => x ? '1' : '0').join(''));
+  return o;
+}
+function unpack(s){
+  if (!s) return s;
+  const o = JSON.parse(JSON.stringify(s));
+  if (Array.isArray(o.week)) o.week = o.week.map(d => typeof d === 'string' ? d.split('').map(c => c === '1') : d);
+  return o;
 }
 function persist(){
   saveLocal();
@@ -434,11 +457,12 @@ async function flush(){
   if (!ref || writing || !dirty) return;
   writing = true; dirty = false; lastRev = Date.now();
   try{
-    await ref.set({state:JSON.parse(JSON.stringify(state)), rev:lastRev, by:CLIENT, at:new Date().toISOString()});
+    await ref.set({state:pack(state), rev:lastRev, by:CLIENT, at:new Date().toISOString()});
     setSync('synced');
   }catch(e){
+    lastErr = e && (e.code || e.message);
     if (e && (e.code === 'invalid_argument' || e.code === 'not_granted' || e.code === 'permission-denied')){ readOnly = true; setSync('readonly'); }
-    else { dirty = true; setSync('offline'); setTimeout(flush, 4000 + Math.random() * 2000); }
+    else { setSync('offline'); clearTimeout(pushTimer); pushTimer = setTimeout(() => { dirty = true; flush(); }, 4000 + Math.random() * 2000); }
   }
   writing = false;
   if (dirty) flush();
@@ -479,6 +503,67 @@ function checkBadges(){
   return got;
 }
 
+/* ================= Game timer =================
+   play = {date, earned (min), carry (min rolled in), used (sec), runningSince (ms|null), frozen}
+   Unused minutes at the end of a day roll into the next day. */
+const pad2 = n => String(n).padStart(2, '0');
+const dateStr = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const playUsed = (p, now = Date.now()) => p.used + (p.runningSince ? Math.max(0, (now - p.runningSince) / 1000) : 0);
+const playTotal = p => (p.earned + p.carry) * 60;
+function ensurePlay(){
+  const today = dateStr(), p = state.play, e = gaming(dayCount(todayIdx()));
+  if (!p || typeof p.date !== 'string'){ state.play = {date:today, earned:e, carry:0, used:0, runningSince:null}; return true; }
+  if (p.date !== today){
+    const left = Math.max(0, playTotal(p) - playUsed(p));
+    state.play = {date:today, earned:e, carry:Math.floor(left / 60), used:0, runningSince:null};
+    return true;
+  }
+  if (!p.frozen && p.earned !== e){ p.earned = e; return true; }
+  return false;
+}
+const clock = sec => { sec = Math.max(0, Math.round(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60;
+  return h ? `${h}:${pad2(m)}:${pad2(s)}` : `${m}:${pad2(s)}`; };
+
+function timerHTML(){
+  const p = state.play, total = playTotal(p), used = Math.min(total, playUsed(p)), left = total - used, run = !!p.runningSince;
+  const off = total === 0;
+  return `<div class="timer glass ${run ? 'run' : ''} ${off ? 'off' : ''}" id="gt">
+      <div class="row"><b>Game Timer</b><span id="gtState">${run ? 'Playing' : off ? 'Locked' : left <= 0 ? 'All used' : 'Paused'}</span></div>
+      <div class="gt-big" id="gtLeft">${clock(left)}</div>
+      <div class="gt-lbl">Left today</div>
+      <div class="bar gold"><i id="gtBar" style="width:${total ? left / total * 100 : 0}%"></i></div>
+      <div class="gt-chips">
+        <span class="tag">${p.earned} min earned today</span>
+        ${p.carry ? `<span class="tag" style="color:var(--gold)">+${p.carry} min rolled over</span>` : ''}
+        <span class="tag" id="gtUsed">Played ${clock(used)}</span>
+      </div>
+      <div class="gt-row">${off
+        ? `<button class="btn ghost" disabled>${ic('lock')}Complete 4 missions</button>`
+        : `<button class="btn ${run ? 'ghost' : 'gold'}" data-act="timer" ${left <= 0 && !run ? 'disabled' : ''}>${ic('pad')}${run ? 'Pause' : used > 0 ? 'Resume' : 'Start'}</button>`}</div>
+      <div class="meta">Start it when you play, pause when you stop. Anything left rolls over to tomorrow.</div>
+    </div>`;
+}
+function tickTimer(){
+  const p = state.play; if (!p) return;
+  const total = playTotal(p), used = playUsed(p);
+  if (p.runningSince && used >= total){
+    p.used = total; p.runningSince = null; persist(); renderAll();
+    toast([['lock', "Game time's up", 'gold']]); buzz([200, 100, 200]); return;
+  }
+  const l = $('gtLeft'); if (!l) return;
+  l.textContent = clock(total - used);
+  $('gtBar').style.width = (total ? (total - used) / total * 100 : 0) + '%';
+  $('gtUsed').textContent = 'Played ' + clock(Math.min(total, used));
+}
+function toggleTimer(){
+  ensurePlay();
+  const p = state.play;
+  if (p.runningSince){ p.used = Math.min(playTotal(p), playUsed(p)); p.runningSince = null; }
+  else { if (playTotal(p) - p.used <= 0) return; p.runningSince = Date.now(); buzz(15); }
+  persist(); renderAll();
+}
+setInterval(() => { if (ensurePlay()){ persist(); renderAll(); } else tickTimer(); }, 1000);
+
 /* ================= Render ================= */
 const $ = id => document.getElementById(id);
 const ringStyle = (c, col) => `background:conic-gradient(${col} ${c / 6 * 360}deg, rgba(255,255,255,.08) 0)`;
@@ -512,6 +597,8 @@ function renderDash(){
         <button class="btn" data-go="story">Missions ${ic('arrow')}</button>
       </div>
     </div>
+
+    ${timerHTML()}
 
     <div class="rank glass">
       <div class="hex">${ic(r.icon)}</div>
@@ -600,7 +687,7 @@ function renderGuide(){
     ${card('target', 'What Each Mission Means', `<div class="tbl">${MISSIONS.map(m =>
       `<div class="tr"><span>${m.name}</span><span style="color:var(--ink);text-align:right">${m.what}</span></div>`).join('')}</div>`)}
     ${card('pad', 'Gaming Rules', list(['No gaming in the morning.', 'Gaming is normally after 4pm.', 'Complete missions first.',
-      'Gaming is earned.', 'Gaming should stop when Mum or Dad ask.', 'Real life comes before screen time.']) +
+      'Gaming is earned.', 'Gaming should stop when Mum or Dad ask.', 'Real life comes before screen time.', 'Use the Game Timer when you play.', 'Unused game time rolls over to the next day.']) +
       `<div class="tbl" style="margin-top:12px">
         <div class="tr"><span>0–3 missions</span><span>Locked</span></div>
         <div class="tr"><span>4 missions</span><span>60 minutes</span></div>
@@ -618,6 +705,7 @@ function renderGuide(){
         <div class="tr"><span>Each mission</span><span>1 star + 2 tokens</span></div>
         <div class="tr"><span>Perfect day bonus</span><span>+3 tokens</span></div>
         <div class="tr"><span>Every 5 stars</span><span>Level up</span></div>
+        <div class="tr"><span>Unused game time</span><span>Rolls to tomorrow</span></div>
         <div class="tr"><span>20 stars</span><span>£3</span></div>
         <div class="tr"><span>25 stars</span><span>£4</span></div>
         <div class="tr"><span>30+ stars</span><span>£5</span></div></div>
@@ -639,7 +727,7 @@ function renderTop(){
   $('topTok').innerHTML = `${ic('token')}${tokens()}`;
   $('weekLbl').textContent = `Week ${state.weekNo} · Level ${level(stars())}`;
 }
-function renderAll(){ renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderGuide(); }
+function renderAll(){ if (!state.play) ensurePlay(); renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderGuide(); }
 
 /* ================= FX ================= */
 let toastTimer;
@@ -682,7 +770,7 @@ function toggle(d, m){
   const on = state.week[d][m];
   const aL = level(stars()), aG = gaming(dayCount(d)), aM = money(stars());
   const newB = checkBadges();
-  persist(); renderAll(); space.pulse(on ? 1 : 0);
+  ensurePlay(); persist(); renderAll(); space.pulse(on ? 1 : 0);
   if (!on) return;
   buzz(12);
   const msgs = [];
@@ -714,6 +802,7 @@ async function undo(idx){
 async function newWeek(){
   const e = earned(), s = stars();
   if (!await ask(`Start Week ${state.weekNo + 1}?`, `${s} stars this week = £${money(s)} pocket money.\n${e} tokens will be kept.\nAll missions will reset.`, 'Start week')) return;
+  ensurePlay(); state.play.frozen = true;
   state.banked += e; state.week = blankWeek(); state.weekNo += 1;
   persist(); go('dash');
   toast([['refresh', `Week ${state.weekNo} begins`]]); shards(40); space.pulse(4);
@@ -742,6 +831,7 @@ document.addEventListener('click', e => {
   if (t.dataset.undo !== undefined) return undo(+t.dataset.undo);
   if (t.dataset.act === 'newweek') return newWeek();
   if (t.dataset.act === 'wipe') return wipe();
+  if (t.dataset.act === 'timer') return toggleTimer();
   if (t.dataset.act === 'makelink') return makeLink();
   if (t.dataset.act === 'sharelink') return shareLink();
   if (t.dataset.act === 'checklink') return checkLink();
@@ -1008,7 +1098,7 @@ const space = (() => {
 })();
 
 /* ================= Boot ================= */
-checkBadges(); saveLocal(); renderAll(); initCloud();
+ensurePlay(); checkBadges(); saveLocal(); renderAll(); initCloud();
 </script>
 
 </body></html>
