@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#03040a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Saira:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Saira:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&family=Orbitron:wght@600;800&family=Russo+One&family=Cinzel:wght@600;700&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
 <style>
 /* Layout: one command column over a cinematic 3D scene. Obsidian glass panels with hairline edges, HUD corner brackets on the briefing card, a floating command bar. */
 :root{
@@ -26,6 +26,7 @@
   --r:18px;
   --f-display:"Saira Condensed","Arial Narrow",system-ui,sans-serif;
   --f-body:"Saira",system-ui,-apple-system,sans-serif;
+  --on-cyan:#021018;--on-gold:#1d1400;--ring-bg:#0a0e1c;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{min-height:100%}
@@ -102,6 +103,80 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .bar{height:6px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
 .bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(70,224,255,.5),var(--cyan));box-shadow:0 0 12px var(--cyan);transition:width .8s cubic-bezier(.2,.9,.2,1)}
 .bar.gold i{background:linear-gradient(90deg,rgba(245,196,81,.5),var(--gold));box-shadow:0 0 12px var(--gold)}
+
+/* ================= Skins =================
+   Each skin is one block of variables plus a background. Same app, new look.
+   To add one: copy a block, change the colours/background, and add it to SKINS in the script. */
+.skinbg{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0;transition:opacity .6s;background-size:cover}
+:root[data-skin]:not([data-skin="default"]) .skinbg{opacity:1}
+:root[data-skin="jet"] #scene,:root[data-skin="liner"] #scene,:root[data-skin="agent"] #scene,:root[data-skin="block"] #scene{opacity:0}
+body.calm .skinbg{opacity:0!important}
+#scene{transition:opacity .6s}
+.skin-prev{height:86px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--line);position:relative;overflow:hidden}
+.skin-prev b{position:absolute;left:10px;bottom:8px;font-size:12px;letter-spacing:.06em}
+.skin-prev i{position:absolute;right:10px;top:10px;width:16px;height:16px;border-radius:50%}
+.skin-tag{font-size:12px;font-weight:600;color:var(--ink-2);line-height:1.35}
+.reward.on{box-shadow:var(--shadow),inset 0 0 0 2px var(--cyan),0 0 26px color-mix(in srgb,var(--cyan) 25%,transparent)}
+
+/* Star Voyager: deep-space saga. Keeps the 3D starfield, warm gold and ion blue */
+:root[data-skin="voyager"]{--cyan:#6fc6ff;--gold:#ffe27a;--red:#ff6b4a;--violet:#9e8cff;--void:#02030a;
+  --f-display:"Orbitron","Saira Condensed",sans-serif;--on-cyan:#02101c}
+:root[data-skin="voyager"] .skinbg{background:radial-gradient(40% 30% at 85% 12%,rgba(255,226,122,.18),transparent 70%),radial-gradient(60% 40% at 10% 90%,rgba(111,198,255,.12),transparent 70%)}
+:root[data-skin="voyager"] .brief h1{font-size:clamp(26px,7.4vw,36px);letter-spacing:.04em}
+:root[data-skin="voyager"] .dt,:root[data-skin="voyager"] .rank .name{letter-spacing:.06em}
+
+/* Jet Ace: sunset flight deck with amber HUD lines */
+:root[data-skin="jet"]{--cyan:#ffb347;--cyan-dim:rgba(255,179,71,.16);--gold:#ffd166;--red:#ff5d5d;--violet:#ff8a5c;--lime:#9dff8a;
+  --void:#141823;--panel:rgba(20,22,34,.62);--line:rgba(255,190,120,.18);
+  --f-display:"Russo One","Saira Condensed",sans-serif;--on-cyan:#1e1206}
+:root[data-skin="jet"] .skinbg{background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 800' preserveAspectRatio='xMidYMid slice'%3E%3Cg fill='none' stroke='%23ffb347' stroke-opacity='.28' stroke-width='1.5'%3E%3Cpath d='M120 300h60M220 300h60M140 360h40M220 360h40M120 420h60M220 420h60M140 240h40M220 240h40'/%3E%3Ccircle cx='200' cy='330' r='34'/%3E%3Cpath d='M200 286v18M200 356v18M156 330h18M226 330h18'/%3E%3C/g%3E%3C/svg%3E") center/cover no-repeat,
+  linear-gradient(180deg,#151a33 0%,#3b2453 26%,#a8405a 48%,#ef7a3d 60%,#ffc072 66%,#2a2f3d 66.4%,#1a1e28 78%,#10131a 100%)}
+:root[data-skin="jet"] .vignette{opacity:.6}
+
+/* Grand Voyage: a 1912 ocean liner at night, brass and cream */
+:root[data-skin="liner"]{--cyan:#d8b26a;--cyan-dim:rgba(216,178,106,.15);--gold:#e9c98a;--red:#c7553f;--violet:#8fb3c9;--lime:#a9d6b5;
+  --void:#07121f;--panel:rgba(9,24,42,.66);--panel-2:rgba(233,201,138,.06);--line:rgba(216,178,106,.24);
+  --ink:#f6efe0;--ink-2:rgba(240,228,205,.76);--ink-3:rgba(240,228,205,.48);
+  --f-display:"Cinzel",Georgia,serif;--on-cyan:#1a1206;--ring-bg:#0a1626}
+:root[data-skin="liner"] .skinbg{background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60 Q25 48 50 60 T100 60 T150 60 T200 60 T250 60 T300 60 T350 60 T400 60 V120 H0Z' fill='%230b2742'/%3E%3Cpath d='M0 78 Q25 68 50 78 T100 78 T150 78 T200 78 T250 78 T300 78 T350 78 T400 78 V120 H0Z' fill='%23081d33'/%3E%3C/svg%3E") bottom/100% 22% no-repeat,
+  radial-gradient(1.2px 1.2px at 20% 12%,#fff8,transparent),radial-gradient(1px 1px at 70% 8%,#fff7,transparent),radial-gradient(1.4px 1.4px at 45% 22%,#fff6,transparent),radial-gradient(1px 1px at 85% 30%,#fff6,transparent),radial-gradient(1px 1px at 10% 35%,#fff5,transparent),
+  radial-gradient(14% 9% at 80% 16%,rgba(255,244,214,.55),rgba(255,244,214,.08) 60%,transparent 75%),
+  linear-gradient(180deg,#050c18 0%,#0d2440 55%,#123457 78%,#0a2238 100%)}
+:root[data-skin="liner"] .brief h1{font-size:clamp(26px,7.6vw,38px);letter-spacing:.03em}
+:root[data-skin="liner"] .glass{box-shadow:var(--shadow),inset 0 0 0 1px var(--line),inset 0 0 0 4px rgba(216,178,106,.05)}
+
+/* Field Ops: secret-agent dossier with red laser grid */
+:root[data-skin="agent"]{--cyan:#ff3b3b;--cyan-dim:rgba(255,59,59,.14);--gold:#f2f2f2;--red:#ff3b3b;--violet:#b0b0b8;--lime:#47ff8a;
+  --void:#060608;--panel:rgba(14,14,18,.78);--panel-2:rgba(255,255,255,.04);--line:rgba(255,80,80,.18);
+  --f-display:"Share Tech Mono",ui-monospace,monospace;--on-cyan:#fff;--on-gold:#111;--r:8px}
+:root[data-skin="agent"] .skinbg{background:
+  repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),
+  linear-gradient(115deg,transparent 30%,rgba(255,40,40,.5) 30.15%,transparent 30.4%),
+  linear-gradient(65deg,transparent 58%,rgba(255,40,40,.45) 58.15%,transparent 58.4%),
+  linear-gradient(140deg,transparent 72%,rgba(255,40,40,.35) 72.12%,transparent 72.35%),
+  radial-gradient(70% 50% at 50% 0%,rgba(255,40,40,.10),transparent 70%),#060608}
+:root[data-skin="agent"] .brief h1,:root[data-skin="agent"] .dt{letter-spacing:.02em}
+:root[data-skin="agent"] .brief::after{content:"CLASSIFIED";position:absolute;right:-30px;bottom:26px;transform:rotate(-14deg);font:700 13px "Share Tech Mono",monospace;letter-spacing:.3em;color:rgba(255,59,59,.55);border:1.5px solid rgba(255,59,59,.45);padding:4px 34px;pointer-events:none}
+:root[data-skin="agent"] .gold.btn,:root[data-skin="agent"] .btn.gold{color:#111}
+
+/* Block World: pixel building world, square corners and chunky borders */
+:root[data-skin="block"]{--cyan:#5ee05e;--cyan-dim:rgba(94,224,94,.16);--gold:#ffd23f;--red:#ff5a4f;--violet:#7fb2ff;--lime:#5ee05e;
+  --void:#1d2533;--panel:rgba(44,48,58,.9);--panel-2:rgba(255,255,255,.06);--line:rgba(0,0,0,.45);
+  --f-display:"VT323",ui-monospace,monospace;--on-cyan:#0e2a0e;--r:4px;--ring-bg:#2c303a}
+:root[data-skin="block"] .skinbg{background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90' shape-rendering='crispEdges' preserveAspectRatio='xMidYMax slice'%3E%3Cg fill='%23fff' fill-opacity='.9'%3E%3Crect x='14' y='10' width='24' height='6'/%3E%3Crect x='20' y='6' width='12' height='4'/%3E%3Crect x='100' y='16' width='30' height='6'/%3E%3Crect x='108' y='12' width='14' height='4'/%3E%3C/g%3E%3Cg%3E%3Crect x='0' y='66' width='40' height='24' fill='%2366b84a'/%3E%3Crect x='40' y='60' width='30' height='30' fill='%2366b84a'/%3E%3Crect x='70' y='70' width='40' height='20' fill='%2366b84a'/%3E%3Crect x='110' y='56' width='50' height='34' fill='%2366b84a'/%3E%3Crect x='0' y='70' width='40' height='20' fill='%238a5a33'/%3E%3Crect x='40' y='64' width='30' height='26' fill='%238a5a33'/%3E%3Crect x='70' y='74' width='40' height='16' fill='%238a5a33'/%3E%3Crect x='110' y='60' width='50' height='30' fill='%238a5a33'/%3E%3Crect x='0' y='82' width='160' height='8' fill='%23777c85'/%3E%3Crect x='128' y='40' width='6' height='16' fill='%235b3a1e'/%3E%3Crect x='120' y='28' width='22' height='14' fill='%232f8a3a'/%3E%3C/g%3E%3C/svg%3E") bottom/cover no-repeat,
+  linear-gradient(180deg,#5fb4ff 0%,#9fd4ff 55%,#cdebff 100%)}
+:root[data-skin="block"] .vignette{opacity:.35}
+:root[data-skin="block"] .glass{background:#2f333d;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 0 0 3px rgba(0,0,0,.55),inset 3px 3px 0 3px rgba(255,255,255,.08),4px 4px 0 rgba(0,0,0,.35)}
+:root[data-skin="block"] .btn{border-radius:4px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.25),inset 0 0 0 2px rgba(0,0,0,.4)}
+:root[data-skin="block"] .brief h1{font-size:clamp(40px,12vw,56px);letter-spacing:.04em}
+:root[data-skin="block"] .dt,:root[data-skin="block"] .rank .name{font-size:32px}
+:root[data-skin="block"] .stat .v,:root[data-skin="block"] .bank .v,:root[data-skin="block"] .gt-big{letter-spacing:.04em}
+:root[data-skin="block"] .bar,:root[data-skin="block"] .bar i,:root[data-skin="block"] .m,:root[data-skin="block"] .m .ck,:root[data-skin="block"] .dot,:root[data-skin="block"] .tag,:root[data-skin="block"] .chip,:root[data-skin="block"] nav button{border-radius:2px}
+:root[data-skin="block"] .hex,:root[data-skin="block"] .medal{clip-path:none;border-radius:4px}
+:root[data-skin="block"] .ring{border-radius:4px}:root[data-skin="block"] .ring span{border-radius:2px}
 
 /* MoodLoop: a calm, bright, neutral space (Deep Ocean, Seafoam, Coral, Sky Mist, Sandstone) */
 #scene,.vignette,.fallback{transition:opacity .6s}
@@ -338,12 +413,13 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 </style>
 
 <div class="fallback"></div>
+<div class="skinbg"></div>
 <canvas id="scene" aria-hidden="true"></canvas>
 <div class="vignette"></div>
 
 <div class="wrap">
   <header class="top">
-    <div class="brand"><small id="weekLbl">Week 1 · Level 1</small>Douglas Battle Pass</div>
+    <div class="brand"><small id="weekLbl">Week 1 · Level 1</small><span id="brandName">Douglas Battle Pass</span></div>
     <div class="hud">
       <div class="chip sync glass" id="sync" data-s="local"><i></i><span>This device</span></div>
       <div class="chip tok glass" id="topTok"></div>
@@ -440,12 +516,29 @@ const REWARDS = [
   {id:'vr',       icon:'visor', name:'Dad & Douglas VR Session', cost:60},
   {id:'icecream', icon:'cone',  name:'Ice Cream Adventure',      cost:80}
 ];
+/* Skins: same app, different look. All are in the shop from the start; add new ones here (plus a CSS block above) any time. */
+const SKINS = [
+  {id:'default', name:'Battle Pass',  title:'Douglas Battle Pass',   week:1, cost:0,  blurb:'The original. Space-age command centre.', prev:'radial-gradient(60% 60% at 80% 90%,#2a5cff55,transparent),#05060f', a:'#46e0ff', void:'#03040a'},
+  {id:'voyager', name:'Star Voyager', title:'Douglas Galactic Log',  week:1, cost:25, blurb:'A deep-space saga among the stars.',        prev:'radial-gradient(30% 30% at 80% 25%,#ffe27a66,transparent),radial-gradient(1px 1px at 20% 30%,#fff,transparent),radial-gradient(1px 1px at 60% 60%,#fff,transparent),#02030a', a:'#ffe27a', void:'#02030a'},
+  {id:'jet',     name:'Jet Ace',      title:'Douglas Flight Deck',   week:1, cost:25, blurb:'Sunset sorties and fighter-pilot HUDs.',   prev:'linear-gradient(180deg,#3b2453,#a8405a 45%,#ef7a3d 62%,#ffc072 70%,#1a1e28 71%)', a:'#ffb347', void:'#141823'},
+  {id:'liner',   name:'Grand Voyage', title:"Douglas's Grand Voyage", week:1, cost:25, blurb:'A 1912 ocean liner under the moon.',       prev:'radial-gradient(20% 25% at 80% 25%,#fff4d6aa,transparent),linear-gradient(180deg,#050c18,#123457 70%,#0b2742 71%)', a:'#d8b26a', void:'#07121f'},
+  {id:'agent',   name:'Field Ops',    title:'Douglas Field Ops',     week:1, cost:25, blurb:'Top-secret missions. Mind the lasers.',    prev:'linear-gradient(115deg,transparent 40%,#ff2828 41%,transparent 42%),linear-gradient(65deg,transparent 60%,#ff282899 61%,transparent 62%),#060608', a:'#ff3b3b', void:'#060608'},
+  {id:'block',   name:'Block World',  title:'Douglas Build Log',     week:1, cost:25, blurb:'A blocky pixel world to build in.',        prev:'linear-gradient(180deg,#5fb4ff 0 62%,#66b84a 62% 70%,#8a5a33 70% 90%,#777c85 90%)', a:'#5ee05e', void:'#1d2533'}
+];
+const skinBy = id => SKINS.find(k => k.id === id) || SKINS[0];
+function applySkin(){
+  if (!state.skins || !Array.isArray(state.skins.owned)) state.skins = {owned:['default'], on:'default'};
+  const k = skinBy(state.skins.on);
+  if (document.documentElement.dataset.skin !== k.id) document.documentElement.dataset.skin = k.id;
+  const b = document.getElementById('brandName'); if (b && b.textContent !== k.title){ b.textContent = k.title; b.parentNode.style.fontSize = k.title.length > 19 ? '18px' : ''; }
+  const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = k.void;
+}
 const MAX_STARS = 42, TOKENS_PER_STAR = 2, FULL_DAY_BONUS = 3, STARS_PER_LEVEL = 5;
 
 /* ================= State (local + cloud sync) ================= */
 const KEY = 'douglasBattlePassV2';
 const blankWeek = () => DAYS.map(() => MISSIONS.map(() => false));
-const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null});
+const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null, skins:{owned:['default'], on:'default'}});
 const valid = s => s && Array.isArray(s.week) && s.week.length === 7 && s.week.every(d => Array.isArray(d) && d.length === 6);
 let state = loadLocal();
 
@@ -1018,9 +1111,22 @@ function renderRewards(){
         <div class="bar gold"><i style="width:${Math.min(100, tk / r.cost * 100)}%"></i></div>
         <button class="btn ${ok ? 'gold' : 'ghost'}" data-redeem="${r.id}" ${ok ? '' : 'disabled'}>${ok ? 'Unlock' : `${r.cost - tk} to go`}</button>
       </div>`; }).join('')}</div>
+    <h2 class="sec">Skins</h2>
+    <div class="rgrid">${SKINS.map(k => { const own = state.skins.owned.includes(k.id), on = state.skins.on === k.id, here = k.week <= state.weekNo, ok = tk >= k.cost;
+      const btn = on ? `<button class="btn ghost" disabled>${ic('check')}Equipped</button>`
+        : own ? `<button class="btn" data-skin="${k.id}">Equip</button>`
+        : !here ? `<button class="btn ghost" disabled>${ic('lock')}Arrives Week ${k.week}</button>`
+        : `<button class="btn ${ok ? 'gold' : 'ghost'}" data-skinbuy="${k.id}" ${ok ? '' : 'disabled'}>${ok ? `Unlock · ${k.cost}` : `${k.cost - tk} to go`}</button>`;
+      return `<div class="reward glass ${on ? 'on' : ''} ${!own && here && ok ? 'ready' : ''}">
+        <div class="skin-prev" style="background:${k.prev}"><i style="background:${k.a}"></i>${!own && !here ? `<b style="color:#fff">NEW IN WEEK ${k.week}</b>` : ''}</div>
+        <div class="rn">${k.name}</div>
+        <div class="skin-tag">${k.blurb}</div>
+        ${own ? '' : `<div class="rc">${ic('token')}${k.cost} tokens</div>`}
+        ${btn}
+      </div>`; }).join('')}</div>
     <h2 class="sec">Unlocked</h2>
     <div class="hist glass">${hist.length ? hist.map((h, k) => { const r = REWARDS.find(x => x.id === h.id);
-      return `<div class="hrow"><span class="he">${ic(r ? r.icon : 'gift')}</span>
+      return `<div class="hrow"><span class="he">${ic(r ? r.icon : String(h.id).startsWith('skin-') ? 'star' : 'gift')}</span>
         <span class="hn">${h.name}<small>${h.date} · ${h.cost} tokens</small></span>
         <button data-undo="${state.redeemed.length - 1 - k}">Undo</button></div>`; }).join('')
       : `<div class="empty">No rewards unlocked yet</div>`}</div>`;
@@ -1076,7 +1182,7 @@ function renderTop(){
   $('topTok').innerHTML = `${ic('token')}${tokens()}`;
   $('weekLbl').textContent = `Week ${state.weekNo} · Level ${level(stars())}`;
 }
-function renderAll(){ if (!state.play) ensurePlay(); renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderMood(); renderGuide(); }
+function renderAll(){ if (!state.play) ensurePlay(); applySkin(); renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderMood(); renderGuide(); }
 
 /* ================= FX ================= */
 let toastTimer;
@@ -1145,7 +1251,20 @@ async function undo(idx){
   const h = state.redeemed[idx]; if (!h) return;
   if (!await ask(`Undo ${h.name}?`, `${h.cost} tokens will be returned.`, 'Undo')) return;
   state.spent = Math.max(0, state.spent - h.cost); state.redeemed.splice(idx, 1);
+  if (String(h.id).startsWith('skin-')){ const id = h.id.slice(5); state.skins.owned = state.skins.owned.filter(x => x !== id); if (state.skins.on === id) state.skins.on = 'default'; }
   persist(); renderAll();
+}
+
+async function buySkin(id){
+  const k = skinBy(id); if (k.id !== id || state.skins.owned.includes(id) || k.week > state.weekNo || tokens() < k.cost) return;
+  if (!await ask(`Unlock ${k.name}?`, `This skin costs ${k.cost} tokens.\nIt changes how the app looks. Everything else stays the same.`, 'Unlock')) return;
+  state.spent += k.cost; state.skins.owned.push(id); state.skins.on = id;
+  state.redeemed.push({id:'skin-' + id, name:k.name + ' skin', cost:k.cost, date:new Date().toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'})});
+  persist(); renderAll(); toast([['star', `${k.name} skin unlocked`, 'gold']]); shards(60); buzz([20, 40, 20]); space.pulse(3);
+}
+function equipSkin(id){
+  if (!state.skins.owned.includes(id)) return;
+  state.skins.on = id; persist(); renderAll(); toast([['check', `${skinBy(id).name} equipped`]]); space.pulse(2);
 }
 
 async function newWeek(){
@@ -1179,6 +1298,8 @@ document.addEventListener('click', e => {
   if (t.dataset.go) return go(t.dataset.go);
   if (t.dataset.d !== undefined) return toggle(+t.dataset.d, +t.dataset.m);
   if (t.dataset.redeem) return redeem(t.dataset.redeem);
+  if (t.dataset.skinbuy) return buySkin(t.dataset.skinbuy);
+  if (t.dataset.skin) return equipSkin(t.dataset.skin);
   if (t.dataset.undo !== undefined) return undo(+t.dataset.undo);
   if (t.dataset.act === 'newweek') return newWeek();
   if (t.dataset.act === 'wipe') return wipe();
