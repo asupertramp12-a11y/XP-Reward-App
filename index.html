@@ -262,6 +262,41 @@ body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shado
 .ml-bar em{font-style:normal;text-align:right;color:var(--ink2)}
 @media (prefers-reduced-motion:reduce){#mlDial{transition:none!important}}
 
+/* Memory photos */
+.mem{display:flex;align-items:center;gap:12px;width:100%;margin-top:8px;padding:10px 12px;border-radius:12px;text-align:left;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-weight:600;font-size:14px;color:var(--ink-2)}
+.mem svg{font-size:20px;color:var(--cyan)}
+.mem img{width:52px;height:52px;flex:none;border-radius:10px;object-fit:cover;box-shadow:0 0 0 1px var(--line)}
+.mem b{display:block;color:var(--ink);font-size:14px}
+.mem small{display:block;font-size:12px;font-weight:500;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60vw}
+.mem.add{justify-content:center;border:1.5px dashed var(--line);box-shadow:none;background:none}
+#v-mood .ml-mem{display:flex;gap:14px;align-items:center;padding:12px;margin-bottom:10px;width:100%;text-align:left;border-radius:20px;background:#fff;box-shadow:0 6px 18px rgba(29,63,99,.10);color:var(--ink);font:700 15px "Nunito",var(--f-body)}
+#v-mood .ml-mem img{width:76px;height:76px;border-radius:14px;object-fit:cover;flex:none}
+#v-mood .ml-mem small{display:block;font-weight:600;color:var(--ink2);font-size:13px;margin-top:2px}
+#v-mood .ml-mem.add{justify-content:center;background:rgba(255,255,255,.6);border:2px dashed rgba(29,63,99,.18);box-shadow:none;padding:16px}
+#v-mood .ml-mem.add svg{width:22px;height:22px;color:#4fb48a}
+.cd .cam{position:absolute;top:3px;right:4px;width:6px;height:6px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 1.5px #fff}
+.bank-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}
+.bank-g button{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(29,63,99,.14)}
+.bank-g img{width:100%;height:100%;object-fit:cover;display:block}
+.bank-g span{position:absolute;left:6px;bottom:6px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.88);color:#1d3f63;font:800 11px "Nunito",sans-serif}
+.pbox{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px;background:rgba(10,14,24,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pcard{width:100%;max-width:440px;max-height:calc(100dvh - 32px);overflow:auto;border-radius:24px;background:#fbf8f2;color:#1d3f63;font-family:"Nunito",var(--f-body);box-shadow:0 30px 60px rgba(0,0,0,.4)}
+.pcard .pimg{display:block;width:100%;max-height:58dvh;object-fit:contain;background:#e9eef2}
+.pcard .pin{padding:16px 18px 18px}
+.pcard h3{font-weight:800;font-size:20px;margin-bottom:4px}
+.pcard .pd{font-size:13px;font-weight:700;color:#6f8ba3}
+.pcard .pc{margin-top:10px;font-weight:600;font-size:16px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.pcard .pm{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pcard .pm span{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px rgba(29,63,99,.1);font-weight:700;font-size:13px}
+.pcard .pm svg{width:22px;height:22px}
+.pcard input{width:100%;margin-top:10px;padding:12px 14px;border-radius:14px;border:0;background:#fff;color:#1d3f63;font:600 16px "Nunito",var(--f-body);box-shadow:inset 0 0 0 1px rgba(29,63,99,.15)}
+.pcard input:focus{outline:2px solid #4fb48a}
+.prow{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.prow button{flex:1;min-width:90px;padding:12px;border-radius:14px;font:800 15px "Nunito",var(--f-body);background:#fff;color:#4b6a85;box-shadow:inset 0 0 0 1px rgba(29,63,99,.12)}
+.prow button.go{background:#1d3f63;color:#fff;box-shadow:none}
+.prow button.rm{color:#c4533f}
+.pbusy{padding:40px;text-align:center;font-weight:700}
+
 /* Game timer */
 .timer{margin-top:12px;padding:18px;background:linear-gradient(165deg,rgba(245,196,81,.11),rgba(12,16,30,.6) 55%)}
 .timer.run{box-shadow:var(--shadow),inset 0 0 0 1px rgba(245,196,81,.55),0 0 34px rgba(245,196,81,.16)}
@@ -436,6 +471,8 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 <nav class="glass" id="nav" aria-label="Sections"></nav>
 
 <div class="toast" id="toast" role="status"></div>
+<input type="file" id="photoIn" accept="image/*" hidden>
+<div class="pbox" id="pbox" hidden><div class="pcard" id="pcard" role="dialog" aria-modal="true"></div></div>
 <div class="modal" id="modal" hidden>
   <div class="mbox glass" role="dialog" aria-modal="true" aria-labelledby="mT">
     <h3 id="mT"></h3><p id="mB"></p>
@@ -480,6 +517,7 @@ const ICONS = {
   heart:'<path d="M12 20s-7-4.4-9-9a4.6 4.6 0 018-4.2A4.6 4.6 0 0121 11c-2 4.6-9 9-9 9z"/>',
   pulse:'<path d="M2 12h4l2.5-6 5 12 2.5-6h6"/>',
   key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14.5 8.5l2 2"/>',
+  camera:'<path d="M4 8h3l1.6-2.4h6.8L17 8h3a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13.2" r="3.6"/>',
   arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
   up:'<path d="M12 19V5M6 11l6-6 6 6"/>'
 };
@@ -783,7 +821,7 @@ function moodWatch(mk){
   r.onSnapshot(snap => {
     if (snap.metadata.fromCache && !snap.exists) return;
     moodData[mk] = snap.exists ? (snap.data() || {days:{}}) : (moodData[mk] || {days:{}});
-    moodSaveLocal(); if (tab === 'mood') renderMood();
+    moodSaveLocal(); if (tab === 'mood') renderMood(); else if (tab === 'story') renderStory();
   }, () => { delete moodSubs[mk]; });
 }
 function entriesFor(ds){
@@ -808,6 +846,114 @@ async function moodDel(ds, id){
 const niceDate = ds => { const [y, m, d] = ds.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}); };
 const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
 
+
+/* ---- Memory photos ----
+   One photo per day. The full photo (shrunk on the device) lives in its own doc: families/<code>P<YYYYMMDD>.
+   A small thumbnail sits in that month's MoodLoop doc under photos.d<DD> so calendars and galleries load fast. */
+const photoOf = ds => (((moodData[monthKey(ds)] || {}).photos || {})['d' + ds.slice(8)]) || null;
+const photoKey = ds => 'douglasPhoto' + ds;
+function photoRef(ds){
+  if (!fbReady() || !window.firebase || !firebase.apps.length) return null;
+  const c = familyCode(); return c ? firebase.firestore().collection('families').doc(c + 'P' + ds.replace(/-/g, '')) : null;
+}
+const fullCache = {};
+function shrink(file, max, q){
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const sc = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * sc); c.height = Math.round(img.naturalHeight * sc);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+      let qq = q, out = c.toDataURL('image/jpeg', qq);
+      while (out.length > 850000 && qq > .35){ qq -= .1; out = c.toDataURL('image/jpeg', qq); }
+      res(out);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('Could not read that photo')); };
+    img.src = url;
+  });
+}
+async function photoSave(ds, full, thumb, caption){
+  const mk = monthKey(ds), dk = 'd' + ds.slice(8), meta = {thumb, caption, t:Date.now()};
+  moodData[mk] = moodData[mk] || {days:{}}; (moodData[mk].photos = moodData[mk].photos || {})[dk] = meta;
+  fullCache[ds] = full; moodSaveLocal();
+  const r = photoRef(ds), mr = moodRef(mk);
+  if (r && mr){
+    await r.set({img:full, caption, t:meta.t});
+    await mr.set({photos:{[dk]:meta}}, {merge:true});
+  } else { try{ localStorage.setItem(photoKey(ds), full); }catch(e){ throw new Error('This device is out of space for photos.'); } }
+}
+async function photoRemove(ds){
+  const mk = monthKey(ds), dk = 'd' + ds.slice(8);
+  try{ delete moodData[mk].photos[dk]; }catch(e){} delete fullCache[ds]; moodSaveLocal();
+  try{ localStorage.removeItem(photoKey(ds)); }catch(e){}
+  const r = photoRef(ds), mr = moodRef(mk);
+  if (r && mr){
+    try{ await r.set({img:'', caption:'', removed:true, t:Date.now()}); }catch(e){}
+    try{ await mr.update({[`photos.${dk}`]: firebase.firestore.FieldValue.delete()}); }catch(e){}
+  }
+}
+async function photoFull(ds){
+  if (fullCache[ds]) return fullCache[ds];
+  const r = photoRef(ds);
+  if (r){ try{ const snap = await r.get(); const d = snap.exists && snap.data(); if (d && d.img) return fullCache[ds] = d.img; }catch(e){} }
+  try{ const l = localStorage.getItem(photoKey(ds)); if (l) return fullCache[ds] = l; }catch(e){}
+  return null;
+}
+
+let photoDay = null;
+function photoPick(ds){ photoDay = ds; const i = $('photoIn'); i.value = ''; i.click(); }
+function pClose(){ $('pbox').hidden = true; $('pcard').innerHTML = ''; }
+document.getElementById('photoIn').addEventListener('change', async () => {
+  const f = $('photoIn').files[0], ds = photoDay; if (!f || !ds) return;
+  $('pbox').hidden = false; $('pcard').innerHTML = '<div class="pbusy">Getting your photo ready…</div>';
+  let full, thumb;
+  try{ full = await shrink(f, 1280, .78); thumb = await shrink(f, 220, .6); }
+  catch(e){ $('pcard').innerHTML = `<div class="pin"><h3>Hmm, that didn't work</h3><p class="pc">${esc(e.message)}</p><div class="prow"><button data-p="close">OK</button></div></div>`; return; }
+  const old = photoOf(ds);
+  $('pcard').innerHTML = `<img class="pimg" src="${full}" alt="">
+    <div class="pin"><h3>Memory for ${niceDate(ds)}</h3><div class="pd">${old ? 'This will replace the photo already saved for this day.' : 'One photo per day. Pick the best moment!'}</div>
+      <input id="pcap" maxlength="120" placeholder="Say something about it (optional)" value="${old ? esc(old.caption || '') : ''}">
+      <div class="prow"><button data-p="close">Cancel</button><button class="go" data-p="save">${ic('check')} Save memory</button></div></div>`;
+  $('pcard').dataset.full = ''; pPending = {ds, full, thumb};
+});
+let pPending = null;
+async function pView(ds){
+  const meta = photoOf(ds); if (!meta) return;
+  const es = entriesFor(ds);
+  $('pbox').hidden = false;
+  $('pcard').innerHTML = `<img class="pimg" id="pimg" src="${meta.thumb}" alt="Memory photo for ${niceDate(ds)}">
+    <div class="pin"><h3>${niceDate(ds)}</h3>
+      ${meta.caption ? `<p class="pc">${esc(meta.caption)}</p>` : ''}
+      ${es.length ? `<div class="pm">${es.map(e => { const m = moodBy(e.mood); return `<span>${faceSVG(m)}${m.name}</span>`; }).join('')}</div>` : '<div class="pd" style="margin-top:8px">No feelings logged on this day.</div>'}
+      <div class="prow"><button class="rm" data-p="rm" data-pd="${ds}">Remove</button><button data-p="retake" data-pd="${ds}">${ic('camera')} Retake</button><button class="go" data-p="close">Close</button></div></div>`;
+  const full = await photoFull(ds), im = $('pimg'); if (full && im) im.src = full;
+}
+document.getElementById('pbox').addEventListener('click', async e => {
+  if (e.target.id === 'pbox') return pClose();
+  const b = e.target.closest('button[data-p]'); if (!b) return;
+  const a = b.dataset.p;
+  if (a === 'close'){ pPending = null; return pClose(); }
+  if (a === 'save' && pPending){
+    const {ds, full, thumb} = pPending, cap = ($('pcap').value || '').trim().slice(0, 120); pPending = null;
+    $('pcard').innerHTML = '<div class="pbusy">Saving your memory…</div>';
+    try{ await photoSave(ds, full, thumb, cap); pClose(); toast([['camera', 'Memory saved', 'gold']]); shards(30); buzz([20, 40, 20]); }
+    catch(err){ $('pcard').innerHTML = `<div class="pin"><h3>Couldn't save it</h3><p class="pc">${esc(err.message || 'Please try again.')}</p><div class="prow"><button data-p="close">OK</button></div></div>`; }
+    if (tab === 'mood') renderMood(); else renderStory();
+    return;
+  }
+  if (a === 'retake'){ pClose(); return photoPick(b.dataset.pd); }
+  if (a === 'rm'){
+    const ds = b.dataset.pd; pClose();
+    if (await ask('Remove this memory?', 'The photo will be removed on every device.', 'Remove')){ await photoRemove(ds); if (tab === 'mood') renderMood(); else renderStory(); }
+  }
+});
+function memHTML(ds, isFuture){
+  const p = photoOf(ds);
+  if (p) return `<button class="mem" data-pview="${ds}"><img src="${p.thumb}" alt=""><span><b>Memory</b><small>${p.caption ? esc(p.caption) : 'Tap to look back'}</small></span></button>`;
+  if (isFuture) return '';
+  return `<button class="mem add" data-psnap="${ds}">${ic('camera')}Take a photo for today's memory</button>`.replace("today's", ds === dateStr() ? "today's" : 'this day\'s');
+}
+const weekDate = i => { const d = new Date(); d.setDate(d.getDate() - todayIdx() + i); return dateStr(d); };
 
 /* ---- The wristband ---- */
 const BANDS = {seafoam:['#cdf2e1','#8fdcbc','#56b88f'], coral:['#fdd6cb','#f59a86','#d26d58'], sky:['#dceef9','#a9d2ee','#6fa6d0']};
@@ -931,7 +1077,7 @@ function renderMoodRest(){
   for (let d = 1; d <= days; d++){
     const ds = `${Y}-${pad2(M)}-${pad2(d)}`, es = entriesFor(ds), last = es[es.length - 1], fut = ds > today;
     cells.push(`<button class="cd ${last ? 'has' : ''} ${ds === today ? 'today' : ''} ${ds === v.sel ? 'sel' : ''} ${fut ? 'fut' : ''}" ${fut ? 'disabled' : `data-day="${ds}"`}
-      ${last ? `style="--mc:${moodBy(last.mood).col}"` : ''} aria-label="${niceDate(ds)}${last ? ', ' + moodBy(last.mood).name : ''}">${d}${es.length > 1 ? `<i>×${es.length}</i>` : ''}</button>`);
+      ${last ? `style="--mc:${moodBy(last.mood).col}"` : ''} aria-label="${niceDate(ds)}${last ? ', ' + moodBy(last.mood).name : ''}">${d}${es.length > 1 ? `<i>×${es.length}</i>` : ''}${photoOf(ds) ? '<span class="cam"></span>' : ''}</button>`);
   }
   const counts = {}; let checked = 0;
   for (let d = 1; d <= days; d++){ const es = entriesFor(`${Y}-${pad2(M)}-${pad2(d)}`); if (es.length) checked++; es.forEach(e => counts[e.mood] = (counts[e.mood] || 0) + 1); }
@@ -951,6 +1097,9 @@ function renderMoodRest(){
     ${tip ? `<div class="ml-tip" style="--mc:${tip.col}">${faceSVG(tip)}<span>${tip.tip}</span></div>` : ''}
 
     <h2 class="sec">${isToday ? 'Today' : niceDate(v.sel)}</h2>
+    ${(() => { const p = photoOf(v.sel); return p
+      ? `<button class="ml-mem" data-pview="${v.sel}"><img src="${p.thumb}" alt=""><span>Memory of the day<small>${p.caption ? esc(p.caption) : 'Tap to look back'}</small></span></button>`
+      : `<button class="ml-mem add" data-psnap="${v.sel}">${ic('camera')}Add a photo memory</button>`; })()}
     <div class="card ml-day">${sel.length ? sel.map(e => { const m = moodBy(e.mood);
       return `<div class="ml-entry">${faceSVG(m, 'fc')}<div class="tx"><b>${m.name}</b><small>${new Date(e.t).toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})}</small>
         ${e.tags && e.tags.length ? `<div class="tg">${e.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
@@ -964,6 +1113,11 @@ function renderMoodRest(){
       <div class="cal-g">${['M','T','W','T','F','S','S'].map(x => `<div class="wd">${x}</div>`).join('')}${cells.join('')}</div>
       <div class="ml-key">${MOODS.map(m => `<span style="--mc:${m.col}">${m.name}</span>`).join('')}</div>
     </div>
+
+    ${(() => { const ph = []; for (let d = days; d >= 1; d--){ const ds = `${Y}-${pad2(M)}-${pad2(d)}`, p = photoOf(ds); if (p) ph.push([ds, p, d]); }
+      return `<h2 class="sec">Memory bank · ${first.toLocaleDateString('en-GB', {month:'long'})}</h2>
+      <div class="card">${ph.length ? `<div class="bank-g">${ph.map(([ds, p, d]) => `<button data-pview="${ds}" aria-label="Memory for ${niceDate(ds)}"><img src="${p.thumb}" alt=""><span>${d}</span></button>`).join('')}</div>`
+        : '<div class="empty">No memories yet this month. Add a photo to any day.</div>'}</div>`; })()}
 
     <h2 class="sec">${first.toLocaleDateString('en-GB', {month:'long'})} at a glance</h2>
     <div class="card ml-sum">
@@ -1074,6 +1228,7 @@ function renderDash(){
 
 function renderStory(){
   const t = todayIdx();
+  moodWatch(monthKey(weekDate(0))); moodWatch(monthKey(weekDate(6)));
   $('v-story').innerHTML = `<h2 class="sec">This Week's Missions</h2>` + DAYS.map((d, i) => {
     const c = dayCount(i);
     return `<div class="daycard glass ${i === t ? 'today' : ''}" id="day-${i}" style="--dc:${d.col}">
@@ -1090,6 +1245,7 @@ function renderStory(){
         return `<button class="m ${on ? 'done' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on}">
           <span class="mi">${ic(m.icon)}</span><span class="mt">${m.name}<small>${m.what}</small></span><span class="ck">${ic('check')}</span></button>`; }).join('')}</div>
       ${gamingHTML(c)}
+      ${memHTML(weekDate(i), i > t)}
     </div>`;
   }).join('');
 }
@@ -1140,7 +1296,7 @@ function renderGuide(){
     ${card('home', 'Monday - OWS', `<p>OWS is <b style="color:var(--ink)">Our Wilde Space</b>.</p><p>Monday is a dedicated day with Mum for learning, creativity, exploration, outdoor activities and fun.</p>`)}
     ${card('target', 'What Each Mission Means', `<div class="tbl">${MISSIONS.map(m =>
       `<div class="tr"><span>${m.name}</span><span style="color:var(--ink);text-align:right">${m.what}</span></div>`).join('')}</div>`)}
-    ${card('heart', 'MoodLoop', `<p>MoodLoop is for noticing feelings. Pick the face that matches how you feel, add a few words if you want, and Mum and Dad can see it too.</p><p>All feelings are OK. There are no stars or tokens for moods, so always pick the true one.</p>`)}
+    ${card('heart', 'MoodLoop', `<p>MoodLoop is for noticing feelings. Pick the face that matches how you feel, add a few words if you want, and Mum and Dad can see it too.</p><p>All feelings are OK. There are no stars or tokens for moods, so always pick the true one.</p><p>Each day can also have one photo memory. They build up into your Memory Bank.</p>`)}
     ${card('pad', 'Gaming Rules', list(['No gaming in the morning.', 'Gaming is normally after 4pm.', 'Complete missions first.',
       'Gaming is earned.', 'Gaming should stop when Mum or Dad ask.', 'Real life comes before screen time.', 'Use the Game Timer when you play.', 'Unused game time rolls over to the next day.']) +
       `<div class="tbl" style="margin-top:12px">
@@ -1294,6 +1450,8 @@ function go(k){
 document.addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t || t.closest('#modal')) return;
   if (t.dataset.tab) return go(t.dataset.tab);
+  if (t.dataset.psnap) return photoPick(t.dataset.psnap);
+  if (t.dataset.pview) return pView(t.dataset.pview);
   if (tab === 'mood' && moodClick(t)) return;
   if (t.dataset.go) return go(t.dataset.go);
   if (t.dataset.d !== undefined) return toggle(+t.dataset.d, +t.dataset.m);
