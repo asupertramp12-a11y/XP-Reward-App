@@ -49,7 +49,7 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 
 /* Header */
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.brand{font-family:var(--f-display);font-weight:800;font-size:22px;letter-spacing:.06em;text-transform:uppercase;line-height:1}
+.brand{font-family:var(--f-display);font-weight:800;font-size:clamp(17px,5vw,22px);letter-spacing:.06em;text-transform:uppercase;line-height:1}
 .brand small{display:block;font-family:var(--f-body);font-weight:600;font-size:11px;letter-spacing:.22em;color:var(--cyan);margin-bottom:6px}
 .hud{display:flex;gap:8px;align-items:center}
 .chip{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;font-weight:600;font-size:13px}
@@ -262,6 +262,63 @@ body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shado
 .ml-bar em{font-style:normal;text-align:right;color:var(--ink2)}
 @media (prefers-reduced-motion:reduce){#mlDial{transition:none!important}}
 
+/* Header menu, nav badge */
+.menu-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;font-size:20px;color:var(--ink);padding:0}
+nav button{position:relative}
+.nb{position:absolute;top:4px;left:calc(50% + 6px);min-width:17px;height:17px;padding:0 5px;border-radius:9px;background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:0;line-height:17px;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
+.guide-top{display:flex;align-items:center;gap:12px;margin:2px 0 6px}
+.guide-top .btn{padding:10px 14px}
+
+/* Family planner + message board */
+.pl{overflow:hidden}
+.pl-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px}
+.pl-head b{display:block;font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:.05em;text-transform:uppercase;text-align:center}
+.pl-head small{display:block;text-align:center;font-size:12px;font-weight:600;color:var(--ink-2)}
+.pl-head small button{color:var(--cyan);font-weight:700;font-size:12px;padding:0}
+.pl-nav{width:40px;height:40px;flex:none;border-radius:12px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-size:20px}
+.pl-day{padding:14px 16px;border-top:1px solid var(--line)}
+.pl-day.today{background:color-mix(in srgb,var(--cyan) 8%,transparent);box-shadow:inset 3px 0 0 var(--cyan)}
+.pl-dh{display:flex;align-items:baseline;gap:8px}
+.pl-dh b{font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.07em;text-transform:uppercase}
+.pl-dh small{color:var(--ink-3);font-weight:600;font-size:12px}
+.pl-dh .now{margin-left:auto}
+.pl-it{display:flex;align-items:center;gap:10px;padding:9px 10px;margin-top:6px;border-radius:10px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line)}
+.pl-it time{font-weight:700;font-size:13px;color:var(--cyan);min-width:42px}
+.pl-it .tx{flex:1;min-width:0;font-weight:600;font-size:15px;overflow-wrap:anywhere}
+.pl-it button{color:var(--ink-3);font-size:18px;line-height:1;padding:2px 6px}
+.who{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:color-mix(in srgb,var(--wc) 22%,transparent);color:var(--wc);white-space:nowrap}
+.pl-add{margin-top:8px;font-size:13px;font-weight:700;color:var(--cyan);padding:6px 2px;display:inline-flex;gap:6px;align-items:center}
+.pl-empty{margin-top:6px;font-size:13px;color:var(--ink-3);font-weight:500}
+.pl-form{margin-top:10px;display:grid;gap:10px}
+.pl-in{width:100%;padding:11px 12px;border-radius:10px;border:0;background:rgba(0,0,0,.25);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);font:500 16px var(--f-body);color-scheme:dark}
+.pl-in:focus{outline:2px solid var(--cyan);outline-offset:1px}
+.pl-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pl-r label{font-size:12px;font-weight:700;color:var(--ink-2);letter-spacing:.06em;text-transform:uppercase}
+.pl-r input[type=time]{width:auto}
+.wchips{display:flex;flex-wrap:wrap;gap:6px}
+.wchip{padding:7px 11px;border-radius:999px;font-size:13px;font-weight:600;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-2)}
+.wchip.on{background:color-mix(in srgb,var(--wc) 25%,transparent);box-shadow:inset 0 0 0 1.5px var(--wc);color:var(--ink)}
+.pl-btns{display:flex;gap:8px}
+.pl-btns .btn{flex:1;padding:11px}
+.board{padding:16px}
+.board .lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-bottom:8px}
+.board textarea{display:block;width:100%;min-height:72px;resize:vertical;margin:12px 0 10px;line-height:1.4}
+.post{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.posts{margin-top:14px}
+.post .av{width:36px;height:36px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;color:#0b0f1a;background:var(--wc)}
+.post .pb{flex:1;min-width:0}
+.post .pb b{font-size:14px}
+.post .pb small{color:var(--ink-3);font-size:12px;margin-left:6px;font-weight:600}
+.post .pb p{margin-top:3px;font-weight:500;font-size:15px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.post .pb em{font-style:normal;margin-left:8px;font-size:10px;padding:1px 6px;border-radius:5px;background:var(--red);color:#fff;letter-spacing:.08em;font-weight:700}
+.post button{color:var(--ink-3);font-size:18px;line-height:1;align-self:flex-start;padding:2px 6px}
+.today-plan{margin-top:12px;padding:16px}
+.tp-it{display:flex;gap:10px;align-items:center;padding:7px 0;font-weight:600;font-size:15px}
+.tp-it+.tp-it{border-top:1px solid var(--line)}
+.tp-it time{color:var(--cyan);font-weight:700;font-size:13px;min-width:42px}
+.tp-it .tx{flex:1;min-width:0;overflow-wrap:anywhere}
+.tp-msg{display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--red) 12%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--red) 35%,transparent);font-weight:600;font-size:14px;width:100%;text-align:left}
+
 /* Memory photos */
 .mem{display:flex;align-items:center;gap:12px;width:100%;margin-top:8px;padding:10px 12px;border-radius:12px;text-align:left;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-weight:600;font-size:14px;color:var(--ink-2)}
 .mem svg{font-size:20px;color:var(--cyan)}
@@ -458,6 +515,7 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
     <div class="hud">
       <div class="chip sync glass" id="sync" data-s="local"><i></i><span>This device</span></div>
       <div class="chip tok glass" id="topTok"></div>
+      <button class="chip glass menu-btn" data-go="guide" aria-label="Guide and settings" id="menuBtn"></button>
     </div>
   </header>
 
@@ -465,6 +523,7 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
   <section class="view" id="v-story"></section>
   <section class="view" id="v-rewards"></section>
   <section class="view" id="v-mood"></section>
+  <section class="view" id="v-plan"></section>
   <section class="view" id="v-guide"></section>
 </div>
 
@@ -517,6 +576,10 @@ const ICONS = {
   heart:'<path d="M12 20s-7-4.4-9-9a4.6 4.6 0 018-4.2A4.6 4.6 0 0121 11c-2 4.6-9 9-9 9z"/>',
   pulse:'<path d="M2 12h4l2.5-6 5 12 2.5-6h6"/>',
   key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14.5 8.5l2 2"/>',
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  calendar:'<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h3M8 17h6" stroke-width="2"/>',
+  back:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  pin:'<path d="M9 3h6l-1 6 3 3v2H7v-2l3-3z"/><path d="M12 14v7"/>',
   camera:'<path d="M4 8h3l1.6-2.4h6.8L17 8h3a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13.2" r="3.6"/>',
   arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
   up:'<path d="M12 19V5M6 11l6-6 6 6"/>'
@@ -568,7 +631,7 @@ function applySkin(){
   if (!state.skins || !Array.isArray(state.skins.owned)) state.skins = {owned:['default'], on:'default'};
   const k = skinBy(state.skins.on);
   if (document.documentElement.dataset.skin !== k.id) document.documentElement.dataset.skin = k.id;
-  const b = document.getElementById('brandName'); if (b && b.textContent !== k.title){ b.textContent = k.title; b.parentNode.style.fontSize = k.title.length > 19 ? '18px' : ''; }
+  const b = document.getElementById('brandName'); if (b && b.textContent !== k.title){ b.textContent = k.title; b.parentNode.style.fontSize = k.title.length > 19 ? 'clamp(15px,4.4vw,18px)' : ''; }
   const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = k.void;
 }
 const MAX_STARS = 42, TOKENS_PER_STAR = 2, FULL_DAY_BONUS = 3, STARS_PER_LEVEL = 5;
@@ -630,6 +693,7 @@ async function initCloud(){
       if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
       ref = firebase.firestore().collection('families').doc(code);
     }catch(e){ return setSync('offline'); }
+    setTimeout(() => { try{ shWatchCore(); }catch(e){} }, 0);
   } else {
     if (!window.claude || typeof window.claude.use !== 'function') return setSync('local');
     setSync('connecting');
@@ -846,6 +910,148 @@ async function moodDel(ds, id){
 const niceDate = ds => { const [y, m, d] = ds.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}); };
 const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
 
+
+/* ---- Family planner + message board ----
+   Planner: one doc per week  families/<code>W<YYYYMMDD of Monday>  {items:{id:{day, text, time, who, t}}}
+   Board:   one doc           families/<code>B                      {posts:{id:{text, by, t}}} */
+const WHO = [{n:'Everyone', c:'#b9a5ff'}, {n:'Mum', c:'#ff8fb1'}, {n:'Dad', c:'#6fc6ff'}, {n:'Douglas', c:'#3ef0a0'}, {n:'Dorothea', c:'#f5c451'}];
+const whoCol = n => (WHO.find(w => w.n === n) || WHO[0]).c;
+const SH_KEY = 'douglasSharedV1';
+let shared = (() => { try{ return JSON.parse(localStorage.getItem(SH_KEY)) || {}; }catch(e){ return {}; } })();
+const shSave = () => { try{ localStorage.setItem(SH_KEY, JSON.stringify(shared)); }catch(e){} };
+const shSubs = {};
+function famRef(suffix){
+  if (!fbReady() || !window.firebase || !firebase.apps.length) return null;
+  const c = familyCode(); return c ? firebase.firestore().collection('families').doc(c + suffix) : null;
+}
+function shWatch(suffix){
+  if (shSubs[suffix]) return; const r = famRef(suffix); if (!r) return;
+  shSubs[suffix] = true;
+  r.onSnapshot(snap => {
+    if (snap.metadata.fromCache && !snap.exists) return;
+    shared[suffix] = snap.exists ? (snap.data() || {}) : (shared[suffix] || {});
+    shSave();
+    if (tab === 'plan'){ renderPlan(); markSeen(); } else if (tab === 'dash') renderDash();
+    renderNav();
+  }, () => { delete shSubs[suffix]; });
+}
+async function shPut(suffix, field, id, obj){
+  const d = shared[suffix] = shared[suffix] || {}; (d[field] = d[field] || {})[id] = obj; shSave();
+  const r = famRef(suffix);
+  if (r){ try{ await r.set({[field]:{[id]:obj}}, {merge:true}); }catch(e){ lastErr = e && (e.code || e.message); toast([['pulse', 'Saved here, will sync later']]); } }
+}
+async function shDel(suffix, field, id){
+  try{ delete shared[suffix][field][id]; }catch(e){} shSave();
+  const r = famRef(suffix);
+  if (r){ try{ await r.update({[`${field}.${id}`]: firebase.firestore.FieldValue.delete()}); }catch(e){ lastErr = e && (e.code || e.message); } }
+}
+const newId = () => 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const mondayOf = off => { const d = new Date(); d.setDate(d.getDate() - todayIdx() + 7 * off); return dateStr(d); };
+const addDays = (ds, n) => { const [y, m, d] = ds.split('-').map(Number); return dateStr(new Date(y, m - 1, d + n)); };
+const weekSuffix = mon => 'W' + mon.replace(/-/g, '');
+const planItems = (mon, day) => Object.entries(((shared[weekSuffix(mon)] || {}).items) || {})
+  .map(([id, v]) => Object.assign({id}, v)).filter(v => v && v.day === day && v.text)
+  .sort((a, b) => (a.time || '99') < (b.time || '99') ? -1 : (a.time || '99') > (b.time || '99') ? 1 : a.t - b.t);
+const posts = () => Object.entries(((shared.B || {}).posts) || {}).map(([id, v]) => Object.assign({id}, v)).filter(v => v && v.text).sort((a, b) => b.t - a.t);
+const SEEN_KEY = 'douglasBoardSeen', AS_KEY = 'douglasPostAs';
+let boardSeen = (() => { try{ return +localStorage.getItem(SEEN_KEY) || 0; }catch(e){ return 0; } })();
+let postAs = (() => { try{ return localStorage.getItem(AS_KEY) || 'Douglas'; }catch(e){ return 'Douglas'; } })();
+const unread = () => posts().filter(p => p.t > boardSeen && p.by !== postAs).length;
+function markSeen(){ boardSeen = Date.now(); try{ localStorage.setItem(SEEN_KEY, String(boardSeen)); }catch(e){} }
+function shWatchCore(){ shWatch('B'); shWatch(weekSuffix(mondayOf(0))); }
+const fmtTime = t => t ? t : '';
+function ago(t){
+  const s = (Date.now() - t) / 1000, d = new Date(t), today = dateStr(), ds = dateStr(d), hm = d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+  if (s < 60) return 'just now'; if (s < 3600) return Math.floor(s / 60) + ' min ago';
+  if (ds === today) return 'today ' + hm; if (ds === addDays(today, -1)) return 'yesterday ' + hm;
+  return d.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) + ' ' + hm;
+}
+let planView = {off:0, adding:null, draft:{text:'', time:'', who:'Everyone'}, post:''};
+let planPending = false;
+
+function todayPlanHTML(){
+  const items = planItems(mondayOf(0), todayIdx()), n = unread();
+  if (!items.length && !n) return '';
+  return `<div class="today-plan glass">
+    <div class="row"><b>Today's plan</b><button class="pl-add" data-tab="plan" style="margin:0">Planner ${ic('arrow')}</button></div>
+    ${items.length ? items.slice(0, 5).map(it => `<div class="tp-it"><time>${esc(fmtTime(it.time))}</time><span class="tx">${esc(it.text)}</span>${it.who && it.who !== 'Everyone' ? `<span class="who" style="--wc:${whoCol(it.who)}">${esc(it.who)}</span>` : ''}</div>`).join('')
+      + (items.length > 5 ? `<div class="meta">+${items.length - 5} more</div>` : '') : '<div class="meta">Nothing planned for today.</div>'}
+    ${n ? `<button class="tp-msg" data-tab="plan">${ic('pin')}${n} new message${n > 1 ? 's' : ''} on the board</button>` : ''}
+  </div>`;
+}
+
+function renderPlan(){
+  const el = $('v-plan'); if (!el) return;
+  const ae = document.activeElement;
+  if (ae && el.contains(ae) && /^(INPUT|TEXTAREA)$/.test(ae.tagName)){ planPending = true; return; }
+  planPending = false;
+  const v = planView, mon = mondayOf(v.off), today = dateStr();
+  shWatch(weekSuffix(mon)); shWatch('B');
+  const sun = addDays(mon, 6), fmt = ds => { const [y, m, d] = ds.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('en-GB', {day:'numeric', month:'short'}); };
+  const ps = posts();
+  el.innerHTML = `
+    <h2 class="sec">Family Planner</h2>
+    <div class="pl glass">
+      <div class="pl-head"><button class="pl-nav" data-plnav="-1" aria-label="Previous week">‹</button>
+        <div><b>${v.off === 0 ? 'This week' : v.off === 1 ? 'Next week' : v.off === -1 ? 'Last week' : 'Week of ' + fmt(mon)}</b>
+          <small>${fmt(mon)} – ${fmt(sun)}${v.off ? ` · <button data-plnav="0">Back to this week</button>` : ''}</small></div>
+        <button class="pl-nav" data-plnav="1" aria-label="Next week">›</button></div>
+      ${DAYS.map((d, i) => { const ds = addDays(mon, i), items = planItems(mon, i), isT = ds === today, open = v.adding === i;
+        return `<div class="pl-day ${isT ? 'today' : ''}" id="pl-${i}">
+          <div class="pl-dh"><b>${d.name}</b><small>${fmt(ds)}</small>${isT ? '<span class="now">Today</span>' : ''}</div>
+          ${items.map(it => `<div class="pl-it"><time>${esc(fmtTime(it.time))}</time><span class="tx">${esc(it.text)}</span>${it.who ? `<span class="who" style="--wc:${whoCol(it.who)}">${esc(it.who)}</span>` : ''}<button data-pldel="${it.id}" aria-label="Remove">×</button></div>`).join('')}
+          ${!items.length && !open ? '<div class="pl-empty">Nothing planned yet</div>' : ''}
+          ${open ? `<div class="pl-form">
+              <input class="pl-in" id="plText" maxlength="80" placeholder="What's happening? e.g. Swimming, Grandma visiting" value="${esc(v.draft.text)}">
+              <div class="pl-r"><label for="plTime">Time</label><input class="pl-in" type="time" id="plTime" value="${esc(v.draft.time)}"><span class="meta" style="margin:0">optional</span></div>
+              <div class="wchips">${WHO.map(w => `<button class="wchip ${v.draft.who === w.n ? 'on' : ''}" style="--wc:${w.c}" data-plwho="${w.n}">${w.n}</button>`).join('')}</div>
+              <div class="pl-btns"><button class="btn ghost" data-plcancel="1">Cancel</button><button class="btn" data-plsave="${i}">${ic('check')}Add</button></div>
+            </div>` : `<button class="pl-add" data-pladd="${i}">+ Add activity</button>`}
+        </div>`; }).join('')}
+    </div>
+
+    <h2 class="sec">Message Board</h2>
+    <div class="board glass">
+      <div class="lbl">Posting as</div>
+      <div class="wchips">${WHO.slice(1).map(w => `<button class="wchip ${postAs === w.n ? 'on' : ''}" style="--wc:${w.c}" data-as="${w.n}">${w.n}</button>`).join('')}</div>
+      <textarea class="pl-in" id="bText" maxlength="280" placeholder="Write a reminder or a quick message for the family…">${esc(v.post)}</textarea>
+      <button class="btn" data-act="post" style="width:100%">${ic('pin')}Post to the board</button>
+      <div class="posts">${ps.length ? ps.map(p => `<div class="post">
+          <div class="av" style="--wc:${whoCol(p.by)}">${esc((p.by || '?')[0])}</div>
+          <div class="pb"><b>${esc(p.by || 'Someone')}</b><small>${ago(p.t)}</small>${p.t > (planView.seenAt || 0) && p.by !== postAs ? '<em>NEW</em>' : ''}<p>${esc(p.text)}</p></div>
+          <button data-bdel="${p.id}" aria-label="Remove post">×</button></div>`).join('')
+        : '<div class="empty">No messages yet. Post the first one!</div>'}</div>
+    </div>`;
+  const tx = $('plText'), tm = $('plTime'), bt = $('bText');
+  if (tx){ tx.oninput = () => v.draft.text = tx.value; tx.onkeydown = e => { if (e.key === 'Enter'){ e.preventDefault(); planClick({dataset:{plsave:String(v.adding)}}); } }; }
+  if (tm) tm.oninput = tm.onchange = () => v.draft.time = tm.value;
+  if (bt) bt.oninput = () => v.post = bt.value;
+  el.onfocusout = () => setTimeout(() => { if (planPending) renderPlan(); }, 0);
+}
+function planClick(t){
+  const v = planView, ds = t.dataset;
+  if (ds.plnav !== undefined){ v.off = ds.plnav === '0' ? 0 : v.off + Number(ds.plnav); v.adding = null; renderPlan(); return true; }
+  if (ds.pladd !== undefined){ v.adding = +ds.pladd; v.draft = {text:'', time:'', who:'Everyone'}; renderPlan(); setTimeout(() => { const i = $('plText'); if (i) i.focus(); }, 30); return true; }
+  if (ds.plcancel){ v.adding = null; renderPlan(); return true; }
+  if (ds.plwho){ v.draft.who = ds.plwho; const tx = $('plText'), tm = $('plTime'); if (tx) v.draft.text = tx.value; if (tm) v.draft.time = tm.value; document.activeElement && document.activeElement.blur && document.activeElement.blur(); renderPlan(); return true; }
+  if (ds.plsave !== undefined){
+    const tx = $('plText'), tm = $('plTime'); if (tx) v.draft.text = tx.value; if (tm) v.draft.time = tm.value;
+    const text = (v.draft.text || '').trim().slice(0, 80); if (!text){ if (tx) tx.focus(); return true; }
+    shPut(weekSuffix(mondayOf(v.off)), 'items', newId(), {day:+ds.plsave, text, time:v.draft.time || '', who:v.draft.who || 'Everyone', t:Date.now()});
+    v.adding = null; document.activeElement && document.activeElement.blur && document.activeElement.blur(); renderPlan(); buzz(10); return true;
+  }
+  if (ds.pldel){ shDel(weekSuffix(mondayOf(v.off)), 'items', ds.pldel); renderPlan(); return true; }
+  if (ds.as){ postAs = ds.as; try{ localStorage.setItem(AS_KEY, postAs); }catch(e){} const bt = $('bText'); if (bt) v.post = bt.value; renderPlan(); renderNav(); return true; }
+  if (ds.act === 'post'){
+    const bt = $('bText'), text = ((bt ? bt.value : v.post) || '').trim().slice(0, 280); if (!text){ if (bt) bt.focus(); return true; }
+    shPut('B', 'posts', newId(), {text, by:postAs, t:Date.now()});
+    v.post = ''; if (bt){ bt.value = ''; bt.blur(); }
+    const all = posts(); if (all.length > 60) all.slice(60).forEach(p => shDel('B', 'posts', p.id));
+    markSeen(); renderPlan(); toast([['pin', 'Posted to the board']]); buzz(12); return true;
+  }
+  if (ds.bdel){ ask('Remove this message?', 'It will be removed on every device.', 'Remove').then(ok => { if (ok){ shDel('B', 'posts', ds.bdel); renderPlan(); } }); return true; }
+  return false;
+}
 
 /* ---- Memory photos ----
    One photo per day. The full photo (shrunk on the device) lives in its own doc: families/<code>P<YYYYMMDD>.
@@ -1171,8 +1377,10 @@ function gamingHTML(c){
 }
 
 function renderNav(){
-  $('nav').innerHTML = [['dash','home','Dashboard'],['story','target','Storyboard'],['rewards','gift','Rewards'],['mood','heart','MoodLoop'],['guide','book','Guide']]
-    .map(([k, i, l]) => `<button data-tab="${k}" class="${k === tab ? 'on' : ''}">${ic(i)}${l}</button>`).join('');
+  $('nav').innerHTML = [['dash','home','Dashboard'],['story','target','Storyboard'],['rewards','gift','Rewards'],['mood','heart','MoodLoop'],['plan','calendar','Planner']]
+    .map(([k, i, l]) => { const n = k === 'plan' && tab !== 'plan' ? unread() : 0;
+      return `<button data-tab="${k}" class="${k === tab ? 'on' : ''}">${ic(i)}${l}${n ? `<span class="nb">${n}</span>` : ''}</button>`; }).join('');
+  const mb = $('menuBtn'); if (mb && !mb.innerHTML) mb.innerHTML = ic('menu');
 }
 
 function renderDash(){
@@ -1193,6 +1401,7 @@ function renderDash(){
       </div>
     </div>
 
+    ${todayPlanHTML()}
     ${timerHTML()}
 
     <div class="rank glass">
@@ -1292,6 +1501,7 @@ function renderGuide(){
   const card = (icon, title, body) => `<div class="gcard glass"><h3><span class="gi">${ic(icon)}</span>${title}</h3>${body}</div>`;
   const list = (items, no = []) => `<ul class="rules">${items.map((x, i) => `<li class="${no.includes(i) ? 'no' : ''}">${x}</li>`).join('')}</ul>`;
   $('v-guide').innerHTML = `
+    <div class="guide-top"><button class="btn ghost" data-go="dash">${ic('back')}Back</button></div>
     <h2 class="sec">How We Play</h2>
     ${card('home', 'Monday - OWS', `<p>OWS is <b style="color:var(--ink)">Our Wilde Space</b>.</p><p>Monday is a dedicated day with Mum for learning, creativity, exploration, outdoor activities and fun.</p>`)}
     ${card('target', 'What Each Mission Means', `<div class="tbl">${MISSIONS.map(m =>
@@ -1338,7 +1548,7 @@ function renderTop(){
   $('topTok').innerHTML = `${ic('token')}${tokens()}`;
   $('weekLbl').textContent = `Week ${state.weekNo} · Level ${level(stars())}`;
 }
-function renderAll(){ if (!state.play) ensurePlay(); applySkin(); renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderMood(); renderGuide(); }
+function renderAll(){ if (!state.play) ensurePlay(); applySkin(); renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderMood(); renderPlan(); renderGuide(); }
 
 /* ================= FX ================= */
 let toastTimer;
@@ -1442,7 +1652,8 @@ function go(k){
   tab = k;
   document.body.classList.toggle('calm', k === 'mood');
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'v-' + k));
-  renderAll(); space.setScene(k === 'mood' ? 'guide' : k);
+  if (k === 'plan'){ planView.seenAt = boardSeen; markSeen(); }
+  renderAll(); space.setScene(k === 'mood' ? 'guide' : k === 'plan' ? 'story' : k);
   if (k === 'story'){ const el = $('day-' + todayIdx()); setTimeout(() => el && el.scrollIntoView({behavior:'smooth', block:'start'}), 80); }
   else window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -1453,6 +1664,7 @@ document.addEventListener('click', e => {
   if (t.dataset.psnap) return photoPick(t.dataset.psnap);
   if (t.dataset.pview) return pView(t.dataset.pview);
   if (tab === 'mood' && moodClick(t)) return;
+  if (tab === 'plan' && planClick(t)) return;
   if (t.dataset.go) return go(t.dataset.go);
   if (t.dataset.d !== undefined) return toggle(+t.dataset.d, +t.dataset.m);
   if (t.dataset.redeem) return redeem(t.dataset.redeem);
