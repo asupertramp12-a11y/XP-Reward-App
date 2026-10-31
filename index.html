@@ -436,6 +436,7 @@ nav button{position:relative}
 .m.done .mi{color:var(--cyan)}
 .m.done .mt{color:var(--ink)}
 .m.done .ck{background:var(--cyan);box-shadow:0 0 14px rgba(70,224,255,.6);color:#021018}
+[tabindex="-1"]:focus{outline:none}
 .m:disabled{cursor:not-allowed;opacity:.5}
 .m:disabled:active{transform:none}
 .daylock{display:flex;align-items:center;gap:8px;margin-top:-4px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--ink-2)}
@@ -1568,6 +1569,49 @@ function renderTop(){
 }
 function renderAll(){ if (!state.play) ensurePlay(); applySkin(); renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderMood(); renderPlan(); renderGuide(); }
 
+/* ================= Focus keeping =================
+   Views are rebuilt with innerHTML, which throws keyboard focus back to <body>.
+   Before a rebuild we note what had focus (its id or data-* identity, plus ids of
+   its ancestors as fallbacks, plus the text caret); afterwards we put it back. */
+function focusKey(el){
+  if (!el || el === document.body || !document.contains(el)) return null;
+  const sels = [];
+  if (el.id) sels.push('#' + CSS.escape(el.id));
+  else {
+    const a = [...el.attributes].filter(x => x.name.startsWith('data-'));
+    if (a.length) sels.push(el.tagName.toLowerCase() + a.map(x => `[${x.name}="${CSS.escape(x.value)}"]`).join(''));
+  }
+  for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) if (p.id) sels.push('#' + CSS.escape(p.id));
+  let caret = null;
+  try{ if (typeof el.selectionStart === 'number') caret = [el.selectionStart, el.selectionEnd]; }catch(e){}
+  return {sels, caret};
+}
+const shown = el => el.getClientRects().length > 0;
+function refocus(k, force = false){
+  if (!k) return;
+  const a = document.activeElement;
+  if (!force && a && a !== document.body && document.contains(a) && shown(a)) return;   // focus survived, leave it
+  for (const [n, sel] of k.sels.entries()){
+    const el = [...document.querySelectorAll(sel)].find(shown);
+    if (!el) continue;
+    if (n > 0 && !el.hasAttribute('tabindex') && el.tabIndex < 0) el.setAttribute('tabindex', '-1');
+    el.focus({preventScroll:true});
+    if (document.activeElement !== el) continue;                    // e.g. now disabled
+    if (n === 0 && k.caret){ try{ el.setSelectionRange(...k.caret); }catch(e){} }
+    return;
+  }
+}
+const keepFocus = fn => function(...args){
+  const k = focusKey(document.activeElement);
+  const r = fn.apply(this, args);
+  refocus(k);
+  return r;
+};
+renderAll = keepFocus(renderAll);
+renderPlan = keepFocus(renderPlan);
+renderMood = keepFocus(renderMood);
+renderMoodRest = keepFocus(renderMoodRest);
+
 /* ================= FX ================= */
 let toastTimer;
 function toast(items){
@@ -1595,12 +1639,12 @@ function ask(title, body, okLabel = 'OK', opt = {}){
   /* opt.pin: show a masked digit field and resolve to its value (or null on cancel).
      opt.check(value): return an error message to keep the box open, or nothing to accept. */
   return new Promise(res => {
-    const inp = $('mIn'), err = $('mErr');
+    const inp = $('mIn'), err = $('mErr'), back = focusKey(document.activeElement);
     $('mT').textContent = title; $('mB').textContent = body; $('mOk').textContent = okLabel;
     err.textContent = ''; inp.value = ''; inp.hidden = !opt.pin;
     $('modal').hidden = false; (opt.pin ? inp : $('mOk')).focus();
     const done = v => { $('modal').hidden = true; inp.hidden = true; inp.value = ''; err.textContent = '';
-      $('mOk').onclick = $('mNo').onclick = inp.onkeydown = null; res(v); };
+      $('mOk').onclick = $('mNo').onclick = inp.onkeydown = null; refocus(back, true); res(v); };
     $('mOk').onclick = async () => {
       if (!opt.pin) return done(true);
       const v = inp.value.trim(), bad = opt.check && await opt.check(v);
@@ -1788,7 +1832,17 @@ async function shareLink(){
   try{ await navigator.clipboard.writeText(url); toast([['check', 'Family link copied']]); return; }catch(e){}
   ask('Family link', url + '\n\nKeep this private: anyone with it can tick missions.', 'Done');
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('modal').hidden) $('mNo').click(); });
+document.addEventListener('keydown', e => {
+  if ($('modal').hidden) return;
+  if (e.key === 'Escape') return $('mNo').click();
+  if (e.key === 'Tab'){   // keep Tab inside the open box
+    const f = [...$('modal').querySelectorAll('button,input')].filter(x => !x.hidden && !x.disabled && shown(x));
+    const i = f.indexOf(document.activeElement);
+    if (i === -1 || (e.shiftKey && i === 0) || (!e.shiftKey && i === f.length - 1)){
+      e.preventDefault(); f[e.shiftKey ? f.length - 1 : 0].focus();
+    }
+  }
+});
 
 /* ================= Cinematic 3D backdrop ================= */
 const space = (() => {
