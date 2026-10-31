@@ -436,6 +436,9 @@ nav button{position:relative}
 .m.done .mi{color:var(--cyan)}
 .m.done .mt{color:var(--ink)}
 .m.done .ck{background:var(--cyan);box-shadow:0 0 14px rgba(70,224,255,.6);color:#021018}
+.m:disabled{cursor:not-allowed;opacity:.5}
+.m:disabled:active{transform:none}
+.daylock{display:flex;align-items:center;gap:8px;margin-top:-4px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--ink-2)}
 .game{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase}
 .game svg{font-size:20px}
 .game small{margin-left:auto;font-family:var(--f-body);font-weight:500;font-size:12px;letter-spacing:0;text-transform:none;opacity:.85}
@@ -492,6 +495,10 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 .mbox h3{font-family:var(--f-display);font-weight:800;font-size:24px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:8px}
 .mbox p{color:var(--ink-2);font-weight:500;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere}
 .mrow{display:flex;gap:10px;margin-top:20px}
+.pin-in{display:block;width:100%;margin-top:16px;padding:14px;border-radius:12px;border:0;background:rgba(0,0,0,.3);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);font:700 26px var(--f-display);letter-spacing:.5em;text-align:center;text-indent:.5em}
+.pin-in:focus{outline:2px solid var(--cyan);outline-offset:2px}
+.merr{min-height:1.4em;margin-top:8px;color:#ffb3c0;font-weight:600;font-size:14px}
+.merr:empty{display:none}
 .mrow .btn{flex:1}
 .toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-170%);z-index:50;display:grid;gap:6px;padding:14px 18px;min-width:240px;max-width:min(92vw,420px);border-radius:14px;background:rgba(10,14,28,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(70,224,255,.45),0 0 30px rgba(70,224,255,.2);transition:transform .5s cubic-bezier(.2,1.3,.4,1)}
 .toast.show{transform:translate(-50%,0)}
@@ -535,6 +542,8 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 <div class="modal" id="modal" hidden>
   <div class="mbox glass" role="dialog" aria-modal="true" aria-labelledby="mT">
     <h3 id="mT"></h3><p id="mB"></p>
+    <input class="pin-in" id="mIn" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" aria-labelledby="mT" aria-describedby="mB mErr" hidden>
+    <p class="merr" id="mErr" role="alert"></p>
     <div class="mrow"><button class="btn ghost" id="mNo">Cancel</button><button class="btn" id="mOk">OK</button></div>
   </div>
 </div>
@@ -639,7 +648,7 @@ const MAX_STARS = 42, TOKENS_PER_STAR = 2, FULL_DAY_BONUS = 3, STARS_PER_LEVEL =
 /* ================= State (local + cloud sync) ================= */
 const KEY = 'douglasBattlePassV2';
 const blankWeek = () => DAYS.map(() => MISSIONS.map(() => false));
-const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null, skins:{owned:['default'], on:'default'}});
+const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null, skins:{owned:['default'], on:'default'}, pin:null});
 const valid = s => s && Array.isArray(s.week) && s.week.length === 7 && s.week.every(d => Array.isArray(d) && d.length === 6);
 let state = loadLocal();
 
@@ -804,11 +813,13 @@ function ensurePlay(){
 const clock = sec => { sec = Math.max(0, Math.round(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60;
   return h ? `${h}:${pad2(m)}:${pad2(s)}` : `${m}:${pad2(s)}`; };
 
+const GAME_OPENS = 16;   // gaming starts after 4pm
+const gameOpen = () => new Date().getHours() >= GAME_OPENS;
 function timerHTML(){
   const p = state.play, total = playTotal(p), used = Math.min(total, playUsed(p)), left = total - used, run = !!p.runningSince;
-  const off = total === 0;
+  const off = total === 0, wait = !off && !run && left > 0 && !gameOpen();
   return `<div class="timer glass ${run ? 'run' : ''} ${off ? 'off' : ''}" id="gt">
-      <div class="row"><b>Game Timer</b><span id="gtState">${run ? 'Playing' : off ? 'Locked' : left <= 0 ? 'All used' : 'Paused'}</span></div>
+      <div class="row"><b>Game Timer</b><span id="gtState">${run ? 'Playing' : off ? 'Locked' : left <= 0 ? 'All used' : wait ? 'Opens 4pm' : 'Paused'}</span></div>
       <div class="gt-big" id="gtLeft">${clock(left)}</div>
       <div class="gt-lbl">Left today</div>
       <div class="bar gold"><i id="gtBar" style="width:${total ? left / total * 100 : 0}%"></i></div>
@@ -819,6 +830,7 @@ function timerHTML(){
       </div>
       <div class="gt-row">${off
         ? `<button class="btn ghost" disabled>${ic('lock')}Complete 4 missions</button>`
+        : wait ? `<button class="btn ghost" disabled>${ic('lock')}Opens at 4pm</button>`
         : `<button class="btn ${run ? 'ghost' : 'gold'}" data-act="timer" ${left <= 0 && !run ? 'disabled' : ''}>${ic('pad')}${run ? 'Pause' : used > 0 ? 'Resume' : 'Start'}</button>`}</div>
       <div class="meta">Start it when you play, pause when you stop. Anything left rolls over to tomorrow.</div>
     </div>`;
@@ -839,10 +851,14 @@ function toggleTimer(){
   ensurePlay();
   const p = state.play;
   if (p.runningSince){ p.used = Math.min(playTotal(p), playUsed(p)); p.runningSince = null; }
-  else { if (playTotal(p) - p.used <= 0) return; p.runningSince = Date.now(); buzz(15); }
+  else { if (playTotal(p) - p.used <= 0 || !gameOpen()) return; p.runningSince = Date.now(); buzz(15); }
   persist(); renderAll();
 }
-setInterval(() => { if (ensurePlay()){ persist(); renderAll(); } else tickTimer(); }, 1000);
+let gateWas = gameOpen();
+setInterval(() => {
+  const g = gameOpen(), flip = g !== gateWas; gateWas = g;
+  if (ensurePlay()){ persist(); renderAll(); } else if (flip) renderAll(); else tickTimer();
+}, 1000);
 
 /* ================= MoodLoop =================
    A calm, bright space styled after the MoodLoop wristband prototype.
@@ -1450,8 +1466,8 @@ function renderStory(){
         </div>
         <div class="ring" style="${ringStyle(c, d.col)}"><span>${c}/6</span></div>
       </div>
-      <div class="missions">${MISSIONS.map((m, j) => { const on = state.week[i][j];
-        return `<button class="m ${on ? 'done' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on}">
+      <div class="missions">${i > t ? `<div class="daylock">${ic('lock')}Opens on ${d.name}</div>` : ''}${MISSIONS.map((m, j) => { const on = state.week[i][j];
+        return `<button class="m ${on ? 'done' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on}"${i > t && !on ? ' disabled' : ''}>
           <span class="mi">${ic(m.icon)}</span><span class="mt">${m.name}<small>${m.what}</small></span><span class="ck">${ic('check')}</span></button>`; }).join('')}</div>
       ${gamingHTML(c)}
       ${memHTML(weekDate(i), i > t)}
@@ -1538,8 +1554,10 @@ function renderGuide(){
       : `<p>This device isn't linked yet. If you already have a family link, open it here instead. Otherwise create one on this device.</p>
         <div class="parent"><button class="btn" data-act="makelink">${ic('key')}Create family link</button></div>`) : ''}
     ${card('key', 'Parent Zone', `<p>Use on Sunday evening to start a new week. Unspent tokens are kept.</p>
+      <p style="margin-top:8px">${state.pin ? 'Starting a new week, resetting and undoing rewards need the parent PIN.' : 'Set a parent PIN so only Mum or Dad can start a new week, reset, or undo rewards.'}</p>
       <div class="parent">
         <button class="btn" data-act="newweek">${ic('refresh')}Start New Week</button>
+        <button class="btn ghost" data-act="pin">${ic('key')}${state.pin ? 'Change parent PIN' : 'Set parent PIN'}</button>
         <button class="btn danger" data-act="wipe">Reset everything</button>
       </div>`)}`;
 }
@@ -1573,19 +1591,77 @@ function shards(n = 40){
 }
 const buzz = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
 
-function ask(title, body, okLabel = 'OK'){
+function ask(title, body, okLabel = 'OK', opt = {}){
+  /* opt.pin: show a masked digit field and resolve to its value (or null on cancel).
+     opt.check(value): return an error message to keep the box open, or nothing to accept. */
   return new Promise(res => {
+    const inp = $('mIn'), err = $('mErr');
     $('mT').textContent = title; $('mB').textContent = body; $('mOk').textContent = okLabel;
-    $('modal').hidden = false; $('mOk').focus();
-    const done = v => { $('modal').hidden = true; $('mOk').onclick = $('mNo').onclick = null; res(v); };
-    $('mOk').onclick = () => done(true); $('mNo').onclick = () => done(false);
+    err.textContent = ''; inp.value = ''; inp.hidden = !opt.pin;
+    $('modal').hidden = false; (opt.pin ? inp : $('mOk')).focus();
+    const done = v => { $('modal').hidden = true; inp.hidden = true; inp.value = ''; err.textContent = '';
+      $('mOk').onclick = $('mNo').onclick = inp.onkeydown = null; res(v); };
+    $('mOk').onclick = async () => {
+      if (!opt.pin) return done(true);
+      const v = inp.value.trim(), bad = opt.check && await opt.check(v);
+      if (bad){ err.textContent = bad; inp.value = ''; inp.focus(); return; }
+      done(v);
+    };
+    $('mNo').onclick = () => done(opt.pin ? null : false);
+    inp.onkeydown = e => { if (e.key === 'Enter'){ e.preventDefault(); $('mOk').click(); } };
   });
+}
+
+/* ================= Parent lock =================
+   A 4-6 digit PIN guards the actions that change the score: starting a new week,
+   resetting, and undoing a reward. The PIN is stored hashed in the shared save, so
+   one PIN works on every linked device. Once entered it stays open for 5 minutes. */
+const PARENT_OPEN_MS = 5 * 60 * 1000;
+let parentUntil = 0;
+async function hashPin(v){
+  const txt = 'dbp-parent:' + v;
+  try{
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+  }catch(e){
+    let h = 2166136261; for (const c of txt){ h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+    return 'f' + h.toString(16);
+  }
+}
+const pinShape = v => /^\d{4,6}$/.test(v) ? null : 'Use 4 to 6 numbers.';
+async function setPin(){
+  let first = null;
+  const a = await ask('Set a parent PIN', 'Choose 4 to 6 numbers. Mum or Dad will need it to start a new week, reset the game, or undo a reward.', 'Next',
+    {pin:true, check:v => pinShape(v)});
+  if (a === null) return false;
+  first = a;
+  const b = await ask('Type it again', 'Enter the same PIN once more to confirm it.', 'Save PIN',
+    {pin:true, check:v => v === first ? null : "That doesn't match. Try again."});
+  if (b === null) return false;
+  state.pin = await hashPin(b); persist(); renderAll();
+  parentUntil = Date.now() + PARENT_OPEN_MS;
+  toast([['key', 'Parent PIN saved']]);
+  return true;
+}
+async function parentOK(){
+  if (!state.pin) return setPin();
+  if (Date.now() < parentUntil) return true;
+  const v = await ask('Parent PIN', 'Ask Mum or Dad to enter the parent PIN.', 'Unlock',
+    {pin:true, check:async v => (await hashPin(v)) === state.pin ? null : "That PIN isn't right. Try again."});
+  if (v === null) return false;
+  parentUntil = Date.now() + PARENT_OPEN_MS;
+  return true;
+}
+async function changePin(){
+  if (state.pin && !await parentOK()) return;
+  await setPin();
 }
 
 /* ================= Actions ================= */
 let tab = 'dash';
 
 function toggle(d, m){
+  if (d > todayIdx() && !state.week[d][m]) return;   // future days can't be ticked ahead of time
   const bL = level(stars()), bG = gaming(dayCount(d)), bM = money(stars());
   state.week[d][m] = !state.week[d][m];
   const on = state.week[d][m];
@@ -1615,6 +1691,7 @@ async function redeem(id){
 
 async function undo(idx){
   const h = state.redeemed[idx]; if (!h) return;
+  if (!await parentOK()) return;
   if (!await ask(`Undo ${h.name}?`, `${h.cost} tokens will be returned.`, 'Undo')) return;
   state.spent = Math.max(0, state.spent - h.cost); state.redeemed.splice(idx, 1);
   if (String(h.id).startsWith('skin-')){ const id = h.id.slice(5); state.skins.owned = state.skins.owned.filter(x => x !== id); if (state.skins.on === id) state.skins.on = 'default'; }
@@ -1634,6 +1711,7 @@ function equipSkin(id){
 }
 
 async function newWeek(){
+  if (!await parentOK()) return;
   const e = earned(), s = stars();
   if (!await ask(`Start Week ${state.weekNo + 1}?`, `${s} stars this week = £${money(s)} pocket money.\n${e} tokens will be kept.\nAll missions will reset.`, 'Start week')) return;
   ensurePlay(); state.play.frozen = true;
@@ -1643,9 +1721,10 @@ async function newWeek(){
 }
 
 async function wipe(){
+  if (!await parentOK()) return;
   if (!await ask('Reset everything?', 'Tokens, achievements, rewards and missions will be cleared on every device.', 'Reset')) return;
   if (!await ask('Are you sure?', 'This cannot be undone.', 'Yes, reset')) return;
-  state = fresh(); persist(); go('dash');
+  const pin = state.pin; state = fresh(); state.pin = pin; persist(); go('dash');
 }
 
 function go(k){
@@ -1673,6 +1752,7 @@ document.addEventListener('click', e => {
   if (t.dataset.undo !== undefined) return undo(+t.dataset.undo);
   if (t.dataset.act === 'newweek') return newWeek();
   if (t.dataset.act === 'wipe') return wipe();
+  if (t.dataset.act === 'pin') return changePin();
   if (t.dataset.act === 'timer') return toggleTimer();
   if (t.dataset.act === 'makelink') return makeLink();
   if (t.dataset.act === 'sharelink') return shareLink();
