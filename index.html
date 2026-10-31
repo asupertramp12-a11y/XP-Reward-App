@@ -518,7 +518,30 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 .shard{position:fixed;top:-20px;width:2px;height:18px;border-radius:2px;z-index:40;pointer-events:none;animation:fall var(--d) cubic-bezier(.3,.2,.6,1) forwards}
 @keyframes fall{to{transform:translate(var(--x),110vh) rotate(var(--r));opacity:.2}}
 
-@media (prefers-reduced-motion:reduce){.view.on{animation:none}.shard{display:none}.sync i{animation:none!important}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.gain{position:fixed;z-index:45;pointer-events:none;display:flex;align-items:center;gap:6px;white-space:nowrap;font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.04em;color:var(--gold);transform:translate(-100%,-50%);animation:gain 1s cubic-bezier(.16,1,.3,1) forwards}
+.gain svg{font-size:15px}
+.gain .tk{color:var(--cyan)}
+@keyframes gain{0%{opacity:0;translate:0 6px}18%{opacity:1}70%{opacity:1}100%{opacity:0;translate:0 -36px}}
+.moment{position:fixed;inset:0;z-index:65;display:grid;place-items:center;padding:20px;background:rgba(2,3,8,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.mo-card{width:100%;max-width:380px;padding:30px 22px 22px;text-align:center;background:rgba(14,18,34,.94);animation:moIn .55s cubic-bezier(.16,1,.3,1)}
+.mo-hex{width:104px;height:118px;margin:0 auto 18px}
+.mo-hex svg{font-size:46px}
+.mo-card.gold .mo-hex{background:linear-gradient(160deg,var(--gold),#b8801c 60%,var(--red))}
+.mo-card.gold .mo-hex svg{color:var(--gold);filter:drop-shadow(0 4px 10px rgba(245,196,81,.45))}
+.mo-card h2{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,10vw,46px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;margin:10px 0 8px;text-wrap:balance}
+.mo-card p{color:var(--ink-2);font-weight:500;line-height:1.5}
+.mo-rows{display:grid;margin:18px 0 4px;text-align:left}
+.mo-r{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 2px}
+.mo-r+.mo-r{border-top:1px solid var(--line)}
+.mo-r span{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink-2)}
+.mo-r span svg{font-size:18px;color:var(--cyan)}
+.mo-r b{font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:.03em}
+.mo-card .btn{width:100%;margin-top:20px}
+@keyframes moIn{from{opacity:0;transform:scale(.92) translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view.on{animation:none}.shard{display:none}.sync i{animation:none!important}
+  .gain{animation-name:gainFade}.mo-card{animation:none}}
+@keyframes gainFade{0%,70%{opacity:1}100%{opacity:0}}
 </style>
 
 <div class="fallback"></div>
@@ -547,6 +570,8 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 <nav class="glass" id="nav" aria-label="Sections"></nav>
 
 <div class="toast" id="toast" role="status"></div>
+<div class="sr" id="sr" aria-live="polite"></div>
+<div class="moment" id="moment" hidden></div>
 <input type="file" id="photoIn" accept="image/*" hidden>
 <div class="pbox" id="pbox" hidden><div class="pcard" id="pcard" role="dialog" aria-modal="true"></div></div>
 <div class="modal" id="modal" hidden>
@@ -658,7 +683,7 @@ const MAX_STARS = 42, TOKENS_PER_STAR = 2, FULL_DAY_BONUS = 3, STARS_PER_LEVEL =
 /* ================= State (local + cloud sync) ================= */
 const KEY = 'douglasBattlePassV2';
 const blankWeek = () => DAYS.map(() => MISSIONS.map(() => false));
-const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null, skins:{owned:['default'], on:'default'}, pin:null});
+const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null, skins:{owned:['default'], on:'default'}, pin:null, history:[]});
 const valid = s => s && Array.isArray(s.week) && s.week.length === 7 && s.week.every(d => Array.isArray(d) && d.length === 6);
 let state = loadLocal();
 
@@ -1488,7 +1513,16 @@ function renderStory(){
       ${gamingHTML(c)}
       ${memHTML(weekDate(i), i > t)}
     </div>`;
-  }).join('');
+  }).join('') + pastWeeksHTML();
+}
+function pastWeeksHTML(){
+  const h = state.history || [];
+  if (!h.length) return '';
+  return `<h2 class="sec">Past Weeks</h2><div class="hist glass">${h.slice(0, 8).map(w => `<div class="hrow">
+      <span class="he">${ic(w.perfect ? 'diamond' : 'star')}</span>
+      <span class="hn">Week ${w.week} · ${w.stars} stars · £${w.money}
+        <small>${w.perfect} perfect day${w.perfect === 1 ? '' : 's'}${w.best ? ` · best ${w.best}` : ''} · ended ${new Date(w.ended).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</small></span>
+    </div>`).join('')}</div>`;
 }
 
 function renderRewards(){
@@ -1716,6 +1750,37 @@ async function changePin(){
   await setPin();
 }
 
+/* ================= Reward moments =================
+   Small: each tick floats its gain from the checkbox and is announced.
+   Big: level-ups and the end of a week get a full-screen moment. */
+function announce(t){ const el = $('sr'); el.textContent = ''; setTimeout(() => el.textContent = t, 30); }
+function floatGain(d, m){
+  const b = [...document.querySelectorAll(`.m[data-d="${d}"][data-m="${m}"]`)].find(shown); if (!b) return;
+  const r = b.querySelector('.ck').getBoundingClientRect(), f = document.createElement('div');
+  f.className = 'gain'; f.setAttribute('aria-hidden', 'true');
+  f.innerHTML = `+1${ic('star')}<span class="tk">+${TOKENS_PER_STAR}</span>${ic('token')}`;
+  f.style.left = (r.left - 8) + 'px'; f.style.top = (r.top + r.height / 2) + 'px';
+  document.body.appendChild(f); setTimeout(() => f.remove(), 1200);
+}
+function showMoment({emblem, kicker, title, sub = '', rows = [], cta = 'Continue', tone = ''}){
+  return new Promise(res => {
+    const el = $('moment'), back = focusKey(document.activeElement);
+    el.innerHTML = `<div class="mo-card glass ${tone}" role="dialog" aria-modal="true" aria-labelledby="moT" aria-describedby="moS">
+      <div class="hex mo-hex">${ic(emblem)}</div>
+      <div class="eyebrow">${kicker}</div>
+      <h2 id="moT">${title}</h2>
+      <p id="moS">${sub}</p>
+      ${rows.length ? `<div class="mo-rows">${rows.map(([i, k, v]) => `<div class="mo-r"><span>${ic(i)}${k}</span><b>${v}</b></div>`).join('')}</div>` : ''}
+      <button class="btn ${tone}" id="moOk">${cta}</button>
+    </div>`;
+    el.hidden = false; $('moOk').focus();
+    const key = e => { if (e.key === 'Tab'){ e.preventDefault(); $('moOk').focus(); } else if (e.key === 'Escape'){ e.preventDefault(); close(); } };
+    const close = () => { document.removeEventListener('keydown', key, true); el.hidden = true; el.innerHTML = ''; refocus(back, true); res(); };
+    document.addEventListener('keydown', key, true);
+    $('moOk').onclick = close;
+  });
+}
+
 /* ================= Actions ================= */
 let tab = 'dash';
 
@@ -1727,15 +1792,25 @@ function toggle(d, m){
   const aL = level(stars()), aG = gaming(dayCount(d)), aM = money(stars());
   const newB = checkBadges();
   ensurePlay(); persist(); renderAll(); space.pulse(on ? 1 : 0);
-  if (!on) return;
-  buzz(12);
+  if (!on){ announce(`${MISSIONS[m].name} unticked.`); return; }
+  buzz(12); floatGain(d, m);
   const msgs = [];
   if (dayCount(d) === 6) msgs.push(['diamond', `Perfect day · +${FULL_DAY_BONUS} tokens`, 'gold']);
-  if (aL > bL){ const r = rankFor(aL); msgs.push(['up', r.lvl === aL ? `Level ${aL} · Rank: ${r.name}` : `Level ${aL} reached`]); }
   if (aG > bG) msgs.push(['pad', `${aG} minutes unlocked`, 'gold']);
   if (aM > bM) msgs.push(['pound', `Pocket money now £${aM}`, 'gold']);
   newB.forEach(b => msgs.push([b.icon, `Achievement: ${b.name}`, 'gold']));
-  if (msgs.length){ toast(msgs); shards(dayCount(d) === 6 || aL > bL ? 60 : 30); buzz([20, 40, 20]); space.pulse(3); }
+  announce(`${MISSIONS[m].name} done. 1 star and ${TOKENS_PER_STAR} tokens.` + msgs.map(x => ' ' + x[1] + '.').join(''));
+  (async () => {
+    if (aL > bL){
+      await new Promise(r => setTimeout(r, 700));   // let the tick and its +1 land first
+      const r = rankFor(aL), nr = nextRank(aL), isNew = r.lvl === aL;
+      shards(80); buzz([30, 60, 30, 60, 60]); space.pulse(4);
+      await showMoment({emblem:r.icon, kicker:'Level up', title:`Level ${aL}`, tone:isNew ? 'gold' : '',
+        sub:isNew ? `New rank unlocked: ${r.name}.` : `${r.name} rank${nr ? ` · ${nr.name} unlocks at Level ${nr.lvl}` : ''}.`,
+        cta:'Keep going'});
+    }
+    if (msgs.length){ toast(msgs); shards(dayCount(d) === 6 ? 60 : 30); buzz([20, 40, 20]); space.pulse(3); }
+  })();
 }
 
 async function redeem(id){
@@ -1773,10 +1848,20 @@ async function newWeek(){
   if (!await parentOK()) return;
   const e = earned(), s = stars();
   if (!await ask(`Start Week ${state.weekNo + 1}?`, `${s} stars this week = £${money(s)} pocket money.\n${e} tokens will be kept.\nAll missions will reset.`, 'Start week')) return;
+  const best = DAYS.map((x, i) => [x.name, dayCount(i)]).reduce((a, b) => b[1] > a[1] ? b : a, ['', 0]);
+  const rec = {week:state.weekNo, stars:s, money:money(s), tokens:e, perfect:fullDays(), best:best[1] ? `${best[0]} ${best[1]}/6` : '', ended:dateStr()};
   ensurePlay(); state.play.frozen = true;
+  state.history = [rec, ...(state.history || [])].slice(0, 52);
   state.banked += e; state.week = blankWeek(); state.weekNo += 1;
   persist(); go('dash');
-  toast([['refresh', `Week ${state.weekNo} begins`]]); shards(40); space.pulse(4);
+  shards(rec.stars >= 20 ? 90 : 40); space.pulse(4); buzz([30, 60, 30]);
+  await showMoment({emblem:'trophy', kicker:`Week ${rec.week} complete`, tone:rec.stars >= 20 ? 'gold' : '',
+    title:rec.stars >= 30 ? 'Legend week' : rec.stars >= 20 ? 'Great week' : rec.stars ? 'Week done' : 'Fresh start',
+    sub:`Tokens are kept. Missions reset for Week ${state.weekNo}.`,
+    rows:[['star', 'Battle stars', `${rec.stars}/${MAX_STARS}`], ['pound', 'Pocket money', `£${rec.money}`],
+      ['diamond', 'Perfect days', rec.perfect], ...(rec.best ? [['trophy', 'Best day', rec.best]] : []), ['token', 'Tokens earned', rec.tokens]],
+    cta:`Start Week ${state.weekNo}`});
+  toast([['refresh', `Week ${state.weekNo} begins`]]);
 }
 
 async function wipe(){
