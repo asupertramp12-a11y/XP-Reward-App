@@ -49,9 +49,10 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 
 /* Header */
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.brand{font-family:var(--f-display);font-weight:800;font-size:clamp(17px,5vw,22px);letter-spacing:.06em;text-transform:uppercase;line-height:1}
+.brand{min-width:0;font-family:var(--f-display);font-weight:800;font-size:clamp(16px,4.6vw,22px);letter-spacing:.06em;text-transform:uppercase;line-height:1}
 .brand small{display:block;font-family:var(--f-body);font-weight:600;font-size:11px;letter-spacing:.22em;color:var(--cyan);margin-bottom:6px}
 .hud{display:flex;gap:8px;align-items:center}
+@media (max-width:360px){ .top{flex-wrap:wrap} .hud{margin-left:auto} }
 .chip{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;font-weight:600;font-size:13px}
 .chip.tok{font-weight:700;color:var(--gold)}
 .chip.tok svg{font-size:16px}
@@ -60,6 +61,11 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .sync[data-s="synced"] i{background:var(--lime);box-shadow:0 0 8px var(--lime)}
 .sync[data-s="saving"] i,.sync[data-s="connecting"] i{background:var(--gold);animation:blink 1s infinite}
 .sync[data-s="offline"] i,.sync[data-s="readonly"] i{background:var(--red)}
+.chip{white-space:nowrap}
+@media (max-width:420px){   /* routine states show just the dot; problems keep their word */
+  .sync[data-s="local"],.sync[data-s="synced"],.sync[data-s="saving"]{padding:8px 13px}
+  .sync[data-s="local"] span,.sync[data-s="synced"] span,.sync[data-s="saving"] span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
 @keyframes blink{50%{opacity:.25}}
 
 .sec{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);margin:30px 2px 12px}
@@ -261,7 +267,7 @@ body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shado
 @media (prefers-reduced-motion:reduce){#mlDial{transition:none!important}}
 
 /* Header menu, nav badge */
-.menu-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;font-size:20px;color:var(--ink);padding:0}
+.menu-btn{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;font-size:20px;color:var(--ink);padding:0}
 nav button{position:relative}
 .nb{position:absolute;top:4px;left:calc(50% + 6px);min-width:17px;height:17px;padding:0 5px;border-radius:9px;background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:0;line-height:17px;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
 .guide-top{display:flex;align-items:center;gap:12px;margin:2px 0 6px}
@@ -387,6 +393,7 @@ nav button{position:relative}
 .ach[open] summary svg{transform:rotate(90deg)}
 .ach summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-4px;border-radius:inherit}
 .ach .badges{padding:0 18px 18px}
+.guide-link{display:flex;width:100%;margin-top:12px}
 .ach .badge{border-radius:12px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line)}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .row b{font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:.14em;text-transform:uppercase}
@@ -503,7 +510,7 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 .merr{min-height:1.4em;margin-top:8px;color:#ffb3c0;font-weight:600;font-size:14px}
 .merr:empty{display:none}
 .mrow .btn{flex:1}
-.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-170%);z-index:50;display:grid;gap:6px;padding:14px 18px;min-width:240px;max-width:min(92vw,420px);border-radius:14px;background:rgba(10,14,28,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(70,224,255,.45),0 0 30px rgba(70,224,255,.2);transition:transform .5s cubic-bezier(.2,1.3,.4,1)}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,calc(100% + 120px));pointer-events:none;z-index:50;display:grid;gap:6px;padding:14px 18px;min-width:240px;max-width:min(92vw,420px);border-radius:14px;background:rgba(10,14,28,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(70,224,255,.45),0 0 30px rgba(70,224,255,.2);transition:transform .5s cubic-bezier(.2,1.3,.4,1)}
 .toast.show{transform:translate(-50%,0)}
 .toast div{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.05em;text-transform:uppercase}
 .toast svg{font-size:19px;color:var(--cyan)}
@@ -523,7 +530,7 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
   <header class="top">
     <div class="brand"><small id="weekLbl">Week 1 · Level 1</small><span id="brandName">Douglas Battle Pass</span></div>
     <div class="hud">
-      <div class="chip sync glass" id="sync" data-s="local"><i></i><span>This device</span></div>
+      <div class="chip sync glass" id="sync" data-s="local" role="status" title="Sync status"><i></i><span>This device</span></div>
       <div class="chip tok glass" id="topTok"></div>
       <button class="chip glass menu-btn" data-go="guide" aria-label="Guide and settings" id="menuBtn"></button>
     </div>
@@ -1458,7 +1465,8 @@ function renderDash(){
       <summary class="row" id="achSum"><b>Achievements</b><span>${got}/${BADGES.length} ${ic('arrow')}</span></summary>
       <div class="badges">${BADGES.map(b => { const has = state.badges.includes(b.id);
         return `<div class="badge ${has ? '' : 'locked'}"><div class="medal">${ic(has ? b.icon : 'lock')}</div><div><b>${b.name}</b><small>${has ? 'Unlocked' : b.hint}</small></div></div>`; }).join('')}</div>
-    </details>`;
+    </details>
+    <button class="btn ghost guide-link" data-go="guide">${ic('book')}Guide, rules &amp; parent zone</button>`;
 }
 
 function renderStory(){
