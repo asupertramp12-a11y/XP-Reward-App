@@ -971,7 +971,7 @@ const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '
 /* ---- Family planner + message board ----
    Planner: one doc per week  families/<code>W<YYYYMMDD of Monday>  {items:{id:{day, text, time, who, t}}}
    Board:   one doc           families/<code>B                      {posts:{id:{text, by, t}}} */
-const WHO = [{n:'Everyone', c:'#b9a5ff'}, {n:'Mum', c:'#ff8fb1'}, {n:'Dad', c:'#6fc6ff'}, {n:'Douglas', c:'#3ef0a0'}, {n:'Dorothea', c:'#f5c451'}];
+const WHO = [{n:'Everyone', c:'#b9a5ff'}, {n:'Mum', c:'#ff8fb1'}, {n:'Dad', c:'#6fc6ff'}, {n:'Douglas', c:'#3ef0a0'}, {n:'Dorothea', c:'#f5c451'}, {n:'Nanny', c:'#ff9f5a'}];
 const whoCol = n => (WHO.find(w => w.n === n) || WHO[0]).c;
 const SH_KEY = 'douglasSharedV1';
 let shared = (() => { try{ return JSON.parse(localStorage.getItem(SH_KEY)) || {}; }catch(e){ return {}; } })();
