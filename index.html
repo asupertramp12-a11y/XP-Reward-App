@@ -87,8 +87,6 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .brief .sub{font-weight:500;color:var(--ink-2);font-size:16px}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}
 .tag{padding:5px 11px;border-radius:8px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.note{display:flex;gap:8px;align-items:center;font-weight:500;font-size:14px;color:var(--ink-2)}
-.note svg{color:var(--cyan);font-size:17px}
 .brief .status{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .status .st{font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase}
 .status .st.ok{color:var(--gold)}
@@ -374,18 +372,22 @@ nav button{position:relative}
 .meta{font-size:12px;font-weight:500;color:var(--ink-2);margin-top:8px}
 
 /* Stats */
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.stat{padding:16px;min-width:0}
-.stat .k{display:flex;gap:7px;align-items:center;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
-.stat .k svg{font-size:15px;color:var(--cyan)}
-.stat .v{font-family:var(--f-display);font-weight:700;font-size:38px;line-height:1;margin-top:10px}
-.stat .v small{font-size:18px;color:var(--ink-3);font-weight:600}
-.stat .h{font-size:12px;font-weight:500;color:var(--ink-2);margin-top:6px}
-.stat.cash .k svg,.stat.cash .v{color:var(--gold)}
-.stat.cash .v{text-shadow:0 0 20px rgba(245,196,81,.35)}
 
 /* Week */
 .week{padding:18px;margin-top:12px}
+.prog{margin-top:12px}
+.prog .rank{margin-top:0}
+.prog .week{margin:0 18px;padding:18px 0;border-top:1px solid var(--line)}
+.prog .week .meta{margin-top:12px}
+.ach{margin-top:12px}
+.ach summary{padding:18px;cursor:pointer;list-style:none;align-items:center}
+.ach summary::-webkit-details-marker{display:none}
+.ach summary span{display:inline-flex;align-items:center;gap:8px;font-size:18px}
+.ach summary svg{font-size:16px;color:var(--ink-2);transition:transform .2s}
+.ach[open] summary svg{transform:rotate(90deg)}
+.ach summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-4px;border-radius:inherit}
+.ach .badges{padding:0 18px 18px}
+.ach .badge{border-radius:12px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line)}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .row b{font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:.14em;text-transform:uppercase}
 .row span{font-family:var(--f-display);font-weight:700;font-size:20px;color:var(--gold)}
@@ -1400,10 +1402,20 @@ function renderNav(){
   const mb = $('menuBtn'); if (mb && !mb.innerHTML) mb.innerHTML = ic('menu');
 }
 
+function missionBtn(i, j, t){
+  const m = MISSIONS[j], on = state.week[i][j];
+  return `<button class="m ${on ? 'done' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on}"${i > t && !on ? ' disabled' : ''}>
+          <span class="mi">${ic(m.icon)}</span><span class="mt">${m.name}<small>${m.what}</small></span><span class="ck">${ic('check')}</span></button>`;
+}
+
+let achOpen = false;
+document.addEventListener('toggle', e => { if (e.target.id === 'ach') achOpen = e.target.open; }, true);
+
 function renderDash(){
   const t = todayIdx(), d = DAYS[t], c = dayCount(t), s = stars(), L = level(s);
   const r = rankFor(L), nr = nextRank(L), into = s - (L - 1) * STARS_PER_LEVEL;
   const xp = L >= 9 ? 100 : into / STARS_PER_LEVEL * 100, nm = nextMoney(s), g = gaming(c);
+  const got = BADGES.filter(b => state.badges.includes(b.id)).length;
   $('v-dash').innerHTML = `
     <div class="brief glass" style="--dc:${d.col}">
       <div class="daymark">${ic(d.icon)}</div>
@@ -1411,45 +1423,42 @@ function renderDash(){
       <h1>${d.title}</h1>
       <div class="sub">${t === 0 ? 'Our Wilde Space' : d.sub}</div>
       <div class="tags">${d.tags.map(x => `<span class="tag">${x}</span>`).join('')}</div>
-      <div class="note">${ic('pad')}Complete missions to unlock gaming after 4pm</div>
+      <div class="missions">${MISSIONS.map((_, j) => missionBtn(t, j, t)).join('')}</div>
       <div class="status">
-        <span class="st ${g ? 'ok' : ''}">${g ? `${g} min unlocked today` : `${c}/6 complete · ${4 - c} to unlock`}</span>
-        <button class="btn" data-go="story">Missions ${ic('arrow')}</button>
+        <span class="st ${g ? 'ok' : ''}">${c === 6 ? `Perfect day · ${g} min unlocked` : g ? `${g} min gaming unlocked` : `${c}/6 done · ${4 - c} more to unlock gaming`}</span>
+        <button class="btn ghost" data-go="story">Whole week ${ic('arrow')}</button>
       </div>
     </div>
 
     ${todayPlanHTML()}
-    ${timerHTML()}
+    ${playTotal(state.play) ? timerHTML() : ''}
 
-    <div class="rank glass">
-      <div class="hex">${ic(r.icon)}</div>
-      <div class="info">
-        <div class="eyebrow">Level ${L} · Rank</div>
-        <div class="name">${r.name}</div>
-        <div class="bar"><i style="width:${xp}%"></i></div>
-        <div class="meta">${L >= 9 ? 'Maximum level reached' : `${STARS_PER_LEVEL - into} stars to Level ${L + 1}${nr ? ` · ${nr.name} at Level ${nr.lvl}` : ''}`}</div>
+    <div class="prog glass">
+      <div class="rank">
+        <div class="hex">${ic(r.icon)}</div>
+        <div class="info">
+          <div class="eyebrow">Level ${L} · Rank</div>
+          <div class="name">${r.name}</div>
+          <div class="bar"><i style="width:${xp}%"></i></div>
+          <div class="meta">${L >= 9 ? 'Maximum level reached' : `${STARS_PER_LEVEL - into} stars to Level ${L + 1}${nr ? ` · ${nr.name} at Level ${nr.lvl}` : ''}`}</div>
+        </div>
+      </div>
+      <div class="week">
+        <div class="row"><b>Battle Stars ${s}/${MAX_STARS}</b><span>£${money(s)}</span></div>
+        <div class="track"><div class="bar gold"><i style="width:${s / MAX_STARS * 100}%"></i></div>
+          ${[20, 25, 30].map(m => `<div class="mk ${s >= m ? 'hit' : ''}" style="left:${m / MAX_STARS * 100}%"><em>£${money(m)}</em></div>`).join('')}
+        </div>
+        <div class="dots">${DAYS.map((x, i) => { const n = dayCount(i);
+          return `<div class="dot ${n === 6 ? 'full' : ''} ${i === t ? 'today' : ''}"><b>${n}</b>${x.name.slice(0, 3)}</div>`; }).join('')}</div>
+        <div class="meta">${nm ? `${nm.need} more star${nm.need > 1 ? 's' : ''} to £${nm.amt} pocket money` : 'Top pocket money reached this week'}</div>
       </div>
     </div>
 
-    <div class="stats">
-      <div class="stat glass"><div class="k">${ic('star')}Battle Stars</div><div class="v">${s}<small> / ${MAX_STARS}</small></div><div class="h">This week</div></div>
-      <div class="stat glass"><div class="k">${ic('token')}Screen Tokens</div><div class="v">${tokens()}</div><div class="h">+${earned()} this week</div></div>
-      <div class="stat glass cash"><div class="k">${ic('pound')}Pocket Money</div><div class="v">£${money(s)}</div><div class="h">${nm ? `${nm.need} stars to £${nm.amt}` : 'Maximum reached'}</div></div>
-      <div class="stat glass"><div class="k">${ic('chevrons')}Level</div><div class="v">${L}<small> / 9</small></div><div class="h">${r.name}</div></div>
-    </div>
-
-    <div class="week glass">
-      <div class="row"><b>Weekly Progress</b><span>${Math.round(s / MAX_STARS * 100)}%</span></div>
-      <div class="track"><div class="bar gold"><i style="width:${s / MAX_STARS * 100}%"></i></div>
-        ${[20, 25, 30].map(m => `<div class="mk ${s >= m ? 'hit' : ''}" style="left:${m / MAX_STARS * 100}%"><em>£${money(m)}</em></div>`).join('')}
-      </div>
-      <div class="dots">${DAYS.map((x, i) => { const n = dayCount(i);
-        return `<div class="dot ${n === 6 ? 'full' : ''} ${i === t ? 'today' : ''}"><b>${n}</b>${x.name.slice(0, 3)}</div>`; }).join('')}</div>
-    </div>
-
-    <h2 class="sec">Achievements</h2>
-    <div class="badges">${BADGES.map(b => { const got = state.badges.includes(b.id);
-      return `<div class="badge glass ${got ? '' : 'locked'}"><div class="medal">${ic(got ? b.icon : 'lock')}</div><div><b>${b.name}</b><small>${got ? 'Unlocked' : b.hint}</small></div></div>`; }).join('')}</div>`;
+    <details class="ach glass" id="ach" ${achOpen ? 'open' : ''}>
+      <summary class="row" id="achSum"><b>Achievements</b><span>${got}/${BADGES.length} ${ic('arrow')}</span></summary>
+      <div class="badges">${BADGES.map(b => { const has = state.badges.includes(b.id);
+        return `<div class="badge ${has ? '' : 'locked'}"><div class="medal">${ic(has ? b.icon : 'lock')}</div><div><b>${b.name}</b><small>${has ? 'Unlocked' : b.hint}</small></div></div>`; }).join('')}</div>
+    </details>`;
 }
 
 function renderStory(){
@@ -1467,9 +1476,7 @@ function renderStory(){
         </div>
         <div class="ring" style="${ringStyle(c, d.col)}"><span>${c}/6</span></div>
       </div>
-      <div class="missions">${i > t ? `<div class="daylock">${ic('lock')}Opens on ${d.name}</div>` : ''}${MISSIONS.map((m, j) => { const on = state.week[i][j];
-        return `<button class="m ${on ? 'done' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on}"${i > t && !on ? ' disabled' : ''}>
-          <span class="mi">${ic(m.icon)}</span><span class="mt">${m.name}<small>${m.what}</small></span><span class="ck">${ic('check')}</span></button>`; }).join('')}</div>
+      <div class="missions">${i > t ? `<div class="daylock">${ic('lock')}Opens on ${d.name}</div>` : ''}${MISSIONS.map((_, j) => missionBtn(i, j, t)).join('')}</div>
       ${gamingHTML(c)}
       ${memHTML(weekDate(i), i > t)}
     </div>`;
