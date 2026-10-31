@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en-GB"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Douglas Battle Pass</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#03040a">
@@ -15,7 +15,7 @@
   --line:rgba(170,200,255,.13);
   --ink:#f2f5ff;
   --ink-2:rgba(208,218,242,.74);
-  --ink-3:rgba(208,218,242,.46);
+  --ink-3:rgba(208,218,242,.6);
   --cyan:#46e0ff;
   --cyan-dim:rgba(70,224,255,.16);
   --red:#ff3a5c;
@@ -141,7 +141,7 @@ body.calm .skinbg{opacity:0!important}
 /* Grand Voyage: a 1912 ocean liner at night, brass and cream */
 :root[data-skin="liner"]{--cyan:#d8b26a;--cyan-dim:rgba(216,178,106,.15);--gold:#e9c98a;--red:#c7553f;--violet:#8fb3c9;--lime:#a9d6b5;
   --void:#07121f;--panel:rgba(9,24,42,.66);--panel-2:rgba(233,201,138,.06);--line:rgba(216,178,106,.24);
-  --ink:#f6efe0;--ink-2:rgba(240,228,205,.76);--ink-3:rgba(240,228,205,.48);
+  --ink:#f6efe0;--ink-2:rgba(240,228,205,.76);--ink-3:rgba(240,228,205,.6);
   --f-display:"Cinzel",Georgia,serif;--on-cyan:#1a1206;--ring-bg:#0a1626}
 :root[data-skin="liner"] .skinbg{background:
   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60 Q25 48 50 60 T100 60 T150 60 T200 60 T250 60 T300 60 T350 60 T400 60 V120 H0Z' fill='%230b2742'/%3E%3Cpath d='M0 78 Q25 68 50 78 T100 78 T150 78 T200 78 T250 78 T300 78 T350 78 T400 78 V120 H0Z' fill='%23081d33'/%3E%3C/svg%3E") bottom/100% 22% no-repeat,
@@ -193,7 +193,7 @@ body.calm .toast svg{color:#4fb48a}
 body.calm nav{background:rgba(255,255,255,.8);box-shadow:0 10px 30px rgba(29,63,99,.15),inset 0 0 0 1px rgba(29,63,99,.08)}
 body.calm nav button{color:#6f8ba3}
 body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shadow:inset 0 0 0 1px rgba(95,191,152,.7)}
-#v-mood{--ink:#1d3f63;--ink2:#4b6a85;--ink3:#86a0b5;--line:rgba(29,63,99,.10);color:var(--ink);font-family:"Nunito",var(--f-body);font-variant-numeric:normal}
+#v-mood{--ink:#1d3f63;--ink2:#4b6a85;--ink3:#557089;--line:rgba(29,63,99,.10);color:var(--ink);font-family:"Nunito",var(--f-body);font-variant-numeric:normal}
 #v-mood .card{background:rgba(255,255,255,.72);border-radius:24px;box-shadow:0 12px 32px rgba(29,63,99,.10),inset 0 0 0 1px rgba(255,255,255,.8);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 #v-mood .sec{font-family:"Nunito",var(--f-body);font-weight:800;font-size:15px;letter-spacing:.06em;color:var(--ink2);margin:26px 4px 10px}
 #v-mood .sec::after{background:linear-gradient(90deg,rgba(29,63,99,.16),transparent)}
@@ -213,9 +213,10 @@ body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shado
 .ml-pick button{width:48px;height:48px;flex:none;border-radius:50%;background:#fff;color:var(--ink);font-size:26px;font-weight:800;line-height:1;box-shadow:0 4px 14px rgba(29,63,99,.14)}
 .ml-name{min-width:150px;font-weight:800;font-size:26px;line-height:1.1}
 .ml-hint{font-size:13px;font-weight:700;color:var(--ink3);margin-top:3px}
-.ml-sw{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:16px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
-.ml-sw button{width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.85),0 2px 8px rgba(29,63,99,.22)}
-.ml-sw button.on{outline:3px solid var(--ink);outline-offset:2px}
+.ml-sw{display:flex;justify-content:center;align-items:center;gap:2px;margin-top:16px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.ml-sw button{width:44px;height:44px;display:grid;place-items:center;border-radius:50%}
+.ml-sw button::before{content:"";width:28px;height:28px;border-radius:50%;background:var(--sw);box-shadow:inset 0 0 0 2px rgba(255,255,255,.85),0 2px 8px rgba(29,63,99,.22)}
+.ml-sw button.on::before{outline:3px solid var(--ink);outline-offset:2px}
 .ml-draft{padding:18px 16px;margin-top:12px}
 .ml-draft .lbl{font-size:14px;font-weight:700;color:var(--ink2);margin:0 0 8px}
 .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
@@ -240,7 +241,7 @@ body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shado
 .ml-entry .tx p{margin-top:4px;color:var(--ink2);font-weight:600;font-size:15px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
 .ml-entry .tg{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .ml-entry .tg span{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(29,63,99,.06);color:var(--ink2)}
-.ml-entry button{font-size:12px;font-weight:700;color:var(--ink3);padding:6px 8px;border-radius:8px}
+.ml-entry button{font-size:12px;font-weight:700;color:var(--ink3);min-height:44px;padding:0 10px;margin-top:-8px;border-radius:8px}
 .cal{padding:16px}
 .cal-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .cal-h b{font-weight:800;font-size:20px}
@@ -278,7 +279,7 @@ nav button{position:relative}
 .pl-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px}
 .pl-head b{display:block;font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:.05em;text-transform:uppercase;text-align:center}
 .pl-head small{display:block;text-align:center;font-size:12px;font-weight:600;color:var(--ink-2)}
-.pl-head small button{color:var(--cyan);font-weight:700;font-size:12px;padding:0}
+.pl-head small button{color:var(--cyan);font-weight:700;font-size:12px;min-height:44px;padding:0 6px;margin:-14px 0}
 .pl-nav{width:40px;height:40px;flex:none;border-radius:12px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-size:20px}
 .pl-day{padding:14px 16px;border-top:1px solid var(--line)}
 .pl-day.today{background:color-mix(in srgb,var(--cyan) 8%,transparent);box-shadow:inset 3px 0 0 var(--cyan)}
@@ -289,7 +290,7 @@ nav button{position:relative}
 .pl-it{display:flex;align-items:center;gap:10px;padding:9px 10px;margin-top:6px;border-radius:10px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line)}
 .pl-it time{font-weight:700;font-size:13px;color:var(--cyan);min-width:42px}
 .pl-it .tx{flex:1;min-width:0;font-weight:600;font-size:15px;overflow-wrap:anywhere}
-.pl-it button{color:var(--ink-3);font-size:18px;line-height:1;padding:2px 6px}
+.pl-it button{color:var(--ink-3);font-size:18px;line-height:1;min-width:44px;min-height:44px;margin:-10px -10px -10px 0;border-radius:10px}
 .who{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:color-mix(in srgb,var(--wc) 22%,transparent);color:var(--wc);white-space:nowrap}
 .pl-add{margin-top:8px;font-size:13px;font-weight:700;color:var(--cyan);padding:6px 2px;display:inline-flex;gap:6px;align-items:center}
 .pl-empty{margin-top:6px;font-size:13px;color:var(--ink-3);font-weight:500}
@@ -315,7 +316,7 @@ nav button{position:relative}
 .post .pb small{color:var(--ink-3);font-size:12px;margin-left:6px;font-weight:600}
 .post .pb p{margin-top:3px;font-weight:500;font-size:15px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
 .post .pb em{font-style:normal;margin-left:8px;font-size:10px;padding:1px 6px;border-radius:5px;background:var(--red);color:#fff;letter-spacing:.08em;font-weight:700}
-.post button{color:var(--ink-3);font-size:18px;line-height:1;align-self:flex-start;padding:2px 6px}
+.post button{color:var(--ink-3);font-size:18px;line-height:1;align-self:flex-start;min-width:44px;min-height:44px;margin:-10px -8px 0 0;border-radius:10px}
 .today-plan{margin-top:12px;padding:16px}
 .tp-it{display:flex;gap:10px;align-items:center;padding:7px 0;font-weight:600;font-size:15px}
 .tp-it+.tp-it{border-top:1px solid var(--line)}
@@ -401,10 +402,10 @@ nav button{position:relative}
 .track{position:relative;margin:16px 0 30px}
 .track .bar{height:8px}
 .mk{position:absolute;top:-5px;width:1.5px;height:18px;background:rgba(255,255,255,.3)}
-.mk em{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;font-weight:700;color:var(--ink-3)}
+.mk em{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;font-weight:700;color:var(--ink-2)}
 .mk.hit{background:var(--gold)} .mk.hit em{color:var(--gold)}
 .dots{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.dot{text-align:center;padding:9px 0 8px;border-radius:10px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.dot{text-align:center;padding:9px 0 8px;border-radius:10px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
 .dot b{display:block;font-family:var(--f-display);font-size:18px;color:var(--ink);letter-spacing:0;margin-bottom:2px}
 .dot.full{background:rgba(245,196,81,.12);box-shadow:inset 0 0 0 1px rgba(245,196,81,.5);color:var(--gold)}
 .dot.full b{color:var(--gold)}
@@ -474,7 +475,7 @@ nav button{position:relative}
 .hrow .he{font-size:20px;color:var(--gold)}
 .hrow .hn{flex:1;font-weight:600;font-size:14px;min-width:0}
 .hrow .hn small{display:block;color:var(--ink-2);font-weight:500;font-size:12px}
-.hrow button{font-size:12px;font-weight:600;color:var(--ink-2);padding:6px 10px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--line)}
+.hrow button{font-size:12px;font-weight:600;color:var(--ink-2);min-height:44px;padding:0 14px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line)}
 .empty{color:var(--ink-2);font-weight:500;font-size:14px;padding:16px 0;text-align:center}
 
 /* Guide */
@@ -495,9 +496,10 @@ nav button{position:relative}
 
 /* Command bar */
 nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));max-width:556px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:6px;border-radius:20px;z-index:20;background:rgba(8,11,22,.72)}
-nav button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;border-radius:14px;font-size:9.5px;font-weight:600;letter-spacing:.05em;min-width:0;overflow:hidden;text-transform:uppercase;color:var(--ink-3);transition:color .2s,background .2s}
+nav button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;border-radius:14px;font-size:11px;font-weight:600;letter-spacing:.01em;min-width:0;overflow:hidden;color:var(--ink-3);transition:color .2s,background .2s}
 nav button svg{font-size:21px}
 nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 0 1px rgba(70,224,255,.35)}
+@media (max-width:360px){ nav{gap:0;padding:4px;width:calc(100% - 12px)} nav button{font-size:10px;letter-spacing:0} }
 
 /* Overlays */
 .modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:20px;background:rgba(2,3,8,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
@@ -510,8 +512,8 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 .merr{min-height:1.4em;margin-top:8px;color:#ffb3c0;font-weight:600;font-size:14px}
 .merr:empty{display:none}
 .mrow .btn{flex:1}
-.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,calc(100% + 120px));pointer-events:none;z-index:50;display:grid;gap:6px;padding:14px 18px;min-width:240px;max-width:min(92vw,420px);border-radius:14px;background:rgba(10,14,28,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(70,224,255,.45),0 0 30px rgba(70,224,255,.2);transition:transform .5s cubic-bezier(.2,1.3,.4,1)}
-.toast.show{transform:translate(-50%,0)}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,calc(100% + 120px));pointer-events:none;z-index:50;display:grid;gap:6px;padding:14px 18px;min-width:240px;max-width:min(92vw,420px);border-radius:14px;background:rgba(10,14,28,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(70,224,255,.45),0 0 30px rgba(70,224,255,.2);opacity:0;transition:transform .45s cubic-bezier(.16,1,.3,1),opacity .3s}
+.toast.show{transform:translate(-50%,0);opacity:1}
 .toast div{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.05em;text-transform:uppercase}
 .toast svg{font-size:19px;color:var(--cyan)}
 .toast .gold svg{color:var(--gold)}
@@ -573,7 +575,7 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 <div class="sr" id="sr" aria-live="polite"></div>
 <div class="moment" id="moment" hidden></div>
 <input type="file" id="photoIn" accept="image/*" hidden>
-<div class="pbox" id="pbox" hidden><div class="pcard" id="pcard" role="dialog" aria-modal="true"></div></div>
+<div class="pbox" id="pbox" hidden><div class="pcard" id="pcard" role="dialog" aria-modal="true" aria-label="Photo memory"></div></div>
 <div class="modal" id="modal" hidden>
   <div class="mbox glass" role="dialog" aria-modal="true" aria-labelledby="mT">
     <h3 id="mT"></h3><p id="mB"></p>
@@ -1050,12 +1052,12 @@ function renderPlan(){
       ${DAYS.map((d, i) => { const ds = addDays(mon, i), items = planItems(mon, i), isT = ds === today, open = v.adding === i;
         return `<div class="pl-day ${isT ? 'today' : ''}" id="pl-${i}">
           <div class="pl-dh"><b>${d.name}</b><small>${fmt(ds)}</small>${isT ? '<span class="now">Today</span>' : ''}</div>
-          ${items.map(it => `<div class="pl-it"><time>${esc(fmtTime(it.time))}</time><span class="tx">${esc(it.text)}</span>${it.who ? `<span class="who" style="--wc:${whoCol(it.who)}">${esc(it.who)}</span>` : ''}<button data-pldel="${it.id}" aria-label="Remove">×</button></div>`).join('')}
+          ${items.map(it => `<div class="pl-it"><time>${esc(fmtTime(it.time))}</time><span class="tx">${esc(it.text)}</span>${it.who ? `<span class="who" style="--wc:${whoCol(it.who)}">${esc(it.who)}</span>` : ''}<button data-pldel="${it.id}" aria-label="Remove ${esc(it.text)}">×</button></div>`).join('')}
           ${!items.length && !open ? '<div class="pl-empty">Nothing planned yet</div>' : ''}
           ${open ? `<div class="pl-form">
-              <input class="pl-in" id="plText" maxlength="80" placeholder="What's happening? e.g. Swimming, Grandma visiting" value="${esc(v.draft.text)}">
+              <input class="pl-in" id="plText" aria-label="What's happening" maxlength="80" placeholder="What's happening? e.g. Swimming, Grandma visiting" value="${esc(v.draft.text)}">
               <div class="pl-r"><label for="plTime">Time</label><input class="pl-in" type="time" id="plTime" value="${esc(v.draft.time)}"><span class="meta" style="margin:0">optional</span></div>
-              <div class="wchips">${WHO.map(w => `<button class="wchip ${v.draft.who === w.n ? 'on' : ''}" style="--wc:${w.c}" data-plwho="${w.n}">${w.n}</button>`).join('')}</div>
+              <div class="wchips">${WHO.map(w => `<button class="wchip ${v.draft.who === w.n ? 'on' : ''}" aria-pressed="${v.draft.who === w.n}" style="--wc:${w.c}" data-plwho="${w.n}">${w.n}</button>`).join('')}</div>
               <div class="pl-btns"><button class="btn ghost" data-plcancel="1">Cancel</button><button class="btn" data-plsave="${i}">${ic('check')}Add</button></div>
             </div>` : `<button class="pl-add" data-pladd="${i}">+ Add activity</button>`}
         </div>`; }).join('')}
@@ -1064,13 +1066,13 @@ function renderPlan(){
     <h2 class="sec">Message Board</h2>
     <div class="board glass">
       <div class="lbl">Posting as</div>
-      <div class="wchips">${WHO.slice(1).map(w => `<button class="wchip ${postAs === w.n ? 'on' : ''}" style="--wc:${w.c}" data-as="${w.n}">${w.n}</button>`).join('')}</div>
-      <textarea class="pl-in" id="bText" maxlength="280" placeholder="Write a reminder or a quick message for the family…">${esc(v.post)}</textarea>
+      <div class="wchips">${WHO.slice(1).map(w => `<button class="wchip ${postAs === w.n ? 'on' : ''}" aria-pressed="${postAs === w.n}" style="--wc:${w.c}" data-as="${w.n}">${w.n}</button>`).join('')}</div>
+      <textarea class="pl-in" id="bText" aria-label="Message for the family" maxlength="280" placeholder="Write a reminder or a quick message for the family…">${esc(v.post)}</textarea>
       <button class="btn" data-act="post" style="width:100%">${ic('pin')}Post to the board</button>
       <div class="posts">${ps.length ? ps.map(p => `<div class="post">
           <div class="av" style="--wc:${whoCol(p.by)}">${esc((p.by || '?')[0])}</div>
           <div class="pb"><b>${esc(p.by || 'Someone')}</b><small>${ago(p.t)}</small>${p.t > (planView.seenAt || 0) && p.by !== postAs ? '<em>NEW</em>' : ''}<p>${esc(p.text)}</p></div>
-          <button data-bdel="${p.id}" aria-label="Remove post">×</button></div>`).join('')
+          <button data-bdel="${p.id}" aria-label="Remove post from ${esc(p.by || 'someone')}">×</button></div>`).join('')
         : '<div class="empty">No messages yet. Post the first one!</div>'}</div>
     </div>`;
   const tx = $('plText'), tm = $('plTime'), bt = $('bText');
@@ -1084,7 +1086,7 @@ function planClick(t){
   if (ds.plnav !== undefined){ v.off = ds.plnav === '0' ? 0 : v.off + Number(ds.plnav); v.adding = null; renderPlan(); return true; }
   if (ds.pladd !== undefined){ v.adding = +ds.pladd; v.draft = {text:'', time:'', who:'Everyone'}; renderPlan(); setTimeout(() => { const i = $('plText'); if (i) i.focus(); }, 30); return true; }
   if (ds.plcancel){ v.adding = null; renderPlan(); return true; }
-  if (ds.plwho){ v.draft.who = ds.plwho; const tx = $('plText'), tm = $('plTime'); if (tx) v.draft.text = tx.value; if (tm) v.draft.time = tm.value; document.activeElement && document.activeElement.blur && document.activeElement.blur(); renderPlan(); return true; }
+  if (ds.plwho){ v.draft.who = ds.plwho; const tx = $('plText'), tm = $('plTime'); if (tx) v.draft.text = tx.value; if (tm) v.draft.time = tm.value; if (document.activeElement && /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) document.activeElement.blur(); renderPlan(); return true; }
   if (ds.plsave !== undefined){
     const tx = $('plText'), tm = $('plTime'); if (tx) v.draft.text = tx.value; if (tm) v.draft.time = tm.value;
     const text = (v.draft.text || '').trim().slice(0, 80); if (!text){ if (tx) tx.focus(); return true; }
@@ -1159,17 +1161,34 @@ async function photoFull(ds){
 
 let photoDay = null;
 function photoPick(ds){ photoDay = ds; const i = $('photoIn'); i.value = ''; i.click(); }
-function pClose(){ $('pbox').hidden = true; $('pcard').innerHTML = ''; }
+let pBack = null;
+function pOpen(){ if ($('pbox').hidden){ pBack = focusKey(document.activeElement); $('pbox').hidden = false; } }
+function pClose(){ $('pbox').hidden = true; $('pcard').innerHTML = ''; refocus(pBack, true); pBack = null; }
+// whenever the photo box shows new content, move focus into it (first field or button)
+new MutationObserver(() => {
+  if ($('pbox').hidden || $('pcard').contains(document.activeElement)) return;
+  const f = $('pcard').querySelector('input,button'); if (f) f.focus(); else { $('pcard').tabIndex = -1; $('pcard').focus(); }
+}).observe(document.getElementById('pcard'), {childList:true});
+document.addEventListener('keydown', e => {
+  if ($('pbox').hidden) return;
+  if (e.key === 'Escape'){ e.preventDefault(); pPending = null; return pClose(); }
+  if (e.key === 'Tab'){
+    const f = [...$('pcard').querySelectorAll('input,button')].filter(shown);
+    if (!f.length) return e.preventDefault();
+    const i = f.indexOf(document.activeElement);
+    if (i === -1 || (e.shiftKey && i === 0) || (!e.shiftKey && i === f.length - 1)){ e.preventDefault(); f[e.shiftKey ? f.length - 1 : 0].focus(); }
+  }
+});
 document.getElementById('photoIn').addEventListener('change', async () => {
   const f = $('photoIn').files[0], ds = photoDay; if (!f || !ds) return;
-  $('pbox').hidden = false; $('pcard').innerHTML = '<div class="pbusy">Getting your photo ready…</div>';
+  pOpen(); $('pcard').innerHTML = '<div class="pbusy" role="status">Getting your photo ready…</div>';
   let full, thumb;
   try{ full = await shrink(f, 1280, .78); thumb = await shrink(f, 220, .6); }
   catch(e){ $('pcard').innerHTML = `<div class="pin"><h3>Hmm, that didn't work</h3><p class="pc">${esc(e.message)}</p><div class="prow"><button data-p="close">OK</button></div></div>`; return; }
   const old = photoOf(ds);
   $('pcard').innerHTML = `<img class="pimg" src="${full}" alt="">
     <div class="pin"><h3>Memory for ${niceDate(ds)}</h3><div class="pd">${old ? 'This will replace the photo already saved for this day.' : 'One photo per day. Pick the best moment!'}</div>
-      <input id="pcap" maxlength="120" placeholder="Say something about it (optional)" value="${old ? esc(old.caption || '') : ''}">
+      <input id="pcap" aria-label="Photo caption" maxlength="120" placeholder="Say something about it (optional)" value="${old ? esc(old.caption || '') : ''}">
       <div class="prow"><button data-p="close">Cancel</button><button class="go" data-p="save">${ic('check')} Save memory</button></div></div>`;
   $('pcard').dataset.full = ''; pPending = {ds, full, thumb};
 });
@@ -1177,7 +1196,7 @@ let pPending = null;
 async function pView(ds){
   const meta = photoOf(ds); if (!meta) return;
   const es = entriesFor(ds);
-  $('pbox').hidden = false;
+  pOpen();
   $('pcard').innerHTML = `<img class="pimg" id="pimg" src="${meta.thumb}" alt="Memory photo for ${niceDate(ds)}">
     <div class="pin"><h3>${niceDate(ds)}</h3>
       ${meta.caption ? `<p class="pc">${esc(meta.caption)}</p>` : ''}
@@ -1311,9 +1330,9 @@ function renderMood(){
         <h2 class="ml-q" id="mlQ"></h2>
         ${bandSVG(bandName)}
         <div class="ml-pick"><button data-act="mlprev" aria-label="Turn the dial back">‹</button>
-          <div><div class="ml-name" id="mlName"></div><div class="ml-hint" id="mlHint"></div></div>
+          <div><div class="ml-name" id="mlName" aria-live="polite"></div><div class="ml-hint" id="mlHint"></div></div>
           <button data-act="mlnext" aria-label="Turn the dial on">›</button></div>
-        <div class="ml-sw">Band ${Object.keys(BANDS).map(b => `<button data-band="${b}" class="${b === bandName ? 'on' : ''}" style="background:${BANDS[b][1]}" aria-label="${b} band"></button>`).join('')}</div>
+        <div class="ml-sw">Band ${Object.keys(BANDS).map(b => `<button data-band="${b}" class="${b === bandName ? 'on' : ''}" aria-pressed="${b === bandName}" style="--sw:${BANDS[b][1]}" aria-label="${b} band"></button>`).join('')}</div>
       </div>
       <div id="mlRest"></div>`;
     bindBand($('mlBand'));
@@ -1346,9 +1365,9 @@ function renderMoodRest(){
   el.innerHTML = `
     ${dr ? `<div class="card ml-draft">
       <p class="lbl">What's it about? (optional)</p>
-      <div class="chips">${ML_TAGS.map(t => `<button class="chipb ${dr.tags.includes(t) ? 'on' : ''}" data-mtag="${t}">${t}</button>`).join('')}</div>
+      <div class="chips">${ML_TAGS.map(t => `<button class="chipb ${dr.tags.includes(t) ? 'on' : ''}" aria-pressed="${dr.tags.includes(t)}" data-mtag="${t}">${t}</button>`).join('')}</div>
       <p class="lbl">Want to say more? (optional)</p>
-      <textarea class="ml-note" id="mlNote" maxlength="600" placeholder="What happened? What would help?">${esc(dr.note)}</textarea>
+      <textarea class="ml-note" id="mlNote" aria-label="Note about this feeling" maxlength="600" placeholder="What happened? What would help?">${esc(dr.note)}</textarea>
       <div class="ml-row"><button class="ml-btn no" data-act="mlcancel">Cancel</button><button class="ml-btn go" data-act="mlsave">${ic('check')}Save ${moodBy(dr.mood).name}</button></div>
     </div>` : ''}
     ${tip ? `<div class="ml-tip" style="--mc:${tip.col}">${faceSVG(tip)}<span>${tip.tip}</span></div>` : ''}
@@ -1361,7 +1380,7 @@ function renderMoodRest(){
       return `<div class="ml-entry">${faceSVG(m, 'fc')}<div class="tx"><b>${m.name}</b><small>${new Date(e.t).toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})}</small>
         ${e.tags && e.tags.length ? `<div class="tg">${e.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
         ${e.note ? `<p>${esc(e.note)}</p>` : ''}</div>
-        <button data-mdel="${v.sel}|${e.id}" aria-label="Remove">Remove</button></div>`; }).join('')
+        <button data-mdel="${v.sel}|${e.id}" aria-label="Remove ${m.name} check-in">Remove</button></div>`; }).join('')
       : `<div class="empty">${isToday ? 'No check-ins yet today. Turn the dial above.' : 'Nothing logged on this day.'}</div>`}</div>
 
     <h2 class="sec">Mood calendar</h2>
@@ -1430,7 +1449,7 @@ function gamingHTML(c){
 function renderNav(){
   $('nav').innerHTML = [['dash','home','Dashboard'],['story','target','Storyboard'],['rewards','gift','Rewards'],['mood','heart','MoodLoop'],['plan','calendar','Planner']]
     .map(([k, i, l]) => { const n = k === 'plan' && tab !== 'plan' ? unread() : 0;
-      return `<button data-tab="${k}" class="${k === tab ? 'on' : ''}">${ic(i)}${l}${n ? `<span class="nb">${n}</span>` : ''}</button>`; }).join('');
+      return `<button data-tab="${k}" class="${k === tab ? 'on' : ''}"${k === tab ? ' aria-current="page"' : ''}>${ic(i)}${l}${n ? `<span class="nb">${n}</span>` : ''}</button>`; }).join('');
   const mb = $('menuBtn'); if (mb && !mb.innerHTML) mb.innerHTML = ic('menu');
 }
 
@@ -1507,7 +1526,7 @@ function renderStory(){
           <div class="dt">${d.title}</div>
           <div class="ds">${d.tags.join(' · ')}</div>
         </div>
-        <div class="ring" style="${ringStyle(c, d.col)}"><span>${c}/6</span></div>
+        <div class="ring" style="${ringStyle(c, d.col)}" role="img" aria-label="${c} of 6 missions done"><span aria-hidden="true">${c}/6</span></div>
       </div>
       <div class="missions">${i > t ? `<div class="daylock">${ic('lock')}Opens on ${d.name}</div>` : ''}${MISSIONS.map((_, j) => missionBtn(i, j, t)).join('')}</div>
       ${gamingHTML(c)}
@@ -1559,7 +1578,7 @@ function renderRewards(){
     <div class="hist glass">${hist.length ? hist.map((h, k) => { const r = REWARDS.find(x => x.id === h.id);
       return `<div class="hrow"><span class="he">${ic(r ? r.icon : String(h.id).startsWith('skin-') ? 'star' : 'gift')}</span>
         <span class="hn">${h.name}<small>${h.date} · ${h.cost} tokens</small></span>
-        <button data-undo="${state.redeemed.length - 1 - k}">Undo</button></div>`; }).join('')
+        <button data-undo="${state.redeemed.length - 1 - k}" aria-label="Undo ${h.name}">Undo</button></div>`; }).join('')
       : `<div class="empty">No rewards unlocked yet</div>`}</div>`;
 }
 
