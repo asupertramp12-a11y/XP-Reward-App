@@ -1,5 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Douglas Battle Pass</title>
+<!doctype html><html lang="en-GB"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>Douglas Battle Pass</title></head><body>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#03040a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +14,7 @@
   --line:rgba(170,200,255,.13);
   --ink:#f2f5ff;
   --ink-2:rgba(208,218,242,.74);
-  --ink-3:rgba(208,218,242,.46);
+  --ink-3:rgba(208,218,242,.6);
   --cyan:#46e0ff;
   --cyan-dim:rgba(70,224,255,.16);
   --red:#ff3a5c;
@@ -34,6 +33,11 @@ body{font-family:var(--f-body);color:var(--ink);background:var(--void);overflow-
 [hidden]{display:none!important}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+::selection{background:var(--cyan);color:var(--on-cyan)}
+input,textarea{caret-color:var(--cyan)}
+#v-mood button:focus-visible,.pcard button:focus-visible{outline-color:#1d3f63}
+#v-mood ::selection,.pcard ::selection{background:#bfe8d6;color:#1d3f63}
+#v-mood input,#v-mood textarea,.pcard input{caret-color:#1d3f63}
 svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
 #scene{position:fixed;inset:0;width:100%;height:100%;z-index:-2;display:block}
@@ -49,9 +53,10 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 
 /* Header */
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.brand{font-family:var(--f-display);font-weight:800;font-size:clamp(17px,5vw,22px);letter-spacing:.06em;text-transform:uppercase;line-height:1}
+.brand{min-width:0;font-family:var(--f-display);font-weight:800;font-size:clamp(16px,4.6vw,22px);letter-spacing:.06em;text-transform:uppercase;line-height:1}
 .brand small{display:block;font-family:var(--f-body);font-weight:600;font-size:11px;letter-spacing:.22em;color:var(--cyan);margin-bottom:6px}
 .hud{display:flex;gap:8px;align-items:center}
+@media (max-width:360px){ .top{flex-wrap:wrap} .hud{margin-left:auto} }
 .chip{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;font-weight:600;font-size:13px}
 .chip.tok{font-weight:700;color:var(--gold)}
 .chip.tok svg{font-size:16px}
@@ -60,6 +65,11 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .sync[data-s="synced"] i{background:var(--lime);box-shadow:0 0 8px var(--lime)}
 .sync[data-s="saving"] i,.sync[data-s="connecting"] i{background:var(--gold);animation:blink 1s infinite}
 .sync[data-s="offline"] i,.sync[data-s="readonly"] i{background:var(--red)}
+.chip{white-space:nowrap}
+@media (max-width:420px){   /* routine states show just the dot; problems keep their word */
+  .sync[data-s="local"],.sync[data-s="synced"],.sync[data-s="saving"]{padding:8px 13px}
+  .sync[data-s="local"] span,.sync[data-s="synced"] span,.sync[data-s="saving"] span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
 @keyframes blink{50%{opacity:.25}}
 
 .sec{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);margin:30px 2px 12px}
@@ -87,12 +97,10 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .brief .sub{font-weight:500;color:var(--ink-2);font-size:16px}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}
 .tag{padding:5px 11px;border-radius:8px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.note{display:flex;gap:8px;align-items:center;font-weight:500;font-size:14px;color:var(--ink-2)}
-.note svg{color:var(--cyan);font-size:17px}
 .brief .status{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .status .st{font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase}
 .status .st.ok{color:var(--gold)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:12px;font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;background:var(--cyan);color:#021018;box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 10px 26px rgba(70,224,255,.3);transition:transform .15s,box-shadow .2s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:12px;font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;background:var(--cyan);color:var(--on-cyan);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 10px 26px rgba(70,224,255,.3);transition:transform .15s,box-shadow .2s}
 .btn:active{transform:scale(.97)}
 .btn.gold{background:var(--gold);color:#1d1400;box-shadow:0 0 0 1px rgba(255,255,255,.25) inset,0 10px 26px rgba(245,196,81,.3)}
 .btn.ghost{background:var(--panel-2);color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line)}
@@ -137,7 +145,7 @@ body.calm .skinbg{opacity:0!important}
 /* Grand Voyage: a 1912 ocean liner at night, brass and cream */
 :root[data-skin="liner"]{--cyan:#d8b26a;--cyan-dim:rgba(216,178,106,.15);--gold:#e9c98a;--red:#c7553f;--violet:#8fb3c9;--lime:#a9d6b5;
   --void:#07121f;--panel:rgba(9,24,42,.66);--panel-2:rgba(233,201,138,.06);--line:rgba(216,178,106,.24);
-  --ink:#f6efe0;--ink-2:rgba(240,228,205,.76);--ink-3:rgba(240,228,205,.48);
+  --ink:#f6efe0;--ink-2:rgba(240,228,205,.76);--ink-3:rgba(240,228,205,.6);
   --f-display:"Cinzel",Georgia,serif;--on-cyan:#1a1206;--ring-bg:#0a1626}
 :root[data-skin="liner"] .skinbg{background:
   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60 Q25 48 50 60 T100 60 T150 60 T200 60 T250 60 T300 60 T350 60 T400 60 V120 H0Z' fill='%230b2742'/%3E%3Cpath d='M0 78 Q25 68 50 78 T100 78 T150 78 T200 78 T250 78 T300 78 T350 78 T400 78 V120 H0Z' fill='%23081d33'/%3E%3C/svg%3E") bottom/100% 22% no-repeat,
@@ -150,7 +158,7 @@ body.calm .skinbg{opacity:0!important}
 /* Field Ops: secret-agent dossier with red laser grid */
 :root[data-skin="agent"]{--cyan:#ff3b3b;--cyan-dim:rgba(255,59,59,.14);--gold:#f2f2f2;--red:#ff3b3b;--violet:#b0b0b8;--lime:#47ff8a;
   --void:#060608;--panel:rgba(14,14,18,.78);--panel-2:rgba(255,255,255,.04);--line:rgba(255,80,80,.18);
-  --f-display:"Share Tech Mono",ui-monospace,monospace;--on-cyan:#fff;--on-gold:#111;--r:8px}
+  --f-display:"Share Tech Mono",ui-monospace,monospace;--on-cyan:#111;--on-gold:#111;--r:8px}
 :root[data-skin="agent"] .skinbg{background:
   repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),
   linear-gradient(115deg,transparent 30%,rgba(255,40,40,.5) 30.15%,transparent 30.4%),
@@ -189,7 +197,7 @@ body.calm .toast svg{color:#4fb48a}
 body.calm nav{background:rgba(255,255,255,.8);box-shadow:0 10px 30px rgba(29,63,99,.15),inset 0 0 0 1px rgba(29,63,99,.08)}
 body.calm nav button{color:#6f8ba3}
 body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shadow:inset 0 0 0 1px rgba(95,191,152,.7)}
-#v-mood{--ink:#1d3f63;--ink2:#4b6a85;--ink3:#86a0b5;--line:rgba(29,63,99,.10);color:var(--ink);font-family:"Nunito",var(--f-body);font-variant-numeric:normal}
+#v-mood{--ink:#1d3f63;--ink2:#4b6a85;--ink3:#557089;--line:rgba(29,63,99,.10);color:var(--ink);font-family:"Nunito",var(--f-body);font-variant-numeric:normal}
 #v-mood .card{background:rgba(255,255,255,.72);border-radius:24px;box-shadow:0 12px 32px rgba(29,63,99,.10),inset 0 0 0 1px rgba(255,255,255,.8);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 #v-mood .sec{font-family:"Nunito",var(--f-body);font-weight:800;font-size:15px;letter-spacing:.06em;color:var(--ink2);margin:26px 4px 10px}
 #v-mood .sec::after{background:linear-gradient(90deg,rgba(29,63,99,.16),transparent)}
@@ -209,9 +217,10 @@ body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shado
 .ml-pick button{width:48px;height:48px;flex:none;border-radius:50%;background:#fff;color:var(--ink);font-size:26px;font-weight:800;line-height:1;box-shadow:0 4px 14px rgba(29,63,99,.14)}
 .ml-name{min-width:150px;font-weight:800;font-size:26px;line-height:1.1}
 .ml-hint{font-size:13px;font-weight:700;color:var(--ink3);margin-top:3px}
-.ml-sw{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:16px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
-.ml-sw button{width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.85),0 2px 8px rgba(29,63,99,.22)}
-.ml-sw button.on{outline:3px solid var(--ink);outline-offset:2px}
+.ml-sw{display:flex;justify-content:center;align-items:center;gap:2px;margin-top:16px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.ml-sw button{width:44px;height:44px;display:grid;place-items:center;border-radius:50%}
+.ml-sw button::before{content:"";width:28px;height:28px;border-radius:50%;background:var(--sw);box-shadow:inset 0 0 0 2px rgba(255,255,255,.85),0 2px 8px rgba(29,63,99,.22)}
+.ml-sw button.on::before{outline:3px solid var(--ink);outline-offset:2px}
 .ml-draft{padding:18px 16px;margin-top:12px}
 .ml-draft .lbl{font-size:14px;font-weight:700;color:var(--ink2);margin:0 0 8px}
 .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
@@ -236,7 +245,7 @@ body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shado
 .ml-entry .tx p{margin-top:4px;color:var(--ink2);font-weight:600;font-size:15px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
 .ml-entry .tg{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .ml-entry .tg span{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(29,63,99,.06);color:var(--ink2)}
-.ml-entry button{font-size:12px;font-weight:700;color:var(--ink3);padding:6px 8px;border-radius:8px}
+.ml-entry button{font-size:12px;font-weight:700;color:var(--ink3);min-height:44px;padding:0 10px;margin-top:-8px;border-radius:8px}
 .cal{padding:16px}
 .cal-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .cal-h b{font-weight:800;font-size:20px}
@@ -263,7 +272,7 @@ body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shado
 @media (prefers-reduced-motion:reduce){#mlDial{transition:none!important}}
 
 /* Header menu, nav badge */
-.menu-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;font-size:20px;color:var(--ink);padding:0}
+.menu-btn{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;font-size:20px;color:var(--ink);padding:0}
 nav button{position:relative}
 .nb{position:absolute;top:4px;left:calc(50% + 6px);min-width:17px;height:17px;padding:0 5px;border-radius:9px;background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:0;line-height:17px;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
 .guide-top{display:flex;align-items:center;gap:12px;margin:2px 0 6px}
@@ -274,7 +283,7 @@ nav button{position:relative}
 .pl-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px}
 .pl-head b{display:block;font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:.05em;text-transform:uppercase;text-align:center}
 .pl-head small{display:block;text-align:center;font-size:12px;font-weight:600;color:var(--ink-2)}
-.pl-head small button{color:var(--cyan);font-weight:700;font-size:12px;padding:0}
+.pl-head small button{color:var(--cyan);font-weight:700;font-size:12px;min-height:44px;padding:0 6px;margin:-14px 0}
 .pl-nav{width:40px;height:40px;flex:none;border-radius:12px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-size:20px}
 .pl-day{padding:14px 16px;border-top:1px solid var(--line)}
 .pl-day.today{background:color-mix(in srgb,var(--cyan) 8%,transparent);box-shadow:inset 3px 0 0 var(--cyan)}
@@ -285,7 +294,7 @@ nav button{position:relative}
 .pl-it{display:flex;align-items:center;gap:10px;padding:9px 10px;margin-top:6px;border-radius:10px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line)}
 .pl-it time{font-weight:700;font-size:13px;color:var(--cyan);min-width:42px}
 .pl-it .tx{flex:1;min-width:0;font-weight:600;font-size:15px;overflow-wrap:anywhere}
-.pl-it button{color:var(--ink-3);font-size:18px;line-height:1;padding:2px 6px}
+.pl-it button{color:var(--ink-3);font-size:18px;line-height:1;min-width:44px;min-height:44px;margin:-10px -10px -10px 0;border-radius:10px}
 .who{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:color-mix(in srgb,var(--wc) 22%,transparent);color:var(--wc);white-space:nowrap}
 .pl-add{margin-top:8px;font-size:13px;font-weight:700;color:var(--cyan);padding:6px 2px;display:inline-flex;gap:6px;align-items:center}
 .pl-empty{margin-top:6px;font-size:13px;color:var(--ink-3);font-weight:500}
@@ -311,7 +320,7 @@ nav button{position:relative}
 .post .pb small{color:var(--ink-3);font-size:12px;margin-left:6px;font-weight:600}
 .post .pb p{margin-top:3px;font-weight:500;font-size:15px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
 .post .pb em{font-style:normal;margin-left:8px;font-size:10px;padding:1px 6px;border-radius:5px;background:var(--red);color:#fff;letter-spacing:.08em;font-weight:700}
-.post button{color:var(--ink-3);font-size:18px;line-height:1;align-self:flex-start;padding:2px 6px}
+.post button{color:var(--ink-3);font-size:18px;line-height:1;align-self:flex-start;min-width:44px;min-height:44px;margin:-10px -8px 0 0;border-radius:10px}
 .today-plan{margin-top:12px;padding:16px}
 .tp-it{display:flex;gap:10px;align-items:center;padding:7px 0;font-weight:600;font-size:15px}
 .tp-it+.tp-it{border-top:1px solid var(--line)}
@@ -374,28 +383,33 @@ nav button{position:relative}
 .meta{font-size:12px;font-weight:500;color:var(--ink-2);margin-top:8px}
 
 /* Stats */
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.stat{padding:16px;min-width:0}
-.stat .k{display:flex;gap:7px;align-items:center;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
-.stat .k svg{font-size:15px;color:var(--cyan)}
-.stat .v{font-family:var(--f-display);font-weight:700;font-size:38px;line-height:1;margin-top:10px}
-.stat .v small{font-size:18px;color:var(--ink-3);font-weight:600}
-.stat .h{font-size:12px;font-weight:500;color:var(--ink-2);margin-top:6px}
-.stat.cash .k svg,.stat.cash .v{color:var(--gold)}
-.stat.cash .v{text-shadow:0 0 20px rgba(245,196,81,.35)}
 
 /* Week */
 .week{padding:18px;margin-top:12px}
+.prog{margin-top:12px}
+.prog .rank{margin-top:0}
+.prog .week{margin:0 18px;padding:18px 0;border-top:1px solid var(--line)}
+.prog .week .meta{margin-top:12px}
+.ach{margin-top:12px}
+.ach summary{padding:18px;cursor:pointer;list-style:none;align-items:center}
+.ach summary::-webkit-details-marker{display:none}
+.ach summary span{display:inline-flex;align-items:center;gap:8px;font-size:18px}
+.ach summary svg{font-size:16px;color:var(--ink-2);transition:transform .2s}
+.ach[open] summary svg{transform:rotate(90deg)}
+.ach summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-4px;border-radius:inherit}
+.ach .badges{padding:0 18px 18px}
+.guide-link{display:flex;width:100%;margin-top:12px}
+.ach .badge{border-radius:12px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line)}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .row b{font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:.14em;text-transform:uppercase}
 .row span{font-family:var(--f-display);font-weight:700;font-size:20px;color:var(--gold)}
 .track{position:relative;margin:16px 0 30px}
 .track .bar{height:8px}
 .mk{position:absolute;top:-5px;width:1.5px;height:18px;background:rgba(255,255,255,.3)}
-.mk em{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;font-weight:700;color:var(--ink-3)}
+.mk em{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;font-weight:700;color:var(--ink-2)}
 .mk.hit{background:var(--gold)} .mk.hit em{color:var(--gold)}
 .dots{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.dot{text-align:center;padding:9px 0 8px;border-radius:10px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.dot{text-align:center;padding:9px 0 8px;border-radius:10px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
 .dot b{display:block;font-family:var(--f-display);font-size:18px;color:var(--ink);letter-spacing:0;margin-bottom:2px}
 .dot.full{background:rgba(245,196,81,.12);box-shadow:inset 0 0 0 1px rgba(245,196,81,.5);color:var(--gold)}
 .dot.full b{color:var(--gold)}
@@ -419,7 +433,7 @@ nav button{position:relative}
 .de{width:50px;height:50px;flex:none;border-radius:14px;display:grid;place-items:center;font-size:24px;color:var(--dc);background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line)}
 .dh .t{min-width:0}
 .dn{display:flex;gap:8px;align-items:center;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
-.now{background:var(--cyan);color:#021018;padding:2px 7px;border-radius:5px;letter-spacing:.14em;font-weight:700}
+.now{background:var(--cyan);color:var(--on-cyan);padding:2px 7px;border-radius:5px;letter-spacing:.14em;font-weight:700}
 .dt{font-family:var(--f-display);font-weight:800;font-size:24px;letter-spacing:.03em;text-transform:uppercase;line-height:1.05;margin-top:3px}
 .ds{font-size:12px;font-weight:500;color:var(--ink-2);margin-top:2px}
 .ring{margin-left:auto;width:52px;height:52px;flex:none;border-radius:50%;display:grid;place-items:center}
@@ -435,7 +449,11 @@ nav button{position:relative}
 .m.done{background:var(--cyan-dim);box-shadow:inset 0 0 0 1px rgba(70,224,255,.45)}
 .m.done .mi{color:var(--cyan)}
 .m.done .mt{color:var(--ink)}
-.m.done .ck{background:var(--cyan);box-shadow:0 0 14px rgba(70,224,255,.6);color:#021018}
+.m.done .ck{background:var(--cyan);box-shadow:0 0 14px rgba(70,224,255,.6);color:var(--on-cyan)}
+[tabindex="-1"]:focus{outline:none}
+.m:disabled{cursor:not-allowed;opacity:.5}
+.m:disabled:active{transform:none}
+.daylock{display:flex;align-items:center;gap:8px;margin-top:-4px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--ink-2)}
 .game{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase}
 .game svg{font-size:20px}
 .game small{margin-left:auto;font-family:var(--f-body);font-weight:500;font-size:12px;letter-spacing:0;text-transform:none;opacity:.85}
@@ -461,8 +479,8 @@ nav button{position:relative}
 .hrow .he{font-size:20px;color:var(--gold)}
 .hrow .hn{flex:1;font-weight:600;font-size:14px;min-width:0}
 .hrow .hn small{display:block;color:var(--ink-2);font-weight:500;font-size:12px}
-.hrow button{font-size:12px;font-weight:600;color:var(--ink-2);padding:6px 10px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--line)}
-.empty{color:var(--ink-2);font-weight:500;font-size:14px;padding:16px 0;text-align:center}
+.hrow button{font-size:12px;font-weight:600;color:var(--ink-2);min-height:44px;padding:0 14px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line)}
+.empty{color:var(--ink-2);font-weight:500;font-size:14px;padding:16px;text-align:center;text-wrap:balance}
 
 /* Guide */
 .gcard{padding:20px;margin-bottom:12px}
@@ -482,9 +500,10 @@ nav button{position:relative}
 
 /* Command bar */
 nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));max-width:556px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:6px;border-radius:20px;z-index:20;background:rgba(8,11,22,.72)}
-nav button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;border-radius:14px;font-size:9.5px;font-weight:600;letter-spacing:.05em;min-width:0;overflow:hidden;text-transform:uppercase;color:var(--ink-3);transition:color .2s,background .2s}
+nav button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;border-radius:14px;font-size:11px;font-weight:600;letter-spacing:.01em;min-width:0;overflow:hidden;color:var(--ink-3);transition:color .2s,background .2s}
 nav button svg{font-size:21px}
 nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 0 1px rgba(70,224,255,.35)}
+@media (max-width:360px){ nav{gap:0;padding:4px;width:calc(100% - 12px)} nav button{font-size:10px;letter-spacing:0} }
 
 /* Overlays */
 .modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:20px;background:rgba(2,3,8,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
@@ -492,16 +511,46 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 .mbox h3{font-family:var(--f-display);font-weight:800;font-size:24px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:8px}
 .mbox p{color:var(--ink-2);font-weight:500;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere}
 .mrow{display:flex;gap:10px;margin-top:20px}
+.pin-in{display:block;width:100%;margin-top:16px;padding:14px;border-radius:12px;border:0;background:rgba(0,0,0,.3);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);font:700 26px var(--f-display);letter-spacing:.5em;text-align:center;text-indent:.5em}
+.pin-in.txt{font:600 17px var(--f-body);letter-spacing:normal;text-align:left;text-indent:0}
+.tag.adj-off{color:#ff8fa3}
+.tag.adj-on{color:var(--lime)}
+.pin-in:focus{outline:2px solid var(--cyan);outline-offset:2px}
+.merr{min-height:1.4em;margin-top:8px;color:#ffb3c0;font-weight:600;font-size:14px}
+.merr:empty{display:none}
 .mrow .btn{flex:1}
-.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-170%);z-index:50;display:grid;gap:6px;padding:14px 18px;min-width:240px;max-width:min(92vw,420px);border-radius:14px;background:rgba(10,14,28,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(70,224,255,.45),0 0 30px rgba(70,224,255,.2);transition:transform .5s cubic-bezier(.2,1.3,.4,1)}
-.toast.show{transform:translate(-50%,0)}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,calc(100% + 120px));pointer-events:none;z-index:50;display:grid;gap:6px;padding:14px 18px;min-width:240px;max-width:min(92vw,420px);border-radius:14px;background:rgba(10,14,28,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 18px 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(70,224,255,.45),0 0 30px rgba(70,224,255,.2);opacity:0;transition:transform .45s cubic-bezier(.16,1,.3,1),opacity .3s}
+.toast.show{transform:translate(-50%,0);opacity:1}
 .toast div{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.05em;text-transform:uppercase}
 .toast svg{font-size:19px;color:var(--cyan)}
 .toast .gold svg{color:var(--gold)}
 .shard{position:fixed;top:-20px;width:2px;height:18px;border-radius:2px;z-index:40;pointer-events:none;animation:fall var(--d) cubic-bezier(.3,.2,.6,1) forwards}
 @keyframes fall{to{transform:translate(var(--x),110vh) rotate(var(--r));opacity:.2}}
 
-@media (prefers-reduced-motion:reduce){.view.on{animation:none}.shard{display:none}.sync i{animation:none!important}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.gain{position:fixed;z-index:45;pointer-events:none;display:flex;align-items:center;gap:6px;white-space:nowrap;font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.04em;color:var(--gold);transform:translate(-100%,-50%);animation:gain 1s cubic-bezier(.16,1,.3,1) forwards}
+.gain svg{font-size:15px}
+.gain .tk{color:var(--cyan)}
+@keyframes gain{0%{opacity:0;translate:0 6px}18%{opacity:1}70%{opacity:1}100%{opacity:0;translate:0 -36px}}
+.moment{position:fixed;inset:0;z-index:65;display:grid;place-items:center;padding:20px;background:rgba(2,3,8,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.mo-card{width:100%;max-width:380px;padding:30px 22px 22px;text-align:center;background:rgba(14,18,34,.94);animation:moIn .55s cubic-bezier(.16,1,.3,1)}
+.mo-hex{width:104px;height:118px;margin:0 auto 18px}
+.mo-hex svg{font-size:46px}
+.mo-card.gold .mo-hex{background:linear-gradient(160deg,var(--gold),#b8801c 60%,var(--red))}
+.mo-card.gold .mo-hex svg{color:var(--gold);filter:drop-shadow(0 4px 10px rgba(245,196,81,.45))}
+.mo-card h2{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,10vw,46px);line-height:.95;letter-spacing:.02em;text-transform:uppercase;margin:10px 0 8px;text-wrap:balance}
+.mo-card p{color:var(--ink-2);font-weight:500;line-height:1.5}
+.mo-rows{display:grid;margin:18px 0 4px;text-align:left}
+.mo-r{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 2px}
+.mo-r+.mo-r{border-top:1px solid var(--line)}
+.mo-r span{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink-2)}
+.mo-r span svg{font-size:18px;color:var(--cyan)}
+.mo-r b{font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:.03em}
+.mo-card .btn{width:100%;margin-top:20px}
+@keyframes moIn{from{opacity:0;transform:scale(.92) translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view.on{animation:none}.shard{display:none}.sync i{animation:none!important}
+  .gain{animation-name:gainFade}.mo-card{animation:none}}
+@keyframes gainFade{0%,70%{opacity:1}100%{opacity:0}}
 </style>
 
 <div class="fallback"></div>
@@ -513,7 +562,7 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
   <header class="top">
     <div class="brand"><small id="weekLbl">Week 1 · Level 1</small><span id="brandName">Douglas Battle Pass</span></div>
     <div class="hud">
-      <div class="chip sync glass" id="sync" data-s="local"><i></i><span>This device</span></div>
+      <div class="chip sync glass" id="sync" data-s="local" role="status" title="Sync status"><i></i><span>This device</span></div>
       <div class="chip tok glass" id="topTok"></div>
       <button class="chip glass menu-btn" data-go="guide" aria-label="Guide and settings" id="menuBtn"></button>
     </div>
@@ -530,11 +579,15 @@ nav button.on{color:var(--cyan);background:var(--cyan-dim);box-shadow:inset 0 0 
 <nav class="glass" id="nav" aria-label="Sections"></nav>
 
 <div class="toast" id="toast" role="status"></div>
+<div class="sr" id="sr" aria-live="polite"></div>
+<div class="moment" id="moment" hidden></div>
 <input type="file" id="photoIn" accept="image/*" hidden>
-<div class="pbox" id="pbox" hidden><div class="pcard" id="pcard" role="dialog" aria-modal="true"></div></div>
+<div class="pbox" id="pbox" hidden><div class="pcard" id="pcard" role="dialog" aria-modal="true" aria-label="Photo memory"></div></div>
 <div class="modal" id="modal" hidden>
   <div class="mbox glass" role="dialog" aria-modal="true" aria-labelledby="mT">
-    <h3 id="mT"></h3><p id="mB"></p><input id="mIn" class="pl-in" style="margin-top:14px" hidden>
+    <h3 id="mT"></h3><p id="mB"></p>
+    <input class="pin-in" id="mIn" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off" aria-labelledby="mT" aria-describedby="mB mErr" hidden>
+    <p class="merr" id="mErr" role="alert"></p>
     <div class="mrow"><button class="btn ghost" id="mNo">Cancel</button><button class="btn" id="mOk">OK</button></div>
   </div>
 </div>
@@ -588,7 +641,7 @@ const ic = n => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n
 
 /* ================= Data ================= */
 const DAYS = [
-  {name:'Monday',   icon:'home',    title:'Monday - OWS',       sub:'Our Wilde Space Day',     tags:['Explore','Learn','Create'],         col:'#8a7dff'},
+  {name:'Monday',   icon:'home',    title:'Monday – OWS',       sub:'Our Wilde Space Day',     tags:['Explore','Learn','Create'],         col:'#8a7dff'},
   {name:'Tuesday',  icon:'compass', title:'Explorer Day',       sub:'Head out and discover',   tags:['Adventure','Discovery','Outdoors'], col:'#46e0ff'},
   {name:'Wednesday',icon:'book',    title:'Skill Up Day',       sub:'Sharpen your powers',     tags:['Learning','Reading','Fitness'],     col:'#3ef0a0'},
   {name:'Thursday', icon:'tool',    title:'Builder Day',        sub:'Engineer something big',  tags:['VR','Creativity','Projects'],       col:'#ff9a3c'},
@@ -639,7 +692,7 @@ const MAX_STARS = 42, TOKENS_PER_STAR = 2, FULL_DAY_BONUS = 3, STARS_PER_LEVEL =
 /* ================= State (local + cloud sync) ================= */
 const KEY = 'douglasBattlePassV2';
 const blankWeek = () => DAYS.map(() => MISSIONS.map(() => false));
-const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null, skins:{owned:['default'], on:'default'}, limits:{carryMax:30, dayMax:120, pin:''}});
+const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null, skins:{owned:['default'], on:'default'}, pin:null, history:[], limits:{carryMax:30, dayMax:120}});
 const valid = s => s && Array.isArray(s.week) && s.week.length === 7 && s.week.every(d => Array.isArray(d) && d.length === 6);
 let state = loadLocal();
 
@@ -710,7 +763,7 @@ async function initCloud(){
     if (d.by === CLIENT && d.rev === lastRev){ if (!dirty && !writing) setSync('synced'); return; }
     if (dirty || writing) return;
     const inc = unpack(d.state);
-    if (valid(inc)){ state = Object.assign(fresh(), inc); saveLocal(); renderAll(); }
+    if (valid(inc)){ state = Object.assign(fresh(), inc); saveLocal(); renderAll(); migratePin(); }
     setSync(readOnly ? 'readonly' : 'synced');
   }, e => { lastErr = e && (e.code || e.message); setSync(e && e.code === 'permission-denied' ? 'readonly' : 'offline'); });
   if (fbReady()) setTimeout(() => { if (!seenCloud) setSync('offline'); }, 15000);
@@ -789,15 +842,21 @@ function checkBadges(){
 const pad2 = n => String(n).padStart(2, '0');
 const dateStr = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
 const playUsed = (p, now = Date.now()) => p.used + (p.runningSince ? Math.max(0, (now - p.runningSince) / 1000) : 0);
-const LIM = () => { if (!state.limits || typeof state.limits !== 'object') state.limits = {carryMax:30, dayMax:120, pin:''}; return state.limits; };
+/* Parent limits (shared by every device): carryMax = most minutes that roll over, dayMax = most game time in a day
+   including rollover; -1 means no limit. play.adj / play.adjLog hold today's parent changes ({m, why, t}). */
+const LIM = () => {
+  if (!state.limits || typeof state.limits !== 'object') state.limits = {carryMax:30, dayMax:120};
+  return state.limits;
+};
 const capNum = v => (v === null || v === undefined || v === '' || v < 0) ? Infinity : +v;
 const playCarry = p => Math.min(p.carry || 0, capNum(LIM().carryMax));
 const playRaw = p => p.earned + playCarry(p) + (p.adj || 0);
 const playMins = p => Math.max(0, Math.min(capNum(LIM().dayMax), playRaw(p)));
 const playTotal = p => playMins(p) * 60;
+const rollText = () => { const c = LIM().carryMax; return c < 0 ? 'Anything left rolls over to tomorrow.' : c === 0 ? 'Unused time doesn’t roll over.' : `Up to ${c} min left over rolls to tomorrow.`; };
 function ensurePlay(){
   const today = dateStr(), p = state.play, e = gaming(dayCount(todayIdx()));
-  if (!p || typeof p.date !== 'string'){ state.play = {date:today, earned:e, carry:0, used:0, runningSince:null}; return true; }
+  if (!p || typeof p.date !== 'string'){ state.play = {date:today, earned:e, carry:0, used:0, runningSince:null, adj:0, adjLog:[]}; return true; }
   if (p.date !== today){
     const left = Math.max(0, playTotal(p) - playUsed(p));
     state.play = {date:today, earned:e, carry:Math.min(Math.floor(left / 60), capNum(LIM().carryMax)), used:0, runningSince:null, adj:0, adjLog:[]};
@@ -809,25 +868,28 @@ function ensurePlay(){
 const clock = sec => { sec = Math.max(0, Math.round(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60;
   return h ? `${h}:${pad2(m)}:${pad2(s)}` : `${m}:${pad2(s)}`; };
 
+const GAME_OPENS = 16;   // gaming starts after 4pm
+const gameOpen = () => new Date().getHours() >= GAME_OPENS;
 function timerHTML(){
   const p = state.play, total = playTotal(p), used = Math.min(total, playUsed(p)), left = total - used, run = !!p.runningSince;
-  const off = total === 0;
+  const off = total === 0, wait = !off && !run && left > 0 && !gameOpen();
   return `<div class="timer glass ${run ? 'run' : ''} ${off ? 'off' : ''}" id="gt">
-      <div class="row"><b>Game Timer</b><span id="gtState">${run ? 'Playing' : off ? 'Locked' : left <= 0 ? 'All used' : 'Paused'}</span></div>
+      <div class="row"><b>Game Timer</b><span id="gtState">${run ? 'Playing' : off ? 'Locked' : left <= 0 ? 'All used' : wait ? 'Opens 4pm' : used > 0 ? 'Paused' : 'Ready'}</span></div>
       <div class="gt-big" id="gtLeft">${clock(left)}</div>
       <div class="gt-lbl">Left today</div>
       <div class="bar gold"><i id="gtBar" style="width:${total ? left / total * 100 : 0}%"></i></div>
       <div class="gt-chips">
         <span class="tag">${p.earned} min earned today</span>
         ${playCarry(p) ? `<span class="tag" style="color:var(--gold)">+${playCarry(p)} min rolled over</span>` : ''}
-        ${(p.adjLog || []).map(a => `<span class="tag" style="color:${a.m < 0 ? 'var(--red)' : 'var(--lime)'}">${a.m > 0 ? '+' : '−'}${Math.abs(a.m)} min${a.why ? ' · ' + esc(a.why) : ''}</span>`).join('')}
+        ${(p.adjLog || []).map(a => `<span class="tag ${a.m < 0 ? 'adj-off' : 'adj-on'}">${a.m > 0 ? '+' : '−'}${Math.abs(a.m)} min${a.why ? ' · ' + esc(a.why) : ''}</span>`).join('')}
         ${playRaw(p) > playMins(p) && playMins(p) > 0 ? `<span class="tag">Max ${playMins(p)} min a day</span>` : ''}
         <span class="tag" id="gtUsed">Played ${clock(used)}</span>
       </div>
       <div class="gt-row">${off
         ? `<button class="btn ghost" disabled>${ic('lock')}Complete 4 missions</button>`
+        : wait ? `<button class="btn ghost" disabled>${ic('lock')}Opens at 4pm</button>`
         : `<button class="btn ${run ? 'ghost' : 'gold'}" data-act="timer" ${left <= 0 && !run ? 'disabled' : ''}>${ic('pad')}${run ? 'Pause' : used > 0 ? 'Resume' : 'Start'}</button>`}</div>
-      <div class="meta">Start it when you play, pause when you stop. Anything left rolls over to tomorrow.</div>
+      <div class="meta">Start it when you play, pause when you stop. ${rollText()}</div>
     </div>`;
 }
 function tickTimer(){
@@ -846,10 +908,14 @@ function toggleTimer(){
   ensurePlay();
   const p = state.play;
   if (p.runningSince){ p.used = Math.min(playTotal(p), playUsed(p)); p.runningSince = null; }
-  else { if (playTotal(p) - p.used <= 0) return; p.runningSince = Date.now(); buzz(15); }
+  else { if (playTotal(p) - p.used <= 0 || !gameOpen()) return; p.runningSince = Date.now(); buzz(15); }
   persist(); renderAll();
 }
-setInterval(() => { if (ensurePlay()){ persist(); renderAll(); } else tickTimer(); }, 1000);
+let gateWas = gameOpen();
+setInterval(() => {
+  const g = gameOpen(), flip = g !== gateWas; gateWas = g;
+  if (ensurePlay()){ persist(); renderAll(); } else if (flip) renderAll(); else tickTimer();
+}, 1000);
 
 /* ================= MoodLoop =================
    A calm, bright space styled after the MoodLoop wristband prototype.
@@ -921,7 +987,7 @@ const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '
 /* ---- Family planner + message board ----
    Planner: one doc per week  families/<code>W<YYYYMMDD of Monday>  {items:{id:{day, text, time, who, t}}}
    Board:   one doc           families/<code>B                      {posts:{id:{text, by, t}}} */
-const WHO = [{n:'Everyone', c:'#b9a5ff'}, {n:'Mum', c:'#ff8fb1'}, {n:'Dad', c:'#6fc6ff'}, {n:'Douglas', c:'#3ef0a0'}, {n:'Dorothea', c:'#f5c451'}];
+const WHO = [{n:'Everyone', c:'#b9a5ff'}, {n:'Mum', c:'#ff8fb1'}, {n:'Dad', c:'#6fc6ff'}, {n:'Douglas', c:'#3ef0a0'}, {n:'Dorothea', c:'#f5c451'}, {n:'Nanny', c:'#ff9f5a'}];
 const whoCol = n => (WHO.find(w => w.n === n) || WHO[0]).c;
 const SH_KEY = 'douglasSharedV1';
 let shared = (() => { try{ return JSON.parse(localStorage.getItem(SH_KEY)) || {}; }catch(e){ return {}; } })();
@@ -1006,12 +1072,12 @@ function renderPlan(){
       ${DAYS.map((d, i) => { const ds = addDays(mon, i), items = planItems(mon, i), isT = ds === today, open = v.adding === i;
         return `<div class="pl-day ${isT ? 'today' : ''}" id="pl-${i}">
           <div class="pl-dh"><b>${d.name}</b><small>${fmt(ds)}</small>${isT ? '<span class="now">Today</span>' : ''}</div>
-          ${items.map(it => `<div class="pl-it"><time>${esc(fmtTime(it.time))}</time><span class="tx">${esc(it.text)}</span>${it.who ? `<span class="who" style="--wc:${whoCol(it.who)}">${esc(it.who)}</span>` : ''}<button data-pldel="${it.id}" aria-label="Remove">×</button></div>`).join('')}
+          ${items.map(it => `<div class="pl-it"><time>${esc(fmtTime(it.time))}</time><span class="tx">${esc(it.text)}</span>${it.who ? `<span class="who" style="--wc:${whoCol(it.who)}">${esc(it.who)}</span>` : ''}<button data-pldel="${it.id}" aria-label="Remove ${esc(it.text)}">×</button></div>`).join('')}
           ${!items.length && !open ? '<div class="pl-empty">Nothing planned yet</div>' : ''}
           ${open ? `<div class="pl-form">
-              <input class="pl-in" id="plText" maxlength="80" placeholder="What's happening? e.g. Swimming, Grandma visiting" value="${esc(v.draft.text)}">
+              <input class="pl-in" id="plText" aria-label="What's happening" maxlength="80" placeholder="What's happening? e.g. Swimming, Grandma visiting" value="${esc(v.draft.text)}">
               <div class="pl-r"><label for="plTime">Time</label><input class="pl-in" type="time" id="plTime" value="${esc(v.draft.time)}"><span class="meta" style="margin:0">optional</span></div>
-              <div class="wchips">${WHO.map(w => `<button class="wchip ${v.draft.who === w.n ? 'on' : ''}" style="--wc:${w.c}" data-plwho="${w.n}">${w.n}</button>`).join('')}</div>
+              <div class="wchips">${WHO.map(w => `<button class="wchip ${v.draft.who === w.n ? 'on' : ''}" aria-pressed="${v.draft.who === w.n}" style="--wc:${w.c}" data-plwho="${w.n}">${w.n}</button>`).join('')}</div>
               <div class="pl-btns"><button class="btn ghost" data-plcancel="1">Cancel</button><button class="btn" data-plsave="${i}">${ic('check')}Add</button></div>
             </div>` : `<button class="pl-add" data-pladd="${i}">+ Add activity</button>`}
         </div>`; }).join('')}
@@ -1020,13 +1086,13 @@ function renderPlan(){
     <h2 class="sec">Message Board</h2>
     <div class="board glass">
       <div class="lbl">Posting as</div>
-      <div class="wchips">${WHO.slice(1).map(w => `<button class="wchip ${postAs === w.n ? 'on' : ''}" style="--wc:${w.c}" data-as="${w.n}">${w.n}</button>`).join('')}</div>
-      <textarea class="pl-in" id="bText" maxlength="280" placeholder="Write a reminder or a quick message for the family…">${esc(v.post)}</textarea>
+      <div class="wchips">${WHO.slice(1).map(w => `<button class="wchip ${postAs === w.n ? 'on' : ''}" aria-pressed="${postAs === w.n}" style="--wc:${w.c}" data-as="${w.n}">${w.n}</button>`).join('')}</div>
+      <textarea class="pl-in" id="bText" aria-label="Message for the family" maxlength="280" placeholder="Write a reminder or a quick message for the family…">${esc(v.post)}</textarea>
       <button class="btn" data-act="post" style="width:100%">${ic('pin')}Post to the board</button>
       <div class="posts">${ps.length ? ps.map(p => `<div class="post">
           <div class="av" style="--wc:${whoCol(p.by)}">${esc((p.by || '?')[0])}</div>
           <div class="pb"><b>${esc(p.by || 'Someone')}</b><small>${ago(p.t)}</small>${p.t > (planView.seenAt || 0) && p.by !== postAs ? '<em>NEW</em>' : ''}<p>${esc(p.text)}</p></div>
-          <button data-bdel="${p.id}" aria-label="Remove post">×</button></div>`).join('')
+          <button data-bdel="${p.id}" aria-label="Remove post from ${esc(p.by || 'someone')}">×</button></div>`).join('')
         : '<div class="empty">No messages yet. Post the first one!</div>'}</div>
     </div>`;
   const tx = $('plText'), tm = $('plTime'), bt = $('bText');
@@ -1040,7 +1106,7 @@ function planClick(t){
   if (ds.plnav !== undefined){ v.off = ds.plnav === '0' ? 0 : v.off + Number(ds.plnav); v.adding = null; renderPlan(); return true; }
   if (ds.pladd !== undefined){ v.adding = +ds.pladd; v.draft = {text:'', time:'', who:'Everyone'}; renderPlan(); setTimeout(() => { const i = $('plText'); if (i) i.focus(); }, 30); return true; }
   if (ds.plcancel){ v.adding = null; renderPlan(); return true; }
-  if (ds.plwho){ v.draft.who = ds.plwho; const tx = $('plText'), tm = $('plTime'); if (tx) v.draft.text = tx.value; if (tm) v.draft.time = tm.value; document.activeElement && document.activeElement.blur && document.activeElement.blur(); renderPlan(); return true; }
+  if (ds.plwho){ v.draft.who = ds.plwho; const tx = $('plText'), tm = $('plTime'); if (tx) v.draft.text = tx.value; if (tm) v.draft.time = tm.value; if (document.activeElement && /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) document.activeElement.blur(); renderPlan(); return true; }
   if (ds.plsave !== undefined){
     const tx = $('plText'), tm = $('plTime'); if (tx) v.draft.text = tx.value; if (tm) v.draft.time = tm.value;
     const text = (v.draft.text || '').trim().slice(0, 80); if (!text){ if (tx) tx.focus(); return true; }
@@ -1115,17 +1181,34 @@ async function photoFull(ds){
 
 let photoDay = null;
 function photoPick(ds){ photoDay = ds; const i = $('photoIn'); i.value = ''; i.click(); }
-function pClose(){ $('pbox').hidden = true; $('pcard').innerHTML = ''; }
+let pBack = null;
+function pOpen(){ if ($('pbox').hidden){ pBack = focusKey(document.activeElement); $('pbox').hidden = false; } }
+function pClose(){ $('pbox').hidden = true; $('pcard').innerHTML = ''; refocus(pBack, true); pBack = null; }
+// whenever the photo box shows new content, move focus into it (first field or button)
+new MutationObserver(() => {
+  if ($('pbox').hidden || $('pcard').contains(document.activeElement)) return;
+  const f = $('pcard').querySelector('input,button'); if (f) f.focus(); else { $('pcard').tabIndex = -1; $('pcard').focus(); }
+}).observe(document.getElementById('pcard'), {childList:true});
+document.addEventListener('keydown', e => {
+  if ($('pbox').hidden) return;
+  if (e.key === 'Escape'){ e.preventDefault(); pPending = null; return pClose(); }
+  if (e.key === 'Tab'){
+    const f = [...$('pcard').querySelectorAll('input,button')].filter(shown);
+    if (!f.length) return e.preventDefault();
+    const i = f.indexOf(document.activeElement);
+    if (i === -1 || (e.shiftKey && i === 0) || (!e.shiftKey && i === f.length - 1)){ e.preventDefault(); f[e.shiftKey ? f.length - 1 : 0].focus(); }
+  }
+});
 document.getElementById('photoIn').addEventListener('change', async () => {
   const f = $('photoIn').files[0], ds = photoDay; if (!f || !ds) return;
-  $('pbox').hidden = false; $('pcard').innerHTML = '<div class="pbusy">Getting your photo ready…</div>';
+  pOpen(); $('pcard').innerHTML = '<div class="pbusy" role="status">Getting your photo ready…</div>';
   let full, thumb;
   try{ full = await shrink(f, 1280, .78); thumb = await shrink(f, 220, .6); }
   catch(e){ $('pcard').innerHTML = `<div class="pin"><h3>Hmm, that didn't work</h3><p class="pc">${esc(e.message)}</p><div class="prow"><button data-p="close">OK</button></div></div>`; return; }
   const old = photoOf(ds);
   $('pcard').innerHTML = `<img class="pimg" src="${full}" alt="">
     <div class="pin"><h3>Memory for ${niceDate(ds)}</h3><div class="pd">${old ? 'This will replace the photo already saved for this day.' : 'One photo per day. Pick the best moment!'}</div>
-      <input id="pcap" maxlength="120" placeholder="Say something about it (optional)" value="${old ? esc(old.caption || '') : ''}">
+      <input id="pcap" aria-label="Photo caption" maxlength="120" placeholder="Say something about it (optional)" value="${old ? esc(old.caption || '') : ''}">
       <div class="prow"><button data-p="close">Cancel</button><button class="go" data-p="save">${ic('check')} Save memory</button></div></div>`;
   $('pcard').dataset.full = ''; pPending = {ds, full, thumb};
 });
@@ -1133,7 +1216,7 @@ let pPending = null;
 async function pView(ds){
   const meta = photoOf(ds); if (!meta) return;
   const es = entriesFor(ds);
-  $('pbox').hidden = false;
+  pOpen();
   $('pcard').innerHTML = `<img class="pimg" id="pimg" src="${meta.thumb}" alt="Memory photo for ${niceDate(ds)}">
     <div class="pin"><h3>${niceDate(ds)}</h3>
       ${meta.caption ? `<p class="pc">${esc(meta.caption)}</p>` : ''}
@@ -1267,9 +1350,9 @@ function renderMood(){
         <h2 class="ml-q" id="mlQ"></h2>
         ${bandSVG(bandName)}
         <div class="ml-pick"><button data-act="mlprev" aria-label="Turn the dial back">‹</button>
-          <div><div class="ml-name" id="mlName"></div><div class="ml-hint" id="mlHint"></div></div>
+          <div><div class="ml-name" id="mlName" aria-live="polite"></div><div class="ml-hint" id="mlHint"></div></div>
           <button data-act="mlnext" aria-label="Turn the dial on">›</button></div>
-        <div class="ml-sw">Band ${Object.keys(BANDS).map(b => `<button data-band="${b}" class="${b === bandName ? 'on' : ''}" style="background:${BANDS[b][1]}" aria-label="${b} band"></button>`).join('')}</div>
+        <div class="ml-sw">Band ${Object.keys(BANDS).map(b => `<button data-band="${b}" class="${b === bandName ? 'on' : ''}" aria-pressed="${b === bandName}" style="--sw:${BANDS[b][1]}" aria-label="${b} band"></button>`).join('')}</div>
       </div>
       <div id="mlRest"></div>`;
     bindBand($('mlBand'));
@@ -1302,9 +1385,9 @@ function renderMoodRest(){
   el.innerHTML = `
     ${dr ? `<div class="card ml-draft">
       <p class="lbl">What's it about? (optional)</p>
-      <div class="chips">${ML_TAGS.map(t => `<button class="chipb ${dr.tags.includes(t) ? 'on' : ''}" data-mtag="${t}">${t}</button>`).join('')}</div>
+      <div class="chips">${ML_TAGS.map(t => `<button class="chipb ${dr.tags.includes(t) ? 'on' : ''}" aria-pressed="${dr.tags.includes(t)}" data-mtag="${t}">${t}</button>`).join('')}</div>
       <p class="lbl">Want to say more? (optional)</p>
-      <textarea class="ml-note" id="mlNote" maxlength="600" placeholder="What happened? What would help?">${esc(dr.note)}</textarea>
+      <textarea class="ml-note" id="mlNote" aria-label="Note about this feeling" maxlength="600" placeholder="What happened? What would help?">${esc(dr.note)}</textarea>
       <div class="ml-row"><button class="ml-btn no" data-act="mlcancel">Cancel</button><button class="ml-btn go" data-act="mlsave">${ic('check')}Save ${moodBy(dr.mood).name}</button></div>
     </div>` : ''}
     ${tip ? `<div class="ml-tip" style="--mc:${tip.col}">${faceSVG(tip)}<span>${tip.tip}</span></div>` : ''}
@@ -1317,7 +1400,7 @@ function renderMoodRest(){
       return `<div class="ml-entry">${faceSVG(m, 'fc')}<div class="tx"><b>${m.name}</b><small>${new Date(e.t).toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})}</small>
         ${e.tags && e.tags.length ? `<div class="tg">${e.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
         ${e.note ? `<p>${esc(e.note)}</p>` : ''}</div>
-        <button data-mdel="${v.sel}|${e.id}" aria-label="Remove">Remove</button></div>`; }).join('')
+        <button data-mdel="${v.sel}|${e.id}" aria-label="Remove ${m.name} check-in">Remove</button></div>`; }).join('')
       : `<div class="empty">${isToday ? 'No check-ins yet today. Turn the dial above.' : 'Nothing logged on this day.'}</div>`}</div>
 
     <h2 class="sec">Mood calendar</h2>
@@ -1386,14 +1469,24 @@ function gamingHTML(c){
 function renderNav(){
   $('nav').innerHTML = [['dash','home','Dashboard'],['story','target','Storyboard'],['rewards','gift','Rewards'],['mood','heart','MoodLoop'],['plan','calendar','Planner']]
     .map(([k, i, l]) => { const n = k === 'plan' && tab !== 'plan' ? unread() : 0;
-      return `<button data-tab="${k}" class="${k === tab ? 'on' : ''}">${ic(i)}${l}${n ? `<span class="nb">${n}</span>` : ''}</button>`; }).join('');
+      return `<button data-tab="${k}" class="${k === tab ? 'on' : ''}"${k === tab ? ' aria-current="page"' : ''}>${ic(i)}${l}${n ? `<span class="nb">${n}</span>` : ''}</button>`; }).join('');
   const mb = $('menuBtn'); if (mb && !mb.innerHTML) mb.innerHTML = ic('menu');
 }
+
+function missionBtn(i, j, t){
+  const m = MISSIONS[j], on = state.week[i][j];
+  return `<button class="m ${on ? 'done' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on}"${i > t && !on ? ' disabled' : ''}>
+          <span class="mi">${ic(m.icon)}</span><span class="mt">${m.name}<small>${m.what}</small></span><span class="ck">${ic('check')}</span></button>`;
+}
+
+let achOpen = false;
+document.addEventListener('toggle', e => { if (e.target.id === 'ach') achOpen = e.target.open; }, true);
 
 function renderDash(){
   const t = todayIdx(), d = DAYS[t], c = dayCount(t), s = stars(), L = level(s);
   const r = rankFor(L), nr = nextRank(L), into = s - (L - 1) * STARS_PER_LEVEL;
   const xp = L >= 9 ? 100 : into / STARS_PER_LEVEL * 100, nm = nextMoney(s), g = gaming(c);
+  const got = BADGES.filter(b => state.badges.includes(b.id)).length;
   $('v-dash').innerHTML = `
     <div class="brief glass" style="--dc:${d.col}">
       <div class="daymark">${ic(d.icon)}</div>
@@ -1401,45 +1494,43 @@ function renderDash(){
       <h1>${d.title}</h1>
       <div class="sub">${t === 0 ? 'Our Wilde Space' : d.sub}</div>
       <div class="tags">${d.tags.map(x => `<span class="tag">${x}</span>`).join('')}</div>
-      <div class="note">${ic('pad')}Complete missions to unlock gaming after 4pm</div>
+      <div class="missions">${MISSIONS.map((_, j) => missionBtn(t, j, t)).join('')}</div>
       <div class="status">
-        <span class="st ${g ? 'ok' : ''}">${g ? `${g} min unlocked today` : `${c}/6 complete · ${4 - c} to unlock`}</span>
-        <button class="btn" data-go="story">Missions ${ic('arrow')}</button>
+        <span class="st ${g ? 'ok' : ''}">${c === 6 ? `Perfect day · ${g} min unlocked` : g ? `${g} min gaming unlocked` : `${c}/6 done · ${4 - c} more to unlock gaming`}</span>
+        <button class="btn ghost" data-go="story">Whole week ${ic('arrow')}</button>
       </div>
     </div>
 
     ${todayPlanHTML()}
-    ${timerHTML()}
+    ${playTotal(state.play) ? timerHTML() : ''}
 
-    <div class="rank glass">
-      <div class="hex">${ic(r.icon)}</div>
-      <div class="info">
-        <div class="eyebrow">Level ${L} · Rank</div>
-        <div class="name">${r.name}</div>
-        <div class="bar"><i style="width:${xp}%"></i></div>
-        <div class="meta">${L >= 9 ? 'Maximum level reached' : `${STARS_PER_LEVEL - into} stars to Level ${L + 1}${nr ? ` · ${nr.name} at Level ${nr.lvl}` : ''}`}</div>
+    <div class="prog glass">
+      <div class="rank">
+        <div class="hex">${ic(r.icon)}</div>
+        <div class="info">
+          <div class="eyebrow">Level ${L} · Rank</div>
+          <div class="name">${r.name}</div>
+          <div class="bar"><i style="width:${xp}%"></i></div>
+          <div class="meta">${L >= 9 ? 'Maximum level reached' : `${STARS_PER_LEVEL - into} stars to Level ${L + 1}${nr ? ` · ${nr.name} at Level ${nr.lvl}` : ''}`}</div>
+        </div>
+      </div>
+      <div class="week">
+        <div class="row"><b>Battle Stars ${s}/${MAX_STARS}</b><span>£${money(s)}</span></div>
+        <div class="track"><div class="bar gold"><i style="width:${s / MAX_STARS * 100}%"></i></div>
+          ${[20, 25, 30].map(m => `<div class="mk ${s >= m ? 'hit' : ''}" style="left:${m / MAX_STARS * 100}%"><em>£${money(m)}</em></div>`).join('')}
+        </div>
+        <div class="dots">${DAYS.map((x, i) => { const n = dayCount(i);
+          return `<div class="dot ${n === 6 ? 'full' : ''} ${i === t ? 'today' : ''}"><b>${n}</b>${x.name.slice(0, 3)}</div>`; }).join('')}</div>
+        <div class="meta">${nm ? `${nm.need} more star${nm.need > 1 ? 's' : ''} to £${nm.amt} pocket money` : 'Top pocket money reached this week'}</div>
       </div>
     </div>
 
-    <div class="stats">
-      <div class="stat glass"><div class="k">${ic('star')}Battle Stars</div><div class="v">${s}<small> / ${MAX_STARS}</small></div><div class="h">This week</div></div>
-      <div class="stat glass"><div class="k">${ic('token')}Screen Tokens</div><div class="v">${tokens()}</div><div class="h">+${earned()} this week</div></div>
-      <div class="stat glass cash"><div class="k">${ic('pound')}Pocket Money</div><div class="v">£${money(s)}</div><div class="h">${nm ? `${nm.need} stars to £${nm.amt}` : 'Maximum reached'}</div></div>
-      <div class="stat glass"><div class="k">${ic('chevrons')}Level</div><div class="v">${L}<small> / 9</small></div><div class="h">${r.name}</div></div>
-    </div>
-
-    <div class="week glass">
-      <div class="row"><b>Weekly Progress</b><span>${Math.round(s / MAX_STARS * 100)}%</span></div>
-      <div class="track"><div class="bar gold"><i style="width:${s / MAX_STARS * 100}%"></i></div>
-        ${[20, 25, 30].map(m => `<div class="mk ${s >= m ? 'hit' : ''}" style="left:${m / MAX_STARS * 100}%"><em>£${money(m)}</em></div>`).join('')}
-      </div>
-      <div class="dots">${DAYS.map((x, i) => { const n = dayCount(i);
-        return `<div class="dot ${n === 6 ? 'full' : ''} ${i === t ? 'today' : ''}"><b>${n}</b>${x.name.slice(0, 3)}</div>`; }).join('')}</div>
-    </div>
-
-    <h2 class="sec">Achievements</h2>
-    <div class="badges">${BADGES.map(b => { const got = state.badges.includes(b.id);
-      return `<div class="badge glass ${got ? '' : 'locked'}"><div class="medal">${ic(got ? b.icon : 'lock')}</div><div><b>${b.name}</b><small>${got ? 'Unlocked' : b.hint}</small></div></div>`; }).join('')}</div>`;
+    <details class="ach glass" id="ach" ${achOpen ? 'open' : ''}>
+      <summary class="row" id="achSum"><b>Achievements</b><span>${got}/${BADGES.length} ${ic('arrow')}</span></summary>
+      <div class="badges">${BADGES.map(b => { const has = state.badges.includes(b.id);
+        return `<div class="badge ${has ? '' : 'locked'}"><div class="medal">${ic(has ? b.icon : 'lock')}</div><div><b>${b.name}</b><small>${has ? 'Unlocked' : b.hint}</small></div></div>`; }).join('')}</div>
+    </details>
+    <button class="btn ghost guide-link" data-go="guide">${ic('book')}Guide, rules &amp; parent zone</button>`;
 }
 
 function renderStory(){
@@ -1455,15 +1546,22 @@ function renderStory(){
           <div class="dt">${d.title}</div>
           <div class="ds">${d.tags.join(' · ')}</div>
         </div>
-        <div class="ring" style="${ringStyle(c, d.col)}"><span>${c}/6</span></div>
+        <div class="ring" style="${ringStyle(c, d.col)}" role="img" aria-label="${c} of 6 missions done"><span aria-hidden="true">${c}/6</span></div>
       </div>
-      <div class="missions">${MISSIONS.map((m, j) => { const on = state.week[i][j];
-        return `<button class="m ${on ? 'done' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on}">
-          <span class="mi">${ic(m.icon)}</span><span class="mt">${m.name}<small>${m.what}</small></span><span class="ck">${ic('check')}</span></button>`; }).join('')}</div>
+      <div class="missions">${i > t ? `<div class="daylock">${ic('lock')}Opens on ${d.name}</div>` : ''}${MISSIONS.map((_, j) => missionBtn(i, j, t)).join('')}</div>
       ${gamingHTML(c)}
       ${memHTML(weekDate(i), i > t)}
     </div>`;
-  }).join('');
+  }).join('') + pastWeeksHTML();
+}
+function pastWeeksHTML(){
+  const h = state.history || [];
+  if (!h.length) return '';
+  return `<h2 class="sec">Past Weeks</h2><div class="hist glass">${h.slice(0, 8).map(w => `<div class="hrow">
+      <span class="he">${ic(w.perfect ? 'diamond' : 'star')}</span>
+      <span class="hn">Week ${w.week} · ${w.stars} stars · £${w.money}
+        <small>${w.perfect} perfect day${w.perfect === 1 ? '' : 's'}${w.best ? ` · best ${w.best}` : ''} · ended ${new Date(w.ended).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</small></span>
+    </div>`).join('')}</div>`;
 }
 
 function renderRewards(){
@@ -1500,7 +1598,7 @@ function renderRewards(){
     <div class="hist glass">${hist.length ? hist.map((h, k) => { const r = REWARDS.find(x => x.id === h.id);
       return `<div class="hrow"><span class="he">${ic(r ? r.icon : String(h.id).startsWith('skin-') ? 'star' : 'gift')}</span>
         <span class="hn">${h.name}<small>${h.date} · ${h.cost} tokens</small></span>
-        <button data-undo="${state.redeemed.length - 1 - k}">Undo</button></div>`; }).join('')
+        <button data-undo="${state.redeemed.length - 1 - k}" aria-label="Undo ${h.name}">Undo</button></div>`; }).join('')
       : `<div class="empty">No rewards unlocked yet</div>`}</div>`;
 }
 
@@ -1510,7 +1608,7 @@ function renderGuide(){
   $('v-guide').innerHTML = `
     <div class="guide-top"><button class="btn ghost" data-go="dash">${ic('back')}Back</button></div>
     <h2 class="sec">How We Play</h2>
-    ${card('home', 'Monday - OWS', `<p>OWS is <b style="color:var(--ink)">Our Wilde Space</b>.</p><p>Monday is a dedicated day with Mum for learning, creativity, exploration, outdoor activities and fun.</p>`)}
+    ${card('home', 'Monday – OWS', `<p>OWS is <b style="color:var(--ink)">Our Wilde Space</b>.</p><p>Monday is a dedicated day with Mum for learning, creativity, exploration, outdoor activities and fun.</p>`)}
     ${card('target', 'What Each Mission Means', `<div class="tbl">${MISSIONS.map(m =>
       `<div class="tr"><span>${m.name}</span><span style="color:var(--ink);text-align:right">${m.what}</span></div>`).join('')}</div>`)}
     ${card('heart', 'MoodLoop', `<p>MoodLoop is for noticing feelings. Pick the face that matches how you feel, add a few words if you want, and Mum and Dad can see it too.</p><p>All feelings are OK. There are no stars or tokens for moods, so always pick the true one.</p><p>Each day can also have one photo memory. They build up into your Memory Bank.</p>`)}
@@ -1533,7 +1631,7 @@ function renderGuide(){
         <div class="tr"><span>Each mission</span><span>1 star + 2 tokens</span></div>
         <div class="tr"><span>Perfect day bonus</span><span>+3 tokens</span></div>
         <div class="tr"><span>Every 5 stars</span><span>Level up</span></div>
-        <div class="tr"><span>Unused game time</span><span>Rolls to tomorrow</span></div>
+        <div class="tr"><span>Unused game time</span><span>${LIM().carryMax < 0 ? 'Rolls to tomorrow' : LIM().carryMax === 0 ? 'Doesn’t roll over' : 'Up to ' + LIM().carryMax + ' min rolls over'}</span></div>
         <div class="tr"><span>20 stars</span><span>£3</span></div>
         <div class="tr"><span>25 stars</span><span>£4</span></div>
         <div class="tr"><span>30+ stars</span><span>£5</span></div></div>
@@ -1544,24 +1642,28 @@ function renderGuide(){
         <button class="btn ghost" data-act="checklink">${ic('pulse')}Check connection</button></div>`
       : `<p>This device isn't linked yet. If you already have a family link, open it here instead. Otherwise create one on this device.</p>
         <div class="parent"><button class="btn" data-act="makelink">${ic('key')}Create family link</button></div>`) : ''}
-    ${(() => { ensurePlay(); const p = state.play, L = LIM(), opt = (key, vals, cur) => `<div class="wchips">${vals.map(([v, l]) => `<button class="wchip ${String(cur < 0 ? 'none' : cur) === String(v) ? 'on' : ''}" style="--wc:var(--cyan)" data-lim="${key}|${v}">${l}</button>`).join('')}</div>`;
+    ${(() => { ensurePlay(); const p = state.play, L = LIM(), adj = p.adj || 0;
+      const opt = (key, vals, cur) => `<div class="wchips">${vals.map(([v, l]) => { const on = String(cur < 0 ? 'none' : cur) === String(v);
+        return `<button class="wchip ${on ? 'on' : ''}" aria-pressed="${on}" style="--wc:var(--cyan)" data-lim="${key}|${v}">${l}</button>`; }).join('')}</div>`;
       return card('pad', 'Game Time Controls', `
       <div class="tbl">
         <div class="tr"><span>Earned today</span><span>${p.earned} min</span></div>
         <div class="tr"><span>Rolled over</span><span>${playCarry(p)} min${(p.carry || 0) > playCarry(p) ? ` (capped from ${p.carry})` : ''}</span></div>
-        <div class="tr"><span>Parent changes</span><span>${(p.adj || 0) > 0 ? '+' : (p.adj || 0) < 0 ? '−' : ''}${Math.abs(p.adj || 0)} min</span></div>
-        <div class="tr"><span>Total today</span><span>${playMins(p)} min</span></div></div>
+        <div class="tr"><span>Parent changes</span><span>${adj > 0 ? '+' : adj < 0 ? '−' : ''}${Math.abs(adj)} min</span></div>
+        <div class="tr"><span>Total today</span><span>${playMins(p)} min${playRaw(p) > playMins(p) ? ' (daily max)' : ''}</span></div></div>
       <p style="margin-top:14px">Take time off for attitude, or add some back:</p>
-      <div class="pl-btns" style="margin-top:8px"><button class="btn danger" data-adj="-30">−30</button><button class="btn danger" data-adj="-15">−15</button><button class="btn ghost" data-adj="15">+15</button></div>
+      <div class="pl-btns" style="margin-top:8px"><button class="btn danger" data-adj="-30" aria-label="Take off 30 minutes">−30</button><button class="btn danger" data-adj="-15" aria-label="Take off 15 minutes">−15</button><button class="btn ghost" data-adj="15" aria-label="Add 15 minutes">+15</button></div>
       ${(p.adjLog || []).length ? `<button class="pl-add" data-act="clearadj">Undo today's changes</button>` : ''}
       <p style="margin-top:14px">Most unused time that can roll over to tomorrow:</p>
       ${opt('carryMax', [[0, 'None'], [15, '15 min'], [30, '30 min'], [60, '60 min'], ['none', 'No cap']], L.carryMax)}
       <p style="margin-top:14px">Most game time in one day, including rollover:</p>
       ${opt('dayMax', [[60, '60 min'], [90, '90 min'], [120, '2 hrs'], [150, '2½ hrs'], ['none', 'No max']], L.dayMax)}
-      <div class="parent"><button class="btn ghost" data-act="setpin">${ic('lock')}${L.pin ? 'Change parent PIN' : 'Set a parent PIN'}</button></div>`); })()}
+      <p class="meta" style="margin-top:12px">${state.pin ? 'These controls need the parent PIN.' : 'Set a parent PIN in the Parent Zone below so only Mum or Dad can change these.'}</p>`); })()}
     ${card('key', 'Parent Zone', `<p>Use on Sunday evening to start a new week. Unspent tokens are kept.</p>
+      <p style="margin-top:8px">${state.pin ? 'Starting a new week, resetting and undoing rewards need the parent PIN.' : 'Set a parent PIN so only Mum or Dad can start a new week, reset, or undo rewards.'}</p>
       <div class="parent">
         <button class="btn" data-act="newweek">${ic('refresh')}Start New Week</button>
+        <button class="btn ghost" data-act="pin">${ic('key')}${state.pin ? 'Change parent PIN' : 'Set parent PIN'}</button>
         <button class="btn danger" data-act="wipe">Reset everything</button>
       </div>`)}`;
 }
@@ -1571,6 +1673,49 @@ function renderTop(){
   $('weekLbl').textContent = `Week ${state.weekNo} · Level ${level(stars())}`;
 }
 function renderAll(){ if (!state.play) ensurePlay(); applySkin(); renderTop(); renderNav(); renderDash(); renderStory(); renderRewards(); renderMood(); renderPlan(); renderGuide(); }
+
+/* ================= Focus keeping =================
+   Views are rebuilt with innerHTML, which throws keyboard focus back to <body>.
+   Before a rebuild we note what had focus (its id or data-* identity, plus ids of
+   its ancestors as fallbacks, plus the text caret); afterwards we put it back. */
+function focusKey(el){
+  if (!el || el === document.body || !document.contains(el)) return null;
+  const sels = [];
+  if (el.id) sels.push('#' + CSS.escape(el.id));
+  else {
+    const a = [...el.attributes].filter(x => x.name.startsWith('data-'));
+    if (a.length) sels.push(el.tagName.toLowerCase() + a.map(x => `[${x.name}="${CSS.escape(x.value)}"]`).join(''));
+  }
+  for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) if (p.id) sels.push('#' + CSS.escape(p.id));
+  let caret = null;
+  try{ if (typeof el.selectionStart === 'number') caret = [el.selectionStart, el.selectionEnd]; }catch(e){}
+  return {sels, caret};
+}
+const shown = el => el.getClientRects().length > 0;
+function refocus(k, force = false){
+  if (!k) return;
+  const a = document.activeElement;
+  if (!force && a && a !== document.body && document.contains(a) && shown(a)) return;   // focus survived, leave it
+  for (const [n, sel] of k.sels.entries()){
+    const el = [...document.querySelectorAll(sel)].find(shown);
+    if (!el) continue;
+    if (n > 0 && !el.hasAttribute('tabindex') && el.tabIndex < 0) el.setAttribute('tabindex', '-1');
+    el.focus({preventScroll:true});
+    if (document.activeElement !== el) continue;                    // e.g. now disabled
+    if (n === 0 && k.caret){ try{ el.setSelectionRange(...k.caret); }catch(e){} }
+    return;
+  }
+}
+const keepFocus = fn => function(...args){
+  const k = focusKey(document.activeElement);
+  const r = fn.apply(this, args);
+  refocus(k);
+  return r;
+};
+renderAll = keepFocus(renderAll);
+renderPlan = keepFocus(renderPlan);
+renderMood = keepFocus(renderMood);
+renderMoodRest = keepFocus(renderMoodRest);
 
 /* ================= FX ================= */
 let toastTimer;
@@ -1595,34 +1740,88 @@ function shards(n = 40){
 }
 const buzz = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
 
-function ask(title, body, okLabel = 'OK', input = null){
+function ask(title, body, okLabel = 'OK', opt = {}){
+  /* opt.pin: show a masked digit field and resolve to its value (or null on cancel).
+     opt.text: {ph, max} show a plain text field instead (value may be empty).
+     opt.check(value): return an error message to keep the box open, or nothing to accept. */
   return new Promise(res => {
+    const inp = $('mIn'), err = $('mErr'), back = focusKey(document.activeElement), field = opt.pin || opt.text;
     $('mT').textContent = title; $('mB').textContent = body; $('mOk').textContent = okLabel;
-    const inp = $('mIn'); inp.hidden = !input; inp.value = '';
-    if (input){ inp.type = input.type || 'text'; inp.inputMode = input.mode || 'text'; inp.placeholder = input.ph || ''; inp.maxLength = input.max || 40; }
-    $('modal').hidden = false; (input ? inp : $('mOk')).focus();
-    const done = v => { $('modal').hidden = true; $('mOk').onclick = $('mNo').onclick = inp.onkeydown = null; inp.hidden = true; res(v); };
-    $('mOk').onclick = () => done(input ? inp.value : true); $('mNo').onclick = () => done(input ? null : false);
-    inp.onkeydown = e => { if (e.key === 'Enter') done(inp.value); };
+    err.textContent = ''; inp.value = ''; inp.hidden = !field;
+    inp.type = opt.text ? 'text' : 'password'; inp.inputMode = opt.text ? 'text' : 'numeric';
+    inp.maxLength = opt.text ? (opt.text.max || 40) : 8; inp.placeholder = opt.text ? (opt.text.ph || '') : '';
+    inp.classList.toggle('txt', !!opt.text);
+    $('modal').hidden = false; (field ? inp : $('mOk')).focus();
+    const done = v => { $('modal').hidden = true; inp.hidden = true; inp.value = ''; err.textContent = '';
+      $('mOk').onclick = $('mNo').onclick = inp.onkeydown = null; refocus(back, true); res(v); };
+    $('mOk').onclick = async () => {
+      if (!field) return done(true);
+      const v = inp.value.trim(), bad = opt.check && await opt.check(v);
+      if (bad){ err.textContent = bad; inp.value = ''; inp.focus(); return; }
+      done(v);
+    };
+    $('mNo').onclick = () => done(field ? null : false);
+    inp.onkeydown = e => { if (e.key === 'Enter'){ e.preventDefault(); $('mOk').click(); } };
   });
 }
-/* Parent PIN: a light lock so game time can't be changed by accident. Unlocked for 5 minutes after entry. */
+
+/* ================= Parent lock =================
+   A 4-6 digit PIN guards the actions that change the score: starting a new week,
+   resetting, and undoing a reward. The PIN is stored hashed in the shared save, so
+   one PIN works on every linked device. Once entered it stays open for 5 minutes. */
+const PARENT_OPEN_MS = 5 * 60 * 1000;
 let parentUntil = 0;
+async function hashPin(v){
+  const txt = 'dbp-parent:' + v;
+  try{
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+  }catch(e){
+    let h = 2166136261; for (const c of txt){ h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+    return 'f' + h.toString(16);
+  }
+}
+const pinShape = v => /^\d{4,8}$/.test(v) ? null : 'Use 4 to 8 numbers.';
+async function setPin(){
+  let first = null;
+  const a = await ask('Set a parent PIN', 'Choose 4 to 8 numbers. Mum or Dad will need it to change game time, start a new week, reset the game, or undo a reward.', 'Next',
+    {pin:true, check:v => pinShape(v)});
+  if (a === null) return false;
+  first = a;
+  const b = await ask('Type it again', 'Enter the same PIN once more to confirm it.', 'Save PIN',
+    {pin:true, check:v => v === first ? null : "That doesn't match. Try again."});
+  if (b === null) return false;
+  state.pin = await hashPin(b); persist(); renderAll();
+  parentUntil = Date.now() + PARENT_OPEN_MS;
+  toast([['key', 'Parent PIN saved']]);
+  return true;
+}
 async function parentOK(){
-  const pin = LIM().pin;
-  if (!pin || Date.now() < parentUntil) return true;
-  const v = await ask('Parent PIN', 'Enter the parent PIN to continue.', 'Unlock', {type:'password', mode:'numeric', ph:'PIN', max:8});
+  if (!state.pin) return setPin();
+  if (Date.now() < parentUntil) return true;
+  const v = await ask('Parent PIN', 'Ask Mum or Dad to enter the parent PIN.', 'Unlock',
+    {pin:true, check:async v => (await hashPin(v)) === state.pin ? null : "That PIN isn't right. Try again."});
   if (v === null) return false;
-  if (v === pin){ parentUntil = Date.now() + 5 * 60000; return true; }
-  toast([['lock', 'Wrong PIN']]); buzz([60, 40, 60]); return false;
+  parentUntil = Date.now() + PARENT_OPEN_MS;
+  return true;
+}
+/* A plain-text PIN saved by an older build moves into the hashed slot once. */
+async function migratePin(){
+  const old = state.limits && state.limits.pin;
+  if (old === undefined) return;
+  if (old && !state.pin) state.pin = await hashPin(String(old));
+  delete state.limits.pin; persist();
 }
 async function adjustTime(m){
   if (!await parentOK()) return;
   ensurePlay(); const p = state.play;
-  const why = await ask(m < 0 ? `Take off ${-m} minutes?` : `Add ${m} minutes?`, 'Add a short reason Douglas will see (optional), e.g. Attitude, Not listening, Great helping.', m < 0 ? 'Take off' : 'Add', {ph:'Reason (optional)', max:30});
+  const why = await ask(m < 0 ? `Take off ${-m} minutes?` : `Add ${m} minutes?`,
+    'Add a short reason Douglas will see (optional), e.g. Attitude, Not listening, Great helping.', m < 0 ? 'Take off' : 'Add', {text:{ph:'Reason (optional)', max:30}});
   if (why === null) return;
   p.adj = (p.adj || 0) + m; (p.adjLog = p.adjLog || []).push({m, why:why.trim().slice(0, 30), t:Date.now()});
-  persist(); renderAll(); toast([[m < 0 ? 'lock' : 'pad', `${m > 0 ? '+' : '−'}${Math.abs(m)} min game time`, m < 0 ? '' : 'gold']]);
+  if (p.runningSince && playUsed(p) >= playTotal(p)){ p.used = playTotal(p); p.runningSince = null; }
+  persist(); renderAll();
+  toast([[m < 0 ? 'lock' : 'pad', `${m > 0 ? '+' : '−'}${Math.abs(m)} min game time`, m < 0 ? '' : 'gold']]);
 }
 async function clearAdjust(){
   if (!await parentOK()) return;
@@ -1632,33 +1831,72 @@ async function setLimit(key, val){
   if (!await parentOK()) return;
   LIM()[key] = val === 'none' ? -1 : +val; persist(); renderAll();
 }
-async function setPin(){
-  if (!await parentOK()) return;
-  const v = await ask(LIM().pin ? 'Change parent PIN' : 'Set a parent PIN', 'Choose 4 to 8 digits. Leave it empty to turn the PIN off. It is shared by all your devices.', 'Save', {type:'password', mode:'numeric', ph:'New PIN', max:8});
-  if (v === null) return;
-  if (v && !/^\d{4,8}$/.test(v)){ toast([['lock', 'Use 4 to 8 digits']]); return; }
-  LIM().pin = v; parentUntil = Date.now() + 5 * 60000; persist(); renderAll(); toast([['key', v ? 'Parent PIN set' : 'Parent PIN turned off']]);
+async function changePin(){
+  if (state.pin && !await parentOK()) return;
+  await setPin();
+}
+
+/* ================= Reward moments =================
+   Small: each tick floats its gain from the checkbox and is announced.
+   Big: level-ups and the end of a week get a full-screen moment. */
+function announce(t){ const el = $('sr'); el.textContent = ''; setTimeout(() => el.textContent = t, 30); }
+function floatGain(d, m){
+  const b = [...document.querySelectorAll(`.m[data-d="${d}"][data-m="${m}"]`)].find(shown); if (!b) return;
+  const r = b.querySelector('.ck').getBoundingClientRect(), f = document.createElement('div');
+  f.className = 'gain'; f.setAttribute('aria-hidden', 'true');
+  f.innerHTML = `+1${ic('star')}<span class="tk">+${TOKENS_PER_STAR}</span>${ic('token')}`;
+  f.style.left = (r.left - 8) + 'px'; f.style.top = (r.top + r.height / 2) + 'px';
+  document.body.appendChild(f); setTimeout(() => f.remove(), 1200);
+}
+function showMoment({emblem, kicker, title, sub = '', rows = [], cta = 'Continue', tone = ''}){
+  return new Promise(res => {
+    const el = $('moment'), back = focusKey(document.activeElement);
+    el.innerHTML = `<div class="mo-card glass ${tone}" role="dialog" aria-modal="true" aria-labelledby="moT" aria-describedby="moS">
+      <div class="hex mo-hex">${ic(emblem)}</div>
+      <div class="eyebrow">${kicker}</div>
+      <h2 id="moT">${title}</h2>
+      <p id="moS">${sub}</p>
+      ${rows.length ? `<div class="mo-rows">${rows.map(([i, k, v]) => `<div class="mo-r"><span>${ic(i)}${k}</span><b>${v}</b></div>`).join('')}</div>` : ''}
+      <button class="btn ${tone}" id="moOk">${cta}</button>
+    </div>`;
+    el.hidden = false; $('moOk').focus();
+    const key = e => { if (e.key === 'Tab'){ e.preventDefault(); $('moOk').focus(); } else if (e.key === 'Escape'){ e.preventDefault(); close(); } };
+    const close = () => { document.removeEventListener('keydown', key, true); el.hidden = true; el.innerHTML = ''; refocus(back, true); res(); };
+    document.addEventListener('keydown', key, true);
+    $('moOk').onclick = close;
+  });
 }
 
 /* ================= Actions ================= */
 let tab = 'dash';
 
 function toggle(d, m){
+  if (d > todayIdx() && !state.week[d][m]) return;   // future days can't be ticked ahead of time
   const bL = level(stars()), bG = gaming(dayCount(d)), bM = money(stars());
   state.week[d][m] = !state.week[d][m];
   const on = state.week[d][m];
   const aL = level(stars()), aG = gaming(dayCount(d)), aM = money(stars());
   const newB = checkBadges();
   ensurePlay(); persist(); renderAll(); space.pulse(on ? 1 : 0);
-  if (!on) return;
-  buzz(12);
+  if (!on){ announce(`${MISSIONS[m].name} unticked.`); return; }
+  buzz(12); floatGain(d, m);
   const msgs = [];
   if (dayCount(d) === 6) msgs.push(['diamond', `Perfect day · +${FULL_DAY_BONUS} tokens`, 'gold']);
-  if (aL > bL){ const r = rankFor(aL); msgs.push(['up', r.lvl === aL ? `Level ${aL} · Rank: ${r.name}` : `Level ${aL} reached`]); }
   if (aG > bG) msgs.push(['pad', `${aG} minutes unlocked`, 'gold']);
   if (aM > bM) msgs.push(['pound', `Pocket money now £${aM}`, 'gold']);
   newB.forEach(b => msgs.push([b.icon, `Achievement: ${b.name}`, 'gold']));
-  if (msgs.length){ toast(msgs); shards(dayCount(d) === 6 || aL > bL ? 60 : 30); buzz([20, 40, 20]); space.pulse(3); }
+  announce(`${MISSIONS[m].name} done. 1 star and ${TOKENS_PER_STAR} tokens.` + msgs.map(x => ' ' + x[1] + '.').join(''));
+  (async () => {
+    if (aL > bL){
+      await new Promise(r => setTimeout(r, 700));   // let the tick and its +1 land first
+      const r = rankFor(aL), nr = nextRank(aL), isNew = r.lvl === aL;
+      shards(80); buzz([30, 60, 30, 60, 60]); space.pulse(4);
+      await showMoment({emblem:r.icon, kicker:'Level up', title:`Level ${aL}`, tone:isNew ? 'gold' : '',
+        sub:isNew ? `New rank unlocked: ${r.name}.` : `${r.name} rank${nr ? ` · ${nr.name} unlocks at Level ${nr.lvl}` : ''}.`,
+        cta:'Keep going'});
+    }
+    if (msgs.length){ toast(msgs); shards(dayCount(d) === 6 ? 60 : 30); buzz([20, 40, 20]); space.pulse(3); }
+  })();
 }
 
 async function redeem(id){
@@ -1673,6 +1911,7 @@ async function redeem(id){
 
 async function undo(idx){
   const h = state.redeemed[idx]; if (!h) return;
+  if (!await parentOK()) return;
   if (!await ask(`Undo ${h.name}?`, `${h.cost} tokens will be returned.`, 'Undo')) return;
   state.spent = Math.max(0, state.spent - h.cost); state.redeemed.splice(idx, 1);
   if (String(h.id).startsWith('skin-')){ const id = h.id.slice(5); state.skins.owned = state.skins.owned.filter(x => x !== id); if (state.skins.on === id) state.skins.on = 'default'; }
@@ -1692,18 +1931,30 @@ function equipSkin(id){
 }
 
 async function newWeek(){
+  if (!await parentOK()) return;
   const e = earned(), s = stars();
   if (!await ask(`Start Week ${state.weekNo + 1}?`, `${s} stars this week = £${money(s)} pocket money.\n${e} tokens will be kept.\nAll missions will reset.`, 'Start week')) return;
+  const best = DAYS.map((x, i) => [x.name, dayCount(i)]).reduce((a, b) => b[1] > a[1] ? b : a, ['', 0]);
+  const rec = {week:state.weekNo, stars:s, money:money(s), tokens:e, perfect:fullDays(), best:best[1] ? `${best[0]} ${best[1]}/6` : '', ended:dateStr()};
   ensurePlay(); state.play.frozen = true;
+  state.history = [rec, ...(state.history || [])].slice(0, 52);
   state.banked += e; state.week = blankWeek(); state.weekNo += 1;
   persist(); go('dash');
-  toast([['refresh', `Week ${state.weekNo} begins`]]); shards(40); space.pulse(4);
+  shards(rec.stars >= 20 ? 90 : 40); space.pulse(4); buzz([30, 60, 30]);
+  await showMoment({emblem:'trophy', kicker:`Week ${rec.week} complete`, tone:rec.stars >= 20 ? 'gold' : '',
+    title:rec.stars >= 30 ? 'Legend week' : rec.stars >= 20 ? 'Great week' : rec.stars ? 'Week done' : 'Fresh start',
+    sub:`Tokens are kept. Missions reset for Week ${state.weekNo}.`,
+    rows:[['star', 'Battle stars', `${rec.stars}/${MAX_STARS}`], ['pound', 'Pocket money', `£${rec.money}`],
+      ['diamond', 'Perfect days', rec.perfect], ...(rec.best ? [['trophy', 'Best day', rec.best]] : []), ['token', 'Tokens earned', rec.tokens]],
+    cta:`Start Week ${state.weekNo}`});
+  toast([['refresh', `Week ${state.weekNo} begins`]]);
 }
 
 async function wipe(){
+  if (!await parentOK()) return;
   if (!await ask('Reset everything?', 'Tokens, achievements, rewards and missions will be cleared on every device.', 'Reset')) return;
   if (!await ask('Are you sure?', 'This cannot be undone.', 'Yes, reset')) return;
-  state = fresh(); persist(); go('dash');
+  const pin = state.pin; state = fresh(); state.pin = pin; persist(); go('dash');
 }
 
 function go(k){
@@ -1729,12 +1980,12 @@ document.addEventListener('click', e => {
   if (t.dataset.skinbuy) return buySkin(t.dataset.skinbuy);
   if (t.dataset.skin) return equipSkin(t.dataset.skin);
   if (t.dataset.undo !== undefined) return undo(+t.dataset.undo);
+  if (t.dataset.act === 'newweek') return newWeek();
+  if (t.dataset.act === 'wipe') return wipe();
+  if (t.dataset.act === 'pin') return changePin();
   if (t.dataset.adj) return adjustTime(+t.dataset.adj);
   if (t.dataset.lim){ const [k, v] = t.dataset.lim.split('|'); return setLimit(k, v); }
   if (t.dataset.act === 'clearadj') return clearAdjust();
-  if (t.dataset.act === 'setpin') return setPin();
-  if (t.dataset.act === 'newweek') return parentOK().then(ok => ok && newWeek());
-  if (t.dataset.act === 'wipe') return parentOK().then(ok => ok && wipe());
   if (t.dataset.act === 'timer') return toggleTimer();
   if (t.dataset.act === 'makelink') return makeLink();
   if (t.dataset.act === 'sharelink') return shareLink();
@@ -1770,7 +2021,17 @@ async function shareLink(){
   try{ await navigator.clipboard.writeText(url); toast([['check', 'Family link copied']]); return; }catch(e){}
   ask('Family link', url + '\n\nKeep this private: anyone with it can tick missions.', 'Done');
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('modal').hidden) $('mNo').click(); });
+document.addEventListener('keydown', e => {
+  if ($('modal').hidden) return;
+  if (e.key === 'Escape') return $('mNo').click();
+  if (e.key === 'Tab'){   // keep Tab inside the open box
+    const f = [...$('modal').querySelectorAll('button,input')].filter(x => !x.hidden && !x.disabled && shown(x));
+    const i = f.indexOf(document.activeElement);
+    if (i === -1 || (e.shiftKey && i === 0) || (!e.shiftKey && i === f.length - 1)){
+      e.preventDefault(); f[e.shiftKey ? f.length - 1 : 0].focus();
+    }
+  }
+});
 
 /* ================= Cinematic 3D backdrop ================= */
 const space = (() => {
@@ -2002,7 +2263,7 @@ const space = (() => {
 })();
 
 /* ================= Boot ================= */
-ensurePlay(); checkBadges(); saveLocal(); renderAll(); initCloud();
+ensurePlay(); checkBadges(); saveLocal(); renderAll(); migratePin(); initCloud();
 </script>
 
 </body></html>
