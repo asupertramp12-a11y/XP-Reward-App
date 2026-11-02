@@ -452,6 +452,19 @@ nav button{position:relative}
 .m.done .ck{background:var(--cyan);box-shadow:0 0 14px rgba(70,224,255,.6);color:var(--on-cyan)}
 [tabindex="-1"]:focus{outline:none}
 .m:disabled{cursor:not-allowed;opacity:.5}
+/* A mission Douglas has ticked that is waiting for an adult to confirm */
+.mline{display:flex;gap:6px;align-items:stretch}
+.mline .m{flex:1;min-width:0}
+.m.wait{box-shadow:inset 0 0 0 1.5px var(--gold);background:color-mix(in srgb,var(--gold) 8%,var(--panel-2))}
+.m.wait .mt{color:var(--ink)}
+.m.wait .mt small{color:var(--gold)}
+.m.wait .ck{background:color-mix(in srgb,var(--gold) 30%,transparent);box-shadow:inset 0 0 0 1.5px var(--gold);color:var(--gold)}
+.adult{flex:none;width:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:12px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink-3);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:background .2s,box-shadow .2s,color .2s}
+.adult svg{font-size:18px}
+.adult.ask{color:var(--gold);box-shadow:inset 0 0 0 1.5px var(--gold)}
+.adult.on{background:var(--cyan);color:var(--on-cyan);box-shadow:0 0 14px rgba(70,224,255,.45)}
+.adult:disabled{cursor:not-allowed;opacity:.5}
+.confirm-all{width:100%;margin-top:-4px;margin-bottom:12px}
 .m:disabled:active{transform:none}
 .daylock{display:flex;align-items:center;gap:8px;margin-top:-4px;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--ink-2)}
 .game{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase}
@@ -628,6 +641,7 @@ const ICONS = {
   check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
   heart:'<path d="M12 20s-7-4.4-9-9a4.6 4.6 0 018-4.2A4.6 4.6 0 0121 11c-2 4.6-9 9-9 9z"/>',
   pulse:'<path d="M2 12h4l2.5-6 5 12 2.5-6h6"/>',
+  shieldok:'<path d="M12 3l7 3v5c0 4.5-3 8.2-7 9.5C8 19.2 5 15.5 5 11V6z"/><path d="M9 12l2 2 4-4"/>',
   key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14.5 8.5l2 2"/>',
   menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
   calendar:'<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h3M8 17h6" stroke-width="2"/>',
@@ -692,7 +706,21 @@ const MAX_STARS = 42, TOKENS_PER_STAR = 2, FULL_DAY_BONUS = 3, STARS_PER_LEVEL =
 /* ================= State (local + cloud sync) ================= */
 const KEY = 'douglasBattlePassV2';
 const blankWeek = () => DAYS.map(() => MISSIONS.map(() => false));
-const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null, skins:{owned:['default'], on:'default'}, pin:null, history:[], limits:{carryMax:30, dayMax:120}});
+/* claims: missions Douglas has ticked, one string per day like "110000". A tick only earns stars,
+   tokens and game time once an adult confirms it with the parent PIN (state.week holds confirmed ones). */
+const blankClaims = () => DAYS.map(() => '0'.repeat(MISSIONS.length));
+function claimed(d, m){
+  const c = state.claims;
+  return !!(Array.isArray(c) && typeof c[d] === 'string' && c[d][m] === '1');
+}
+function setClaim(d, m, on){
+  if (!Array.isArray(state.claims) || state.claims.length !== DAYS.length) state.claims = blankClaims();
+  const row = (typeof state.claims[d] === 'string' ? state.claims[d] : '').padEnd(MISSIONS.length, '0').split('');
+  row[m] = on ? '1' : '0'; state.claims[d] = row.join('');
+}
+const waiting = (d, m) => claimed(d, m) && !state.week[d][m];
+const waitingIn = d => MISSIONS.filter((_, m) => waiting(d, m)).length;
+const fresh = () => ({v:3, week:blankWeek(), weekNo:1, banked:0, spent:0, redeemed:[], badges:[], play:null, skins:{owned:['default'], on:'default'}, pin:null, history:[], limits:{carryMax:30, dayMax:120}, claims:blankClaims()});
 const valid = s => s && Array.isArray(s.week) && s.week.length === 7 && s.week.every(d => Array.isArray(d) && d.length === 6);
 let state = loadLocal();
 
@@ -707,7 +735,10 @@ let lastErr = null, ref = null, writing = false, dirty = false, pushTimer = null
 
 /* ---- Family sync (Firebase) ----
    Paste your Firebase web config between the braces below (see setup steps).
-   Leave it empty and the app saves on this device only. */
+   Leave it empty and the app saves on this device only.
+   The apiKey is a public Firebase web key, not a secret: every visitor's browser receives it.
+   Access is controlled by the Firestore rules (only families/<code> docs, no listing, no deletes)
+   and by the key's restrictions in Google Cloud (this site only, Cloud Firestore API only). */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCdS-73Pb77tgIZGskEU3MlyPac6BIT9l0",
   authDomain: "douglas-battle-pass.firebaseapp.com",
@@ -1474,9 +1505,14 @@ function renderNav(){
 }
 
 function missionBtn(i, j, t){
-  const m = MISSIONS[j], on = state.week[i][j];
-  return `<button class="m ${on ? 'done' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on}"${i > t && !on ? ' disabled' : ''}>
-          <span class="mi">${ic(m.icon)}</span><span class="mt">${m.name}<small>${m.what}</small></span><span class="ck">${ic('check')}</span></button>`;
+  const m = MISSIONS[j], on = state.week[i][j], wait = waiting(i, j), ahead = i > t && !on && !wait;
+  return `<div class="mline"><button class="m ${on ? 'done' : wait ? 'wait' : ''}" data-d="${i}" data-m="${j}" aria-pressed="${on || wait}"${ahead ? ' disabled' : ''}>
+          <span class="mi">${ic(m.icon)}</span><span class="mt">${m.name}<small>${wait ? 'Waiting for Mum or Dad to confirm' : m.what}</small></span><span class="ck">${ic('check')}</span></button>
+          <button class="adult ${on ? 'on' : wait ? 'ask' : ''}" data-ad="${i}|${j}" aria-pressed="${on}" aria-label="Adult confirm: ${m.name}"${ahead ? ' disabled' : ''}>${ic('shieldok')}<span>${on ? 'Done' : 'Adult'}</span></button></div>`;
+}
+function confirmAllBtn(i){
+  const n = waitingIn(i);
+  return n ? `<button class="btn ghost confirm-all" data-confirmall="${i}">${ic('shieldok')}Adult: confirm ${n} waiting</button>` : '';
 }
 
 let achOpen = false;
@@ -1495,6 +1531,7 @@ function renderDash(){
       <div class="sub">${t === 0 ? 'Our Wilde Space' : d.sub}</div>
       <div class="tags">${d.tags.map(x => `<span class="tag">${x}</span>`).join('')}</div>
       <div class="missions">${MISSIONS.map((_, j) => missionBtn(t, j, t)).join('')}</div>
+      ${confirmAllBtn(t)}
       <div class="status">
         <span class="st ${g ? 'ok' : ''}">${c === 6 ? `Perfect day · ${g} min unlocked` : g ? `${g} min gaming unlocked` : `${c}/6 done · ${4 - c} more to unlock gaming`}</span>
         <button class="btn ghost" data-go="story">Whole week ${ic('arrow')}</button>
@@ -1549,6 +1586,7 @@ function renderStory(){
         <div class="ring" style="${ringStyle(c, d.col)}" role="img" aria-label="${c} of 6 missions done"><span aria-hidden="true">${c}/6</span></div>
       </div>
       <div class="missions">${i > t ? `<div class="daylock">${ic('lock')}Opens on ${d.name}</div>` : ''}${MISSIONS.map((_, j) => missionBtn(i, j, t)).join('')}</div>
+      ${confirmAllBtn(i)}
       ${gamingHTML(c)}
       ${memHTML(weekDate(i), i > t)}
     </div>`;
@@ -1609,7 +1647,7 @@ function renderGuide(){
     <div class="guide-top"><button class="btn ghost" data-go="dash">${ic('back')}Back</button></div>
     <h2 class="sec">How We Play</h2>
     ${card('home', 'Monday – OWS', `<p>OWS is <b style="color:var(--ink)">Our Wilde Space</b>.</p><p>Monday is a dedicated day with Mum for learning, creativity, exploration, outdoor activities and fun.</p>`)}
-    ${card('target', 'What Each Mission Means', `<div class="tbl">${MISSIONS.map(m =>
+    ${card('target', 'What Each Mission Means', `<p style="margin-bottom:10px">Tick a mission when you've done it, then ask Mum or Dad to tap <b style="color:var(--ink)">Adult</b> next to it. Stars, tokens and game time come once they confirm.</p><div class="tbl">${MISSIONS.map(m =>
       `<div class="tr"><span>${m.name}</span><span style="color:var(--ink);text-align:right">${m.what}</span></div>`).join('')}</div>`)}
     ${card('heart', 'MoodLoop', `<p>MoodLoop is for noticing feelings. Pick the face that matches how you feel, add a few words if you want, and Mum and Dad can see it too.</p><p>All feelings are OK. There are no stars or tokens for moods, so always pick the true one.</p><p>Each day can also have one photo memory. They build up into your Memory Bank.</p>`)}
     ${card('pad', 'Gaming Rules', list(['No gaming in the morning.', 'Gaming is normally after 4pm.', 'Complete missions first.',
@@ -1653,6 +1691,7 @@ function renderGuide(){
         <div class="tr"><span>Total today</span><span>${playMins(p)} min${playRaw(p) > playMins(p) ? ' (daily max)' : ''}</span></div></div>
       <p style="margin-top:14px">Take time off for attitude, or add some back:</p>
       <div class="pl-btns" style="margin-top:8px"><button class="btn danger" data-adj="-30" aria-label="Take off 30 minutes">−30</button><button class="btn danger" data-adj="-15" aria-label="Take off 15 minutes">−15</button><button class="btn ghost" data-adj="15" aria-label="Add 15 minutes">+15</button></div>
+      <button class="btn danger" data-act="adjother" style="width:100%;margin-top:8px">${ic('lock')}Take off another amount</button>
       ${(p.adjLog || []).length ? `<button class="pl-add" data-act="clearadj">Undo today's changes</button>` : ''}
       <p style="margin-top:14px">Most unused time that can roll over to tomorrow:</p>
       ${opt('carryMax', [[0, 'None'], [15, '15 min'], [30, '30 min'], [60, '60 min'], ['none', 'No cap']], L.carryMax)}
@@ -1660,7 +1699,7 @@ function renderGuide(){
       ${opt('dayMax', [[60, '60 min'], [90, '90 min'], [120, '2 hrs'], [150, '2½ hrs'], ['none', 'No max']], L.dayMax)}
       <p class="meta" style="margin-top:12px">${state.pin ? 'These controls need the parent PIN.' : 'Set a parent PIN in the Parent Zone below so only Mum or Dad can change these.'}</p>`); })()}
     ${card('key', 'Parent Zone', `<p>Use on Sunday evening to start a new week. Unspent tokens are kept.</p>
-      <p style="margin-top:8px">${state.pin ? 'Starting a new week, resetting and undoing rewards need the parent PIN.' : 'Set a parent PIN so only Mum or Dad can start a new week, reset, or undo rewards.'}</p>
+      <p style="margin-top:8px">${state.pin ? 'Confirming missions, starting a new week, resetting and undoing rewards need the parent PIN.' : 'Set a parent PIN so only Mum or Dad can confirm missions, start a new week, reset, or undo rewards.'}</p>
       <div class="parent">
         <button class="btn" data-act="newweek">${ic('refresh')}Start New Week</button>
         <button class="btn ghost" data-act="pin">${ic('key')}${state.pin ? 'Change parent PIN' : 'Set parent PIN'}</button>
@@ -1748,7 +1787,7 @@ function ask(title, body, okLabel = 'OK', opt = {}){
     const inp = $('mIn'), err = $('mErr'), back = focusKey(document.activeElement), field = opt.pin || opt.text;
     $('mT').textContent = title; $('mB').textContent = body; $('mOk').textContent = okLabel;
     err.textContent = ''; inp.value = ''; inp.hidden = !field;
-    inp.type = opt.text ? 'text' : 'password'; inp.inputMode = opt.text ? 'text' : 'numeric';
+    inp.type = opt.text ? 'text' : 'password'; inp.inputMode = opt.text && !opt.text.num ? 'text' : 'numeric';
     inp.maxLength = opt.text ? (opt.text.max || 40) : 8; inp.placeholder = opt.text ? (opt.text.ph || '') : '';
     inp.classList.toggle('txt', !!opt.text);
     $('modal').hidden = false; (field ? inp : $('mOk')).focus();
@@ -1784,7 +1823,7 @@ async function hashPin(v){
 const pinShape = v => /^\d{4,8}$/.test(v) ? null : 'Use 4 to 8 numbers.';
 async function setPin(){
   let first = null;
-  const a = await ask('Set a parent PIN', 'Choose 4 to 8 numbers. Mum or Dad will need it to change game time, start a new week, reset the game, or undo a reward.', 'Next',
+  const a = await ask('Set a parent PIN', 'Choose 4 to 8 numbers. Mum or Dad will need it to confirm missions, change game time, start a new week, reset the game, or undo a reward.', 'Next',
     {pin:true, check:v => pinShape(v)});
   if (a === null) return false;
   first = a;
@@ -1822,6 +1861,13 @@ async function adjustTime(m){
   if (p.runningSince && playUsed(p) >= playTotal(p)){ p.used = playTotal(p); p.runningSince = null; }
   persist(); renderAll();
   toast([[m < 0 ? 'lock' : 'pad', `${m > 0 ? '+' : '−'}${Math.abs(m)} min game time`, m < 0 ? '' : 'gold']]);
+}
+async function adjustOther(){
+  if (!await parentOK()) return;
+  const v = await ask('Take off how many minutes?', 'Type any number of minutes to take off today’s game time.', 'Next',
+    {text:{ph:'Minutes, e.g. 20', max:3, num:true}, check:v => /^\d{1,3}$/.test(v) && +v > 0 ? null : 'Type a number of minutes, like 20.'});
+  if (v === null) return;
+  return adjustTime(-v);
 }
 async function clearAdjust(){
   if (!await parentOK()) return;
@@ -1870,22 +1916,57 @@ function showMoment({emblem, kicker, title, sub = '', rows = [], cta = 'Continue
 /* ================= Actions ================= */
 let tab = 'dash';
 
-function toggle(d, m){
-  if (d > todayIdx() && !state.week[d][m]) return;   // future days can't be ticked ahead of time
-  const bL = level(stars()), bG = gaming(dayCount(d)), bM = money(stars());
-  state.week[d][m] = !state.week[d][m];
+/* Douglas's tick: marks a mission as done and waiting for an adult. Unticking a confirmed mission
+   takes rewards away, so that needs the parent PIN. */
+async function toggle(d, m){
+  if (state.week[d][m]){
+    if (!await parentOK()) return;
+    state.week[d][m] = false; setClaim(d, m, false);
+    ensurePlay(); persist(); renderAll(); space.pulse(0);
+    announce(`${MISSIONS[m].name} unticked.`); return;
+  }
+  const on = !claimed(d, m);
+  if (on && d > todayIdx()) return;   // future days can't be ticked ahead of time
+  setClaim(d, m, on); persist(); renderAll();
+  if (!on){ announce(`${MISSIONS[m].name} unticked.`); return; }
+  buzz(12); space.pulse(1);
+  toast([['shieldok', 'Ask Mum or Dad to confirm']]);
+  announce(`${MISSIONS[m].name} ticked. Ask Mum or Dad to confirm it to earn your star.`);
+}
+/* The adult tick: needs the parent PIN (open for 5 minutes once entered). Confirming hands out the
+   rewards; tapping a confirmed one takes it back to waiting. */
+async function adultTick(d, m){
   const on = state.week[d][m];
+  if (!on && d > todayIdx() && !claimed(d, m)) return;
+  if (!await parentOK()) return;
+  if (on){
+    state.week[d][m] = false; setClaim(d, m, true);
+    ensurePlay(); persist(); renderAll(); space.pulse(0);
+    announce(`${MISSIONS[m].name} back to waiting for an adult.`); return;
+  }
+  confirmMissions(d, [m]);
+}
+async function confirmAll(d){
+  const list = MISSIONS.map((_, m) => m).filter(m => waiting(d, m));
+  if (!list.length || !await parentOK()) return;
+  confirmMissions(d, list);
+}
+function confirmMissions(d, list){
+  list = list.filter(m => !state.week[d][m]); if (!list.length) return;
+  const bL = level(stars()), bG = gaming(dayCount(d)), bM = money(stars()), bFull = dayCount(d) === 6;
+  list.forEach(m => { state.week[d][m] = true; setClaim(d, m, true); });
   const aL = level(stars()), aG = gaming(dayCount(d)), aM = money(stars());
   const newB = checkBadges();
-  ensurePlay(); persist(); renderAll(); space.pulse(on ? 1 : 0);
-  if (!on){ announce(`${MISSIONS[m].name} unticked.`); return; }
-  buzz(12); floatGain(d, m);
+  ensurePlay(); persist(); renderAll(); space.pulse(1);
+  buzz(12); list.forEach(m => floatGain(d, m));
+  const n = list.length, name = n === 1 ? MISSIONS[list[0]].name : `${n} missions`;
   const msgs = [];
-  if (dayCount(d) === 6) msgs.push(['diamond', `Perfect day · +${FULL_DAY_BONUS} tokens`, 'gold']);
+  if (n > 1) msgs.push(['shieldok', `${n} missions confirmed · +${n * TOKENS_PER_STAR} tokens`]);
+  if (dayCount(d) === 6 && !bFull) msgs.push(['diamond', `Perfect day · +${FULL_DAY_BONUS} tokens`, 'gold']);
   if (aG > bG) msgs.push(['pad', `${aG} minutes unlocked`, 'gold']);
   if (aM > bM) msgs.push(['pound', `Pocket money now £${aM}`, 'gold']);
   newB.forEach(b => msgs.push([b.icon, `Achievement: ${b.name}`, 'gold']));
-  announce(`${MISSIONS[m].name} done. 1 star and ${TOKENS_PER_STAR} tokens.` + msgs.map(x => ' ' + x[1] + '.').join(''));
+  announce(`${name} confirmed. ${n} star${n > 1 ? 's' : ''} and ${n * TOKENS_PER_STAR} tokens.` + msgs.map(x => ' ' + x[1] + '.').join(''));
   (async () => {
     if (aL > bL){
       await new Promise(r => setTimeout(r, 700));   // let the tick and its +1 land first
@@ -1938,7 +2019,7 @@ async function newWeek(){
   const rec = {week:state.weekNo, stars:s, money:money(s), tokens:e, perfect:fullDays(), best:best[1] ? `${best[0]} ${best[1]}/6` : '', ended:dateStr()};
   ensurePlay(); state.play.frozen = true;
   state.history = [rec, ...(state.history || [])].slice(0, 52);
-  state.banked += e; state.week = blankWeek(); state.weekNo += 1;
+  state.banked += e; state.week = blankWeek(); state.claims = blankClaims(); state.weekNo += 1;
   persist(); go('dash');
   shards(rec.stars >= 20 ? 90 : 40); space.pulse(4); buzz([30, 60, 30]);
   await showMoment({emblem:'trophy', kicker:`Week ${rec.week} complete`, tone:rec.stars >= 20 ? 'gold' : '',
@@ -1976,6 +2057,8 @@ document.addEventListener('click', e => {
   if (tab === 'plan' && planClick(t)) return;
   if (t.dataset.go) return go(t.dataset.go);
   if (t.dataset.d !== undefined) return toggle(+t.dataset.d, +t.dataset.m);
+  if (t.dataset.ad){ const [d, m] = t.dataset.ad.split('|'); return adultTick(+d, +m); }
+  if (t.dataset.confirmall !== undefined) return confirmAll(+t.dataset.confirmall);
   if (t.dataset.redeem) return redeem(t.dataset.redeem);
   if (t.dataset.skinbuy) return buySkin(t.dataset.skinbuy);
   if (t.dataset.skin) return equipSkin(t.dataset.skin);
@@ -1984,6 +2067,7 @@ document.addEventListener('click', e => {
   if (t.dataset.act === 'wipe') return wipe();
   if (t.dataset.act === 'pin') return changePin();
   if (t.dataset.adj) return adjustTime(+t.dataset.adj);
+  if (t.dataset.act === 'adjother') return adjustOther();
   if (t.dataset.lim){ const [k, v] = t.dataset.lim.split('|'); return setLimit(k, v); }
   if (t.dataset.act === 'clearadj') return clearAdjust();
   if (t.dataset.act === 'timer') return toggleTimer();
