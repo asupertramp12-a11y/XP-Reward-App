@@ -707,7 +707,10 @@ let lastErr = null, ref = null, writing = false, dirty = false, pushTimer = null
 
 /* ---- Family sync (Firebase) ----
    Paste your Firebase web config between the braces below (see setup steps).
-   Leave it empty and the app saves on this device only. */
+   Leave it empty and the app saves on this device only.
+   The apiKey is a public Firebase web key, not a secret: every visitor's browser receives it.
+   Access is controlled by the Firestore rules (only families/<code> docs, no listing, no deletes)
+   and by the key's restrictions in Google Cloud (this site only, Cloud Firestore API only). */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCdS-73Pb77tgIZGskEU3MlyPac6BIT9l0",
   authDomain: "douglas-battle-pass.firebaseapp.com",
