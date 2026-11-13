@@ -271,6 +271,18 @@ body.calm nav button.on{color:#1d3f63;background:rgba(127,214,176,.35);box-shado
 .ml-bar em{font-style:normal;text-align:right;color:var(--ink2)}
 @media (prefers-reduced-motion:reduce){#mlDial{transition:none!important}}
 
+/* Storage (banked rewards waiting to be used) */
+.store{padding:16px;background:linear-gradient(165deg,color-mix(in srgb,var(--gold) 10%,transparent),var(--panel) 60%)}
+.store-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.crate{position:relative;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:14px;background:var(--panel-2);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 40%,transparent)}
+.crate .ri{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:24px;color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.crate .rn{font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.03em;text-transform:uppercase;line-height:1.05}
+.crate small{font-size:12px;font-weight:500;color:var(--ink-2)}
+.crate .qty{position:absolute;top:10px;right:10px;min-width:30px;height:26px;padding:0 8px;border-radius:13px;display:grid;place-items:center;background:var(--gold);color:var(--on-gold);font-family:var(--f-display);font-weight:800;font-size:15px}
+.crate .crow{display:flex;gap:8px;flex-wrap:wrap}
+.crate .crow .btn{flex:1;padding:9px 6px;font-size:13px;letter-spacing:.04em;white-space:nowrap;min-width:0}
+.hrow .used{font-size:10px;font-weight:700;letter-spacing:.08em;padding:2px 6px;border-radius:5px;margin-left:6px;background:var(--panel-2);color:var(--ink-3);box-shadow:inset 0 0 0 1px var(--line)}
+
 /* Header menu, nav badge */
 .menu-btn{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;font-size:20px;color:var(--ink);padding:0}
 nav button{position:relative}
@@ -1619,6 +1631,17 @@ function renderRewards(){
         <div class="bar gold"><i style="width:${Math.min(100, tk / r.cost * 100)}%"></i></div>
         <button class="btn ${ok ? 'gold' : 'ghost'}" data-redeem="${r.id}" ${ok ? '' : 'disabled'}>${ok ? 'Unlock' : `${r.cost - tk} to go`}</button>
       </div>`; }).join('')}</div>
+    ${(() => { const groups = {};
+      state.redeemed.forEach((h, i) => { if (h.used || String(h.id).startsWith('skin-')) return; (groups[h.id] = groups[h.id] || []).push(i); });
+      const ids = Object.keys(groups), n = ids.reduce((a, k) => a + groups[k].length, 0);
+      return `<h2 class="sec">Storage${n ? ` · ${n}` : ''}</h2>
+      <div class="store glass">${n ? `<div class="store-g">${ids.map(id => { const list = groups[id], h = state.redeemed[list[0]], r = REWARDS.find(x => x.id === id);
+        return `<div class="crate">${list.length > 1 ? `<span class="qty" aria-label="${list.length} stored">×${list.length}</span>` : ''}
+          <div class="ri">${ic(r ? r.icon : 'gift')}</div>
+          <div><div class="rn">${esc(h.name)}</div><small>Banked ${esc(h.date)}${list.length > 1 ? ' (oldest)' : ''}</small></div>
+          <div class="crow"><button class="btn gold" data-use="${list[0]}" aria-label="Use ${esc(h.name)}">Use</button><button class="btn ghost" data-undo="${list[list.length - 1]}" aria-label="Return ${esc(h.name)}">Return</button></div>
+        </div>`; }).join('')}</div>`
+        : '<div class="empty">Nothing in storage. Rewards you unlock wait here until you use them.</div>'}</div>`; })()}
     <h2 class="sec">Skins</h2>
     <div class="rgrid">${SKINS.map(k => { const own = state.skins.owned.includes(k.id), on = state.skins.on === k.id, here = k.week <= state.weekNo, ok = tk >= k.cost;
       const btn = on ? `<button class="btn ghost" disabled>${ic('check')}Equipped</button>`
@@ -1632,12 +1655,13 @@ function renderRewards(){
         ${own ? '' : `<div class="rc">${ic('token')}${k.cost} tokens</div>`}
         ${btn}
       </div>`; }).join('')}</div>
-    <h2 class="sec">Unlocked</h2>
-    <div class="hist glass">${hist.length ? hist.map((h, k) => { const r = REWARDS.find(x => x.id === h.id);
-      return `<div class="hrow"><span class="he">${ic(r ? r.icon : String(h.id).startsWith('skin-') ? 'star' : 'gift')}</span>
-        <span class="hn">${h.name}<small>${h.date} · ${h.cost} tokens</small></span>
-        <button data-undo="${state.redeemed.length - 1 - k}" aria-label="Undo ${h.name}">Undo</button></div>`; }).join('')
-      : `<div class="empty">No rewards unlocked yet</div>`}</div>`;
+    <h2 class="sec">History</h2>
+    <div class="hist glass">${hist.some(h => h.used || String(h.id).startsWith('skin-')) ? hist.map((h, k) => { const r = REWARDS.find(x => x.id === h.id), skin = String(h.id).startsWith('skin-');
+      if (!h.used && !skin) return '';
+      return `<div class="hrow"><span class="he">${ic(r ? r.icon : skin ? 'star' : 'gift')}</span>
+        <span class="hn">${esc(h.name)}${h.used ? '<span class="used">USED</span>' : ''}<small>${h.used ? `Used ${esc(h.usedDate || '')} · banked ${esc(h.date)}` : `${esc(h.date)} · ${h.cost} tokens`}</small></span>
+        ${skin ? `<button data-undo="${state.redeemed.length - 1 - k}" aria-label="Undo ${esc(h.name)}">Undo</button>` : ''}</div>`; }).join('')
+      : `<div class="empty">Used rewards and skins show here</div>`}</div>`;
 }
 
 function renderGuide(){
@@ -1983,17 +2007,28 @@ function confirmMissions(d, list){
 async function redeem(id){
   const r = REWARDS.find(x => x.id === id);
   if (!r || tokens() < r.cost) return;
-  if (!await ask(`Unlock ${r.name}?`, `This costs ${r.cost} tokens.\nCheck with Mum or Dad first.`, 'Unlock')) return;
+  if (!await ask(`Unlock ${r.name}?`, `This costs ${r.cost} tokens.\nIt goes into your Storage, ready to use when Mum or Dad say it's a good time.`, 'Unlock')) return;
   state.spent += r.cost;
   state.redeemed.push({id:r.id, name:r.name, cost:r.cost,
     date:new Date().toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'})});
-  persist(); renderAll(); toast([[r.icon, `${r.name} unlocked`, 'gold']]); shards(50); buzz([20, 40, 20]); space.pulse(3);
+  persist(); renderAll(); toast([[r.icon, `${r.name} added to Storage`, 'gold']]); shards(50); buzz([20, 40, 20]); space.pulse(3);
+}
+
+/* Using a stored reward needs a grown-up: it moves from Storage to History. */
+async function useReward(idx){
+  const h = state.redeemed[idx]; if (!h || h.used) return;
+  if (!await parentOK()) return;
+  if (!await ask(`Use ${h.name}?`, 'It moves from Storage to History.', 'Use it')) return;
+  h.used = true; h.usedDate = new Date().toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'});
+  const r = REWARDS.find(x => x.id === h.id);
+  persist(); renderAll(); toast([[r ? r.icon : 'gift', `Enjoy your ${h.name}!`, 'gold']]); shards(40); buzz([20, 40, 20]);
 }
 
 async function undo(idx){
-  const h = state.redeemed[idx]; if (!h) return;
+  const h = state.redeemed[idx]; if (!h || h.used) return;
   if (!await parentOK()) return;
-  if (!await ask(`Undo ${h.name}?`, `${h.cost} tokens will be returned.`, 'Undo')) return;
+  const skin = String(h.id).startsWith('skin-');
+  if (!await ask(skin ? `Undo ${h.name}?` : `Return ${h.name}?`, `${h.cost} tokens will go back in the Token Vault.`, skin ? 'Undo' : 'Return')) return;
   state.spent = Math.max(0, state.spent - h.cost); state.redeemed.splice(idx, 1);
   if (String(h.id).startsWith('skin-')){ const id = h.id.slice(5); state.skins.owned = state.skins.owned.filter(x => x !== id); if (state.skins.on === id) state.skins.on = 'default'; }
   persist(); renderAll();
@@ -2060,6 +2095,7 @@ document.addEventListener('click', e => {
   if (t.dataset.ad){ const [d, m] = t.dataset.ad.split('|'); return adultTick(+d, +m); }
   if (t.dataset.confirmall !== undefined) return confirmAll(+t.dataset.confirmall);
   if (t.dataset.redeem) return redeem(t.dataset.redeem);
+  if (t.dataset.use) return useReward(+t.dataset.use);
   if (t.dataset.skinbuy) return buySkin(t.dataset.skinbuy);
   if (t.dataset.skin) return equipSkin(t.dataset.skin);
   if (t.dataset.undo !== undefined) return undo(+t.dataset.undo);
