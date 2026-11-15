@@ -1114,8 +1114,9 @@ function shWatch(suffix){
     shSave();
     if (tab === 'plan'){ renderPlan(); markSeen(); } else if (tab === 'dash') renderDash(); else if (tab === 'guide' && suffix === DAD_SUFFIX) renderGuide();
     renderNav();
-  }, () => { delete shSubs[suffix]; });
+  }, e => { delete shSubs[suffix]; shErr[suffix] = (e && (e.code || e.message)) || 'error'; if (suffix === DAD_SUFFIX && tab === 'guide') renderGuide(); });
 }
+const shErr = {};
 async function shPut(suffix, field, id, obj){
   const d = shared[suffix] = shared[suffix] || {}; (d[field] = d[field] || {})[id] = obj; shSave();
   const r = famRef(suffix);
@@ -1214,6 +1215,13 @@ function dadSetupHTML(){
       <li>Save the macro, then run it once with <b>Test macro</b>. The map should appear on the Dashboard within a minute.</li>
     </ol>
     <p>If MacroDroid asks, allow location access <b style="color:var(--ink)">all the time</b> and turn off battery optimisation for it, so it keeps running in the background.</p>
+    ${(() => { const d = shared[DAD_SUFFIX], L = dadLoc(), err = shErr[DAD_SUFFIX];
+      const msg = err ? `Couldn't read your location (${esc(err)}).`
+        : !d || d.loc === undefined ? 'Nothing received yet.'
+        : L ? `Working. Last update ${ago(L.t)}.`
+        : d.loc === '' ? 'Location sharing is switched off.'
+        : `Received something that isn't a location: <code style="font-size:12px">${esc(String(d.loc).slice(0, 60))}</code>. Check the variable in the body.`;
+      return `<div class="dad-off" style="margin:10px 0 4px"><b style="color:var(--ink)">What the app has received:</b> ${msg}</div>`; })()}
     <div class="parent"><button class="btn" data-act="dadnow">${ic('pin')}Share my location once now</button><button class="btn ghost" data-act="dadstop">Stop showing my location</button></div>`;
 }
 async function copySetup(which){
@@ -1244,7 +1252,6 @@ function renderPlan(){
   const sun = addDays(mon, 6), fmt = ds => { const [y, m, d] = ds.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('en-GB', {day:'numeric', month:'short'}); };
   const ps = posts();
   el.innerHTML = `
-    ${dadHTML(false)}
     <h2 class="sec">Family Planner</h2>
     <div class="pl glass">
       <div class="pl-head"><button class="pl-nav" data-plnav="-1" aria-label="Previous week">‹</button>
