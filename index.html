@@ -1202,12 +1202,12 @@ async function dadStop(){
 function dadSetupHTML(){
   const c = familyCode(); if (!c || !fbReady()) return '';
   const P = FIREBASE_CONFIG.projectId, url = `https://firestore.googleapis.com/v1/projects/${P}/databases/(default)/documents:commit?key=${FIREBASE_CONFIG.apiKey}`;
-  const body = `{"writes":[{"update":{"name":"projects/${P}/databases/(default)/documents/families/${c}${DAD_SUFFIX}","fields":{"loc":{"stringValue":"[v=dadloc]"}}},"updateTransforms":[{"fieldPath":"t","setToServerValue":"REQUEST_TIME"}]}]}`;
+  const body = `{"writes":[{"update":{"name":"projects/${P}/databases/(default)/documents/families/${c}${DAD_SUFFIX}","fields":{"loc":{"stringValue":"{lv=dadloc}"}}},"updateTransforms":[{"fieldPath":"t","setToServerValue":"REQUEST_TIME"}]}]}`;
   return `<p>Your Android phone can send its location to the app every 15 minutes using the free <b style="color:var(--ink)">MacroDroid</b> app. Only your latest position is kept.</p>
     <ol>
       <li>Install <b>MacroDroid</b> from the Play Store and tap <b>Add Macro</b>. Name it <b>Share with family</b>.</li>
       <li><b>Trigger:</b> Date/Time → <b>Regular Interval</b> → every <b>15 minutes</b>.</li>
-      <li><b>Action 1:</b> Location → <b>Share Location</b> → output to <b>Variable</b>, format <b>lat,lon</b>. Create a new global text variable called <b>dadloc</b>.</li>
+      <li><b>Action 1:</b> Location → <b>Share Location</b> → output to <b>Variable</b>, format <b>lat,lon</b>. Create a new <b>local</b> text variable called <b>dadloc</b>.</li>
       <li><b>Action 2:</b> add the <b>HTTP Request</b> action. Method <b>POST</b>, and paste this as the URL:
         <code class="setup-code">${esc(url)}</code><button class="pl-add" data-copy="url">Copy URL</button></li>
       <li>In the request body, choose content type <b>application/json</b> and paste this:
