@@ -1174,7 +1174,12 @@ function mapTiles(lat, lng, z = 15){
 }
 const mapsLink = (lat, lng) => /iPhone|iPad|Macintosh/.test(navigator.userAgent) ? `https://maps.apple.com/?ll=${lat},${lng}&q=Dad` : `https://www.google.com/maps?q=${lat},${lng}`;
 function dadHTML(compact){
-  const L = dadLoc(); if (!L) return compact ? '' : `<div class="dad glass"><div class="row"><b>Where's Dad?</b></div><div class="dad-off">Dad isn't sharing his location yet.</div></div>`;
+  const L = dadLoc(), d = shared[DAD_SUFFIX];
+  if (!L){
+    if (d && !d.off && d.t && d.loc !== undefined){ const t = tsMs(d.t);
+      return `<div class="dad glass"><div class="row"><b>Where's Dad?</b></div><div class="dad-off">Can't find Dad's location right now. Last checked ${ago(t)}.</div></div>`; }
+    return compact ? '' : `<div class="dad glass"><div class="row"><b>Where's Dad?</b></div><div class="dad-off">Dad isn't sharing his location yet.</div></div>`;
+  }
   const mins = (Date.now() - L.t) / 60000, stale = mins > DAD_STALE_MIN;
   return `<div class="dad glass">
     <div class="row"><b>Where's Dad?</b><span class="dad-ago" data-t="${L.t}" style="font-size:13px;font-family:var(--f-body);color:var(--ink-2)">${stale ? 'Paused' : 'Updated ' + ago(L.t)}</span></div>
@@ -1196,7 +1201,7 @@ async function dadShareNow(){
 async function dadStop(){
   if (!await parentOK()) return;
   if (!await ask('Stop showing your location?', "This clears your location from the app now. Also switch off the automation on your phone, or it will share again at its next update.", 'Clear it')) return;
-  try{ await famRef(DAD_SUFFIX).set({loc:'', t:firebase.firestore.FieldValue.serverTimestamp()}); }catch(e){}
+  try{ await famRef(DAD_SUFFIX).set({loc:'', off:true, t:firebase.firestore.FieldValue.serverTimestamp()}); }catch(e){}
   shared[DAD_SUFFIX] = {}; shSave(); renderAll(); toast([['check', 'Location cleared']]);
 }
 function dadSetupHTML(){
@@ -1219,7 +1224,8 @@ function dadSetupHTML(){
       const msg = err ? `Couldn't read your location (${esc(err)}).`
         : !d || d.loc === undefined ? 'Nothing received yet.'
         : L ? `Working. Last update ${ago(L.t)}.`
-        : d.loc === '' ? 'Location sharing is switched off.'
+        : d.off ? 'Location sharing is switched off.'
+        : d.loc === '' ? `Your phone couldn't get a location at its last check (${ago(tsMs(d.t))}). Check MacroDroid has location access all the time.`
         : `Received something that isn't a location: <code style="font-size:12px">${esc(String(d.loc).slice(0, 60))}</code>. Check the variable in the body.`;
       return `<div class="dad-off" style="margin:10px 0 4px"><b style="color:var(--ink)">What the app has received:</b> ${msg}</div>`; })()}
     <div class="parent"><button class="btn" data-act="dadnow">${ic('pin')}Share my location once now</button><button class="btn ghost" data-act="dadstop">Stop showing my location</button></div>`;
